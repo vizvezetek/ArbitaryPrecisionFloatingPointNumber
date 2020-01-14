@@ -2,7 +2,7 @@
 
 Compiled by gcc (c++ 14).
 
-####How it works:
+### How it works:
 ```c++
 #include <iostream>
 #include <iomanip>
@@ -34,5 +34,7 @@ int main(){
 }
 ```
 out:
+
 FPN: +478478.0242818719390477005776
+
 double: 478478.0242818719707429409027099609375
