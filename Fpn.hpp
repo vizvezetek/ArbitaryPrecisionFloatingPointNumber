@@ -88,8 +88,8 @@ public:
     friend bool operator != (Fpn &obj1, Fpn &obj2);
     friend bool operator < (Fpn &obj1, Fpn &obj2);
     friend bool operator > (Fpn &obj1, Fpn &obj2);
-    // friend bool operator <= (Fpn &obj1, Fpn &obj2);
-    // friend bool operator >= (Fpn &obj1, Fpn &obj2);
+    friend bool operator <= (Fpn &obj1, Fpn &obj2);
+    friend bool operator >= (Fpn &obj1, Fpn &obj2);
 
 
 

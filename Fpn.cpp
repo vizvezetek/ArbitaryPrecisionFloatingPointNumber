@@ -192,6 +192,15 @@ bool operator > (Fpn &obj1, Fpn &obj2){
     return obj2 < obj1;
 }
 
+bool operator <= (Fpn &obj1, Fpn &obj2){
+    return obj1==obj2 || obj1<obj2;
+}
+
+bool operator >= (Fpn &obj1, Fpn &obj2){
+    return obj1==obj2 || obj1>obj2;
+}
+
+
 Fpn Fpn::operator + (Fpn const &obj ) {
 
     Fpn temp(this->toString());

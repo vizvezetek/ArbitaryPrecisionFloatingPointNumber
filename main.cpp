@@ -10,7 +10,7 @@ using namespace std;
 int main(){
     
     Fpn a("-22.9911");
-    Fpn aa("-22.99113");
+    Fpn aa("-22.9911");
     Fpn b("3333.111189");
     Fpn c("-123.234");
     Fpn d("0.456");
