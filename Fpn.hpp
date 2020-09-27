@@ -68,12 +68,28 @@ public:
 
     //operators ********************************************
     Fpn operator = (Fpn const &obj);
-    friend bool operator == (Fpn &obj1, Fpn &obj2);
 
     Fpn operator + (Fpn const &obj);
     Fpn operator - (Fpn &obj);
     Fpn operator * (Fpn &obj);
     Fpn operator / (Fpn &obj);
+
+    // Fpn sqrt (Fpn &obj);
+    // Fpn pow (Fpn &obj);
+    // Fpn sin (Fpn &obj);
+    // Fpn cos (Fpn &obj);
+
+    // Fpn abs (Fpn &obj);
+    // Fpn round (Fpn &obj);
+    // Fpn fact (Fpn &obj);
+
+
+    friend bool operator == (Fpn &obj1, Fpn &obj2);
+    friend bool operator != (Fpn &obj1, Fpn &obj2);
+    friend bool operator < (Fpn &obj1, Fpn &obj2);
+    friend bool operator > (Fpn &obj1, Fpn &obj2);
+    // friend bool operator <= (Fpn &obj1, Fpn &obj2);
+    // friend bool operator >= (Fpn &obj1, Fpn &obj2);
 
 
 

@@ -114,7 +114,82 @@ Fpn Fpn::operator = (Fpn const &obj){
 
 bool operator == (Fpn &obj1, Fpn &obj2){
 
-    return true ;
+    return (obj1.getSign() == obj2.getSign() && obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() == obj2.getFractPart()) ? true : false ;
+}
+
+bool operator != (Fpn &obj1, Fpn &obj2){
+    return !(obj1==obj2);
+}
+
+bool operator < (Fpn &obj1, Fpn &obj2){
+
+    if (obj1 == obj2){
+        return false;
+    }
+    
+    //sign
+    if (obj1.getSign() == '+' && obj2.getSign() == '-'){
+        return false;
+    }
+    else if (obj1.getSign() == '-' && obj2.getSign() == '+'){
+        return true;
+    }
+
+    else if (obj1.getSign() == '+' && obj2.getSign() == '+'){
+
+        //int part equal
+        if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() < obj2.getIntPart()){
+            return true;
+        }
+        else if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() > obj2.getIntPart()){
+            return false;
+        }
+        // int part size diff
+        if (obj1.getIntPart().length() < obj2.getIntPart().length() ){
+            return true;
+        }
+        else if (obj1.getIntPart().length() > obj2.getIntPart().length() ){
+            return false;
+        }
+        // int equal but fract not
+        if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() < obj2.getFractPart() ){
+            return true;
+        }
+        else if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() > obj2.getFractPart() ){
+            return false;
+        }
+        
+    }
+    else if (obj1.getSign() == '-' && obj2.getSign() == '-'){
+        //int part equal
+        if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() < obj2.getIntPart()){
+            return false;
+        }
+        else if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() > obj2.getIntPart()){
+            return true;
+        }
+        // int part size diff
+        if (obj1.getIntPart().length() < obj2.getIntPart().length() ){
+            return false;
+        }
+        else if (obj1.getIntPart().length() > obj2.getIntPart().length() ){
+            return true;
+        }
+        // int equal but fract not
+        if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() < obj2.getFractPart() ){
+            return false;
+        }
+        else if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() > obj2.getFractPart() ){
+            return true;
+        }
+    }
+
+    //fract part
+    return true;
+}
+
+bool operator > (Fpn &obj1, Fpn &obj2){
+    return obj2 < obj1;
 }
 
 Fpn Fpn::operator + (Fpn const &obj ) {
