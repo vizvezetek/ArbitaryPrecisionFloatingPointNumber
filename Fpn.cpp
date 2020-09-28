@@ -10,6 +10,8 @@ Fpn::Fpn(char sign_, const string number_, int intPrecision_, int fractPrecision
 
 Fpn::Fpn(): sign('+'), number("0.0"), intPart("0"), fractPart("0"){}
 
+Fpn::Fpn(const Fpn& f): sign(f.sign), number(f.number), intPart(f.intPart), fractPart(f.fractPart){}
+
 // //newFpnFromString(const char* s);
 Fpn::Fpn(const string number_){
  
@@ -51,32 +53,36 @@ Fpn::Fpn(const string number_){
 
 //getters
 
-char Fpn::getSign(){
+const char Fpn::getSign(){
     return sign;
 }
 
-string Fpn::getNumber(){
+const string Fpn::getNumber(){
     return intPart + '.' + fractPart;
 }
 
-string Fpn::getIntPart(){
+const string Fpn::getIntPart(){
     return intPart;
 }
 
-string Fpn::getFractPart(){
+const string Fpn::getFractPart(){
     return fractPart;
 }
 
-int Fpn::getIntPrecision(){
+const int Fpn::getIntPrecision(){
     return intPart.size();
 }
 
-int Fpn::getFractPrecision(){
+const int Fpn::getFractPrecision(){
     return fractPart.size();
 }
 
 string Fpn::toString(){
     return sign + intPart + '.' + fractPart;
+}
+
+std::ostream& operator<<(std::ostream &strm, const Fpn &a) {
+  return strm << a.sign << a.intPart << '.' << a.fractPart;
 }
 
 //setters
@@ -108,14 +114,30 @@ void Fpn::setFractPrecision(const int fractPrecision_){
 
 //operators
 
-Fpn Fpn::operator = (Fpn const &obj){
-    return obj;
+// Fpn Fpn::operator = (Fpn const &obj){
+//     return obj;
+// }
+
+Fpn& Fpn::operator = ( const Fpn& obj){
+    if (this != &obj){
+        sign = obj.sign;
+        number = obj.number;
+        intPart = obj.intPart;
+        fractPart = obj.fractPart;
+    }
+    return *this;
 }
 
-bool operator == (Fpn &obj1, Fpn &obj2){
+// bool operator == (Fpn& obj1, Fpn& obj2){
 
-    return (obj1.getSign() == obj2.getSign() && obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() == obj2.getFractPart()) ? true : false ;
+//     return (obj1.getSign() == obj2.getSign() && obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() == obj2.getFractPart()) ? true : false ;
+// }
+
+bool Fpn::operator == (const Fpn& obj2) const{
+
+    return (sign == obj2.sign  && intPart == obj2.intPart && fractPart == obj2.fractPart) ? true : false ;
 }
+
 
 bool operator != (Fpn &obj1, Fpn &obj2){
     return !(obj1==obj2);
@@ -201,14 +223,21 @@ bool operator >= (Fpn &obj1, Fpn &obj2){
 }
 
 
-Fpn Fpn::operator + (Fpn const &obj ) {
+// Fpn Fpn::operator + (Fpn const &obj ) {
+
+//     Fpn temp(this->toString());
+
+//     return addFpns(obj, temp) ; 
+// }
+
+Fpn Fpn::operator + (const Fpn& obj) {
 
     Fpn temp(this->toString());
 
     return addFpns(obj, temp) ; 
 }
 
-Fpn Fpn::operator  - (Fpn &f2) { 
+Fpn Fpn::operator - (Fpn &f2) { 
     Fpn f1(this->toString());
     char s1 = f1.getSign();
     char s2 = f2.getSign();
@@ -276,6 +305,62 @@ Fpn Fpn::operator / (Fpn &f2){
     return out;
 }
 
+//FPN.math
+
+Fpn Fpn::abs(Fpn obj){
+    if (obj.getSign() == '-'){
+        obj.setSign('+');
+        return obj;
+    }
+    return obj;
+}
+
+Fpn Fpn::round(Fpn obj){
+    if ( obj.getFractPart()[0] >= '5'){
+        Fpn one = Fpn("1.0");
+        obj.setFractPart("0");
+        if (obj.sign == '-'){
+            obj = obj - one;
+        }
+        else if (obj.sign == '+'){
+            obj = obj + one;
+        }
+        return obj;
+    }
+    if (obj.getFractPart()[0] <= '4'){
+        obj.setFractPart("0");
+        return obj;
+    }
+}
+
+// Fpn Fpn::fact(Fpn obj){
+//     Fpn zero("0.0");
+//     Fpn one("+1.0");
+//     // return (&obj == &zero) ? &one : (&obj * &Fpn::fact( (&obj - &one) ));
+//     // return (obj == zero) ? Fpn("1.0") : (Fpn::fact( (obj - one) ) * obj );
+//     if (obj == zero){
+//         return Fpn("1.0");
+//     }
+//     else{
+//         Fpn retval("1.0");
+//         while (! (obj == Fpn("+1.0"))){
+
+//             cout << "retval" << retval.toString() << endl;
+//             // cout << "retval" << retval * obj << endl;
+//             retval = retval * obj;
+//             cout << "retval" << retval.toString() << endl;
+
+//             cout << "obj" << obj.toString() << endl;
+//             obj = (obj - one);
+//             cout << "obj" << obj.toString() << endl;
+
+//             cout << "one" << one.toString() << endl;
+//             break;
+
+//         }
+//         return retval;
+//     }
+// }
 
 
 //*******************************************************************************************************************************
@@ -708,35 +793,3 @@ string Fpn::removeZerosTheBeginOfTheString(string s){
     }
     return s;
 }
-
-
-// string Fpn::divideIntsAsString_abc(string number, string divisor){ 
-//     // As result can be very large store it in string 
-//     string ans; 
-    
-//     // Find prefix of number that is larger 
-//     // than divisor. 
-//     int idx = 0; 
-//     int temp = number[idx] - '0'; 
-//     while (temp < divisor) 
-//        temp = temp * 10 + (number[++idx] - '0'); 
-      
-//     // Repeatedly divide divisor with temp. After  
-//     // every division, update temp to include one  
-//     // more digit. 
-//     while (number.size() > idx) 
-//     { 
-//         // Store result in answer i.e. temp / divisor 
-//         ans += (temp / divisor) + '0'; 
-          
-//         // Take next digit of number 
-//         temp = (temp % divisor) * 10 + number[++idx] - '0'; 
-//     } 
-      
-//     // If divisor is greater than number 
-//     if (ans.length() == 0) 
-//         return "0"; 
-      
-//     // else return ans 
-//     return ans; 
-// } 

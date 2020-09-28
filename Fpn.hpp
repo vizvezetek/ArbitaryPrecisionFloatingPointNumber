@@ -37,25 +37,27 @@ private:
     Fpn addFpns(Fpn f1, Fpn f2);
 
     string removeZerosTheBeginOfTheString(string s);
-    
+
+    friend std::ostream& operator<<(std::ostream&, const Fpn&);
     
     
 public:
     //constructors *****************************************
     Fpn(char sign_, const string number_, int intPrecision_, int fractPrecision_ );
-    Fpn(const string number); 
+    Fpn(const string number);
+    Fpn(const Fpn& obj);
     Fpn();
 
     //destructor *******************************************
     ~Fpn(){}
 
     //getter, setter, toString *****************************
-    char getSign();
-    string getNumber();
-    string getIntPart();
-    string getFractPart();
-    int getIntPrecision();
-    int getFractPrecision();
+    const char getSign();
+    const string getNumber();
+    const string getIntPart();
+    const string getFractPart();
+    const int getIntPrecision();
+    const int getFractPrecision();
 
     void setSign(const char sign_);
     void setNumber(const string number_);
@@ -66,25 +68,30 @@ public:
 
     string toString();
 
-    //operators ********************************************
-    Fpn operator = (Fpn const &obj);
 
-    Fpn operator + (Fpn const &obj);
+    //operators ********************************************
+    // Fpn operator = (Fpn const &obj);
+    Fpn& operator = (const Fpn& obj);
+
+    // Fpn operator + (Fpn const &obj);
+    Fpn operator + (const Fpn& obj);
     Fpn operator - (Fpn &obj);
     Fpn operator * (Fpn &obj);
     Fpn operator / (Fpn &obj);
 
+    //FPN.math functions
     // Fpn sqrt (Fpn &obj);
     // Fpn pow (Fpn &obj);
     // Fpn sin (Fpn &obj);
     // Fpn cos (Fpn &obj);
 
-    // Fpn abs (Fpn &obj);
-    // Fpn round (Fpn &obj);
-    // Fpn fact (Fpn &obj);
+    static Fpn abs(Fpn obj);
+    static Fpn round(Fpn obj);
+    // static Fpn fact(Fpn obj);
 
 
-    friend bool operator == (Fpn &obj1, Fpn &obj2);
+    // friend bool operator == (Fpn& obj1, Fpn& obj2);
+    bool operator == (const Fpn& obj2) const;
     friend bool operator != (Fpn &obj1, Fpn &obj2);
     friend bool operator < (Fpn &obj1, Fpn &obj2);
     friend bool operator > (Fpn &obj1, Fpn &obj2);
