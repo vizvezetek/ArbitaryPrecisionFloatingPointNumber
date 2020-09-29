@@ -46,6 +46,7 @@ public:
     Fpn(char sign_, const string number_, int intPrecision_, int fractPrecision_ );
     Fpn(const string number);
     Fpn(const Fpn& obj);
+    Fpn(Fpn& obj);
     Fpn();
 
     //destructor *******************************************
@@ -74,10 +75,14 @@ public:
     Fpn& operator = (const Fpn& obj);
 
     // Fpn operator + (Fpn const &obj);
+    // Fpn operator - (Fpn &obj);
+    // Fpn operator * (Fpn &obj);
+    // Fpn operator / (Fpn &obj);
+
     Fpn operator + (const Fpn& obj);
-    Fpn operator - (Fpn &obj);
-    Fpn operator * (Fpn &obj);
-    Fpn operator / (Fpn &obj);
+    Fpn operator - (const Fpn& obj);
+    Fpn operator * (Fpn& f2);
+    Fpn operator / (Fpn& f2);
 
     //FPN.math functions
     // Fpn sqrt (Fpn &obj);
@@ -87,16 +92,19 @@ public:
 
     static Fpn abs(Fpn obj);
     static Fpn round(Fpn obj);
-    // static Fpn fact(Fpn obj);
+    static Fpn fact(Fpn obj);
 
 
     // friend bool operator == (Fpn& obj1, Fpn& obj2);
-    bool operator == (const Fpn& obj2) const;
     friend bool operator != (Fpn &obj1, Fpn &obj2);
     friend bool operator < (Fpn &obj1, Fpn &obj2);
     friend bool operator > (Fpn &obj1, Fpn &obj2);
     friend bool operator <= (Fpn &obj1, Fpn &obj2);
     friend bool operator >= (Fpn &obj1, Fpn &obj2);
+
+    bool operator == (const Fpn& obj2) const;
+    bool operator < (const Fpn& obj) const;
+
 
 
 

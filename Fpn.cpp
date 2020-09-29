@@ -11,6 +11,7 @@ Fpn::Fpn(char sign_, const string number_, int intPrecision_, int fractPrecision
 Fpn::Fpn(): sign('+'), number("0.0"), intPart("0"), fractPart("0"){}
 
 Fpn::Fpn(const Fpn& f): sign(f.sign), number(f.number), intPart(f.intPart), fractPart(f.fractPart){}
+Fpn::Fpn(Fpn& f): sign(f.getSign()), number(f.getNumber()), intPart(f.getIntPart()), fractPart(f.getFractPart()){}
 
 // //newFpnFromString(const char* s);
 Fpn::Fpn(const string number_){
@@ -210,6 +211,75 @@ bool operator < (Fpn &obj1, Fpn &obj2){
     return true;
 }
 
+bool Fpn::operator < (const Fpn& obj) const{
+
+    Fpn obj1(number);
+    Fpn obj2(obj);
+
+    if (obj1 == obj2){
+        return false;
+    }
+    
+    //sign
+    if (obj1.getSign() == '+' && obj2.getSign() == '-'){
+        return false;
+    }
+    else if (obj1.getSign() == '-' && obj2.getSign() == '+'){
+        return true;
+    }
+
+    else if (obj1.getSign() == '+' && obj2.getSign() == '+'){
+
+        //int part equal
+        if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() < obj2.getIntPart()){
+            return true;
+        }
+        else if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() > obj2.getIntPart()){
+            return false;
+        }
+        // int part size diff
+        if (obj1.getIntPart().length() < obj2.getIntPart().length() ){
+            return true;
+        }
+        else if (obj1.getIntPart().length() > obj2.getIntPart().length() ){
+            return false;
+        }
+        // int equal but fract not
+        if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() < obj2.getFractPart() ){
+            return true;
+        }
+        else if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() > obj2.getFractPart() ){
+            return false;
+        }
+        
+    }
+    else if (obj1.getSign() == '-' && obj2.getSign() == '-'){
+        //int part equal
+        if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() < obj2.getIntPart()){
+            return false;
+        }
+        else if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() > obj2.getIntPart()){
+            return true;
+        }
+        // int part size diff
+        if (obj1.getIntPart().length() < obj2.getIntPart().length() ){
+            return false;
+        }
+        else if (obj1.getIntPart().length() > obj2.getIntPart().length() ){
+            return true;
+        }
+        // int equal but fract not
+        if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() < obj2.getFractPart() ){
+            return false;
+        }
+        else if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() > obj2.getFractPart() ){
+            return true;
+        }
+    }
+    // fract part
+    return true;
+}
+
 bool operator > (Fpn &obj1, Fpn &obj2){
     return obj2 < obj1;
 }
@@ -237,9 +307,10 @@ Fpn Fpn::operator + (const Fpn& obj) {
     return addFpns(obj, temp) ; 
 }
 
-Fpn Fpn::operator - (Fpn &f2) { 
-    Fpn f1(this->toString());
-    char s1 = f1.getSign();
+Fpn Fpn::operator - (const Fpn& obj) { 
+    Fpn f1(this->getNumber());
+    Fpn f2(obj);
+    char s1 = sign;
     char s2 = f2.getSign();
 
     // --- => -++
@@ -265,7 +336,7 @@ Fpn Fpn::operator - (Fpn &f2) {
     }
 }
 
-Fpn Fpn::operator * (Fpn &f2){
+Fpn Fpn::operator * (Fpn& f2){
     Fpn f1(this->toString());
 
     string temp = multiplyIntAsString( f1.getIntPart()+f1.getFractPart() , f2.getIntPart()+f2.getFractPart() );
@@ -286,7 +357,7 @@ Fpn Fpn::operator * (Fpn &f2){
     return out;
 }
 
-Fpn Fpn::operator / (Fpn &f2){
+Fpn Fpn::operator / (Fpn& f2){
     Fpn f1(this->toString());
     // Fpn out( "5.0" );
     // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) );
@@ -333,34 +404,23 @@ Fpn Fpn::round(Fpn obj){
     }
 }
 
-// Fpn Fpn::fact(Fpn obj){
-//     Fpn zero("0.0");
-//     Fpn one("+1.0");
-//     // return (&obj == &zero) ? &one : (&obj * &Fpn::fact( (&obj - &one) ));
-//     // return (obj == zero) ? Fpn("1.0") : (Fpn::fact( (obj - one) ) * obj );
-//     if (obj == zero){
-//         return Fpn("1.0");
-//     }
-//     else{
-//         Fpn retval("1.0");
-//         while (! (obj == Fpn("+1.0"))){
-
-//             cout << "retval" << retval.toString() << endl;
-//             // cout << "retval" << retval * obj << endl;
-//             retval = retval * obj;
-//             cout << "retval" << retval.toString() << endl;
-
-//             cout << "obj" << obj.toString() << endl;
-//             obj = (obj - one);
-//             cout << "obj" << obj.toString() << endl;
-
-//             cout << "one" << one.toString() << endl;
-//             break;
-
-//         }
-//         return retval;
-//     }
-// }
+Fpn Fpn::fact(Fpn obj){
+    Fpn zero("0.0");
+    Fpn one("+1.0");
+    // return (&obj == &zero) ? &one : (&obj * &Fpn::fact( (&obj - &one) ));
+    // return (obj == Fpn("0.0")) ? Fpn("1.0") : (Fpn::fact( (obj - one) ) * obj );
+    if (obj == zero){
+        return Fpn("1.0");
+    }
+    else{
+        Fpn retval("1.0");
+        while (! (obj == Fpn("+1.0"))){
+            retval = retval * obj;
+            obj = obj + Fpn("-1");
+        }
+        return retval;
+    }
+}
 
 
 //*******************************************************************************************************************************

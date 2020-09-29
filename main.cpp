@@ -13,7 +13,7 @@ int main(){
     Fpn c("-123.234");
     Fpn d("0.456");
     Fpn e("0.111111");
-    Fpn fa("3.0");
+    Fpn fa("100.0");
     
 
     Fpn r("-1234.51283745623847236847384652387654823764872364827364283756248756248756283765236");
@@ -44,8 +44,8 @@ int main(){
     //
     // cout << '\n' << Fpn::fact(fa) << endl;
     // Fpn one = Fpn("1.0");
-    fa= fa + Fpn("1.0") ;
-    cout << fa << endl;
+    // fa = fa + Fpn("1.0") ;
+    // cout << fa << endl;
     // cout << Fpn::fact(Fpn("4.0")) << endl;
     // cout << Fpn::round(b) << endl;
     // cout << Fpn::round(c) << endl;
@@ -54,8 +54,18 @@ int main(){
     // cout << (&fa == new Fpn("3.0")) << endl;
     // cout << (fa == Fpn("3.0")) << endl;
     
+    // cout << Fpn::fact(fa) << endl;
     
-   
+    // Fpn f("0.0");
+    // f = f/a;
+
+    // Fpn nulla("0.0");
+    // cout << (nulla<Fpn("20")) << endl;
+
+    for (Fpn i("0.0"); i > Fpn("20.0"); i = i + Fpn("1.0") ){
+        cout << i << "\t" << Fpn("20.0") << "\t" << (i==Fpn("20.0")) << endl;
+    }
+
 
 
     return 0;
