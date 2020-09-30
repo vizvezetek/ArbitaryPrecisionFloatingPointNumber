@@ -6,28 +6,28 @@
 using namespace std;
 
 int main(){
-    
+
     Fpn a("-22.9911");
     Fpn aa("-22.9911");
     Fpn b("3333.111189");
     Fpn c("-123.234");
     Fpn d("0.456");
     Fpn e("0.111111");
-    Fpn fa("100.0");
-    
+
+    Fpn fa("200.0");
 
     Fpn r("-1234.51283745623847236847384652387654823764872364827364283756248756248756283765236");
     Fpn q("7.890005348756348765348765823765139485739847539847594827539847593847593847598343475634875601");
 
-    double i = -22.9911;
-    double j = 3333.111189;
-    double k = -123.234;
-    double l = 0.456;
-    double m = 0.111111;
+    // double i = -22.9911;
+    // double j = 3333.111189;
+    // double k = -123.234;
+    // double l = 0.456;
+    // double m = 0.111111;
 
     // Fpn f = a*b*c*d*e;
     // double o = i*j*k*l*m;
-   
+
     // cout << (r/q).toString() << endl;
 
     // cout << "FPN: " << f.toString() << endl;
@@ -53,20 +53,28 @@ int main(){
 
     // cout << (&fa == new Fpn("3.0")) << endl;
     // cout << (fa == Fpn("3.0")) << endl;
-    
+
+    // Fpn fa("200.0");
     // cout << Fpn::fact(fa) << endl;
-    
+
     // Fpn f("0.0");
     // f = f/a;
 
     // Fpn nulla("0.0");
     // cout << (nulla<Fpn("20")) << endl;
 
-    for (Fpn i("0.0"); i > Fpn("20.0"); i = i + Fpn("1.0") ){
-        cout << i << "\t" << Fpn("20.0") << "\t" << (i==Fpn("20.0")) << endl;
-    }
+
+    // for (Fpn i("0.0"); i <= Fpn("20.0") ; i = i + Fpn("1.0") ){
+
+    //     cout << i << endl;
+    //     // cout << i << "\t" << Fpn("20.0") << "\t" << (i==Fpn("20.0")) << "\t" <<  (i<Fpn("20.0")) << endl;
+    //     // Fpn j("20.0");
+    //     // cout << (j < Fpn("20.0")) << endl ;
+    // }
 
 
-
+    Fpn test("180.0", 100);
+    cout << Fpn::sin(test) << endl;
+    
     return 0;
 }

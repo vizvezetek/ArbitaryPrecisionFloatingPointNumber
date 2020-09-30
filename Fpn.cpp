@@ -47,8 +47,46 @@ Fpn::Fpn(const string number_){
         else{
             fractPart+=number[i];
         }
-
     }
+    fractPart = removeZerosTheEndOfTheString(fractPart);
+}
+
+Fpn::Fpn(const string number_, const int fractPrecision_){
+ 
+    fractPrecision = fractPrecision_;
+
+    if(number_[0]=='+'){
+        sign = '+';
+        number = number_.substr( 1, (int)number_.size() );
+    }
+    else if (number_[0]=='-'){
+        sign = '-';
+        number = number_.substr(1, (int)number_.size() );
+    }
+    else{
+        sign = '+';
+        number = number_;
+    }
+
+    bool floatingpoint = false;
+    for (int i = 0; i< number.size(); i++){
+
+        if (number[i] == '.' || number[i] == ','){
+            number[i] = '.';
+            intPrecision = i;
+            // fractPrecision = number.size()-i-1;
+            floatingpoint = true;
+            continue; //because of the floating point
+        }
+        
+        if (!floatingpoint){
+            intPart+=number[i];
+        }
+        else if ( fractPart.size() <= fractPrecision ){
+            fractPart+=number[i];
+        }
+    }
+    fractPart = removeZerosTheEndOfTheString(fractPart);
 }
 
 
@@ -79,11 +117,13 @@ const int Fpn::getFractPrecision(){
 }
 
 string Fpn::toString(){
-    return sign + intPart + '.' + fractPart;
+    return sign + intPart + '.' + removeZerosTheEndOfTheString(fractPart);
 }
 
 std::ostream& operator<<(std::ostream &strm, const Fpn &a) {
+//   return strm << a.sign << a.intPart << '.' <<a.fractPart;
   return strm << a.sign << a.intPart << '.' << a.fractPart;
+
 }
 
 //setters
@@ -101,7 +141,7 @@ void Fpn::setIntPart(const string intPart_){
 }
 
 void Fpn::setFractPart(const string fractPart_){
-    fractPart = fractPart_;
+    fractPart = removeZerosTheEndOfTheString(fractPart_);
 }
 
 void Fpn::setIntPrecision(const int intPrecision_){ // plus zeros, when the size is ok.
@@ -211,68 +251,68 @@ bool operator < (Fpn &obj1, Fpn &obj2){
     return true;
 }
 
-bool Fpn::operator < (const Fpn& obj) const{
+bool Fpn::operator < (const Fpn& obj2) const{
 
-    Fpn obj1(number);
-    Fpn obj2(obj);
+    // Fpn obj1(number);
+    // Fpn obj2(obj);
 
-    if (obj1 == obj2){
+    if (sign == obj2.sign  && intPart == obj2.intPart && fractPart == obj2.fractPart){
         return false;
     }
     
     //sign
-    if (obj1.getSign() == '+' && obj2.getSign() == '-'){
+    if (sign == '+' && obj2.sign == '-'){
         return false;
     }
-    else if (obj1.getSign() == '-' && obj2.getSign() == '+'){
+    else if (sign == '-' && obj2.sign == '+'){
         return true;
     }
 
-    else if (obj1.getSign() == '+' && obj2.getSign() == '+'){
+    else if (sign == '+' && obj2.sign == '+'){
 
         //int part equal
-        if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() < obj2.getIntPart()){
+        if (intPart.length() == obj2.intPart.length() && intPart < obj2.intPart){
             return true;
         }
-        else if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() > obj2.getIntPart()){
+        else if (intPart.length() == obj2.intPart.length() && intPart > obj2.intPart){
             return false;
         }
         // int part size diff
-        if (obj1.getIntPart().length() < obj2.getIntPart().length() ){
+        if (intPart.length() < obj2.intPart.length() ){
             return true;
         }
-        else if (obj1.getIntPart().length() > obj2.getIntPart().length() ){
+        else if (intPart.length() > obj2.intPart.length() ){
             return false;
         }
         // int equal but fract not
-        if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() < obj2.getFractPart() ){
+        if (intPart == obj2.intPart && fractPart < obj2.fractPart ){
             return true;
         }
-        else if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() > obj2.getFractPart() ){
+        else if (intPart == obj2.intPart && fractPart > obj2.fractPart ){
             return false;
         }
         
     }
-    else if (obj1.getSign() == '-' && obj2.getSign() == '-'){
+    else if (sign == '-' && obj2.sign == '-'){
         //int part equal
-        if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() < obj2.getIntPart()){
+        if (intPart.length() == obj2.intPart.length() && intPart < obj2.intPart){
             return false;
         }
-        else if (obj1.getIntPart().length() == obj2.getIntPart().length() && obj1.getIntPart() > obj2.getIntPart()){
+        else if (intPart.length() == obj2.intPart.length() && intPart > obj2.intPart){
             return true;
         }
         // int part size diff
-        if (obj1.getIntPart().length() < obj2.getIntPart().length() ){
+        if (intPart.length() < obj2.intPart.length() ){
             return false;
         }
-        else if (obj1.getIntPart().length() > obj2.getIntPart().length() ){
+        else if (intPart.length() > obj2.intPart.length() ){
             return true;
         }
         // int equal but fract not
-        if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() < obj2.getFractPart() ){
+        if (intPart == obj2.intPart && fractPart < obj2.fractPart ){
             return false;
         }
-        else if (obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() > obj2.getFractPart() ){
+        else if (intPart == obj2.intPart && fractPart > obj2.fractPart ){
             return true;
         }
     }
@@ -284,21 +324,30 @@ bool operator > (Fpn &obj1, Fpn &obj2){
     return obj2 < obj1;
 }
 
+bool Fpn::operator > (const Fpn& obj2) const{
+    // Fpn obj1(number);
+    // Fpn obj2(obj);
+    // return obj2 < obj1;
+    return obj2 < *this; 
+}
+
 bool operator <= (Fpn &obj1, Fpn &obj2){
     return obj1==obj2 || obj1<obj2;
+}
+
+bool Fpn::operator <= (const Fpn& obj2) const{
+    // Fpn obj1(number);
+    // Fpn obj2(obj);
+    return *this==obj2 || *this<obj2;
 }
 
 bool operator >= (Fpn &obj1, Fpn &obj2){
     return obj1==obj2 || obj1>obj2;
 }
 
-
-// Fpn Fpn::operator + (Fpn const &obj ) {
-
-//     Fpn temp(this->toString());
-
-//     return addFpns(obj, temp) ; 
-// }
+bool Fpn::operator >= (const Fpn& obj2) const{
+    return *this==obj2 || *this>obj2;
+}
 
 Fpn Fpn::operator + (const Fpn& obj) {
 
@@ -336,18 +385,18 @@ Fpn Fpn::operator - (const Fpn& obj) {
     }
 }
 
-Fpn Fpn::operator * (Fpn& f2){
+Fpn Fpn::operator * (const Fpn& f2){
     Fpn f1(this->toString());
 
-    string temp = multiplyIntAsString( f1.getIntPart()+f1.getFractPart() , f2.getIntPart()+f2.getFractPart() );
+    string temp = multiplyIntAsString( f1.getIntPart()+f1.getFractPart() , f2.intPart+f2.fractPart );
 
     //set the floating point to the right position
 
-    temp.insert(temp.end()-(f1.getFractPart().size() + f2.getFractPart().size() ) , '.');
+    temp.insert(temp.end()-(f1.getFractPart().size() + f2.fractPart.size() ) , '.');
     Fpn out(temp);
 
     //set the sign
-    if ( (f1.getSign() == '-' && f2.getSign() == '-') || (f1.getSign() == '+' && f2.getSign() == '+') ){
+    if ( (f1.getSign() == '-' && f2.sign == '-') || (f1.getSign() == '+' && f2.sign == '+') ){
         out.setSign('+');
     }
     else {
@@ -357,16 +406,17 @@ Fpn Fpn::operator * (Fpn& f2){
     return out;
 }
 
-Fpn Fpn::operator / (Fpn& f2){
-    Fpn f1(this->toString());
+Fpn Fpn::operator / (const Fpn& f2){
+    Fpn &f1(*this);
+
     // Fpn out( "5.0" );
     // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) );
-    Fpn out( divideIntsAsString( this->getNumber(), f2.getNumber() , f1.getFractPrecision()>f2.getFractPrecision() ? f1.getFractPrecision() : f2.getFractPrecision() ) );
+    Fpn out( divideIntsAsString( this->getNumber(), f2.number , f1.getFractPrecision()>f2.fractPrecision ? f1.getFractPrecision() : f2.fractPrecision ) );
 
     // example 234.567 / 89.01 
     
     // set the sign 
-    if ( (f1.getSign() == '-' && f2.getSign() == '-') || (f1.getSign() == '+' && f2.getSign() == '+') ){
+    if ( (f1.getSign() == '-' && f2.sign == '-') || (f1.getSign() == '+' && f2.sign == '+') ){
         out.setSign('+');
     }
     else {
@@ -421,6 +471,52 @@ Fpn Fpn::fact(Fpn obj){
         return retval;
     }
 }
+
+
+Fpn Fpn::sin(Fpn x) 
+{ 
+    Fpn res(x.toString()); 
+    Fpn sign("1.0");
+    Fpn fact = sign;
+    Fpn pow = x; 
+
+    // cout << res << sign << fact << pow <<endl;
+
+    for (int i = 1; i < TAYLOR_PREC; i++) 
+    { 
+        std::string s = std::to_string((float)i);
+        Fpn fpni(s);
+        // cout << i << "\t" << s <<"\t" << fpni<< endl;
+        sign = sign * Fpn("-1.0"); 
+        fact = fact * (Fpn("2.0") * fpni + Fpn("1.0") ) *  (Fpn("2.0") * fpni ); 
+        // cout << fact << endl;
+        pow = pow * x * x; 
+        // cout << pow << endl;
+        res = res + (sign * pow / fact ); 
+
+        cout << fpni << "\t" << res << endl;
+    } 
+  
+    return res;  
+} 
+
+long double cos2(double x) 
+{ 
+    double res = 1; 
+    double sign = 1, fact = 1,  
+                     pow = 1; 
+    for (int i = 1; i < TAYLOR_PREC; i++) 
+    { 
+        sign = sign * -1; 
+        fact = fact * (2 * i - 1) *  
+                           (2 * i); 
+        pow = pow * x * x; 
+        res = res + sign *  
+              pow / fact; 
+    } 
+  
+    return res;  
+} 
 
 
 //*******************************************************************************************************************************
@@ -533,7 +629,7 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
     //     temp.clear();
     // }
     out.setIntPart( removeZerosTheBeginOfTheString( out.getIntPart() ) );
-
+    out.setFractPart (removeZerosTheEndOfTheString(out.getFractPart()));
     return out;
 }
 
@@ -850,6 +946,21 @@ string Fpn::removeZerosTheBeginOfTheString(string s){
 
         s = temp.substr(i, temp.size() ) ;
         temp.clear();
+    }
+    return s;
+}
+
+string Fpn::removeZerosTheEndOfTheString(string s){
+    //if the last char is '0'
+    if (s.at(s.length()-1) == '0'){
+        int i = s.length()-1;
+        for ( ; s[i]=='0'; i--){}
+        s.erase(i+1, s.length());
+
+        //if the string is empty because of zeros
+        if (s.length()==0){
+            s.insert(0, "0");
+        }
     }
     return s;
 }

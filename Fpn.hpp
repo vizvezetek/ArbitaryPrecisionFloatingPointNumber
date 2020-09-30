@@ -7,6 +7,9 @@
 #include <tuple> //multiple return values
 #include <algorithm> 
 
+#define TAYLOR_PREC 10
+#define EPS 1e-13
+
 using namespace std;
 
 class Fpn{
@@ -37,6 +40,7 @@ private:
     Fpn addFpns(Fpn f1, Fpn f2);
 
     string removeZerosTheBeginOfTheString(string s);
+    string removeZerosTheEndOfTheString(string s);
 
     friend std::ostream& operator<<(std::ostream&, const Fpn&);
     
@@ -44,7 +48,8 @@ private:
 public:
     //constructors *****************************************
     Fpn(char sign_, const string number_, int intPrecision_, int fractPrecision_ );
-    Fpn(const string number);
+    Fpn(const string number_);
+    Fpn(const string number_, const int fractPrecision_);
     Fpn(const Fpn& obj);
     Fpn(Fpn& obj);
     Fpn();
@@ -81,14 +86,14 @@ public:
 
     Fpn operator + (const Fpn& obj);
     Fpn operator - (const Fpn& obj);
-    Fpn operator * (Fpn& f2);
-    Fpn operator / (Fpn& f2);
+    Fpn operator * (const Fpn& f2);
+    Fpn operator / (const Fpn& f2);
 
     //FPN.math functions
-    // Fpn sqrt (Fpn &obj);
-    // Fpn pow (Fpn &obj);
-    // Fpn sin (Fpn &obj);
-    // Fpn cos (Fpn &obj);
+    Fpn sqrt (Fpn &obj);
+    Fpn pow (Fpn &obj);
+    static Fpn sin (Fpn x);
+    Fpn cos (Fpn &obj);
 
     static Fpn abs(Fpn obj);
     static Fpn round(Fpn obj);
@@ -103,7 +108,11 @@ public:
     friend bool operator >= (Fpn &obj1, Fpn &obj2);
 
     bool operator == (const Fpn& obj2) const;
-    bool operator < (const Fpn& obj) const;
+    bool operator != (const Fpn& obj2) const;
+    bool operator < (const Fpn& obj2) const;
+    bool operator > (const Fpn& obj2) const;
+    bool operator <= (const Fpn& obj2) const;
+    bool operator >= (const Fpn& obj2) const;
 
 
 
