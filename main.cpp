@@ -73,8 +73,59 @@ int main(){
     // }
 
 
-    Fpn test("180.0", 100);
-    cout << Fpn::sin(test) << endl;
-    
+
+    // Fpn test("100.0", 100);
+    // Fpn test2("3.0", 100);
+    // cout << Fpn::sin(test) << endl;
+    // cout << test/test2 << endl;
+ 
+    // Fpn x("180.0");
+
+    // Fpn res(x); 
+    // Fpn sign("1.0",100);
+    // Fpn fact = sign;
+    // Fpn pow = x; 
+
+    // // cout << res << sign << fact << pow <<endl;
+
+    // for (int i = 1; i < TAYLOR_PREC; i++) 
+    // { 
+    //     std::string s = std::to_string((float)i);
+    //     Fpn fpni(s);
+    //     // cout << i << "\t" << s <<"\t" << fpni<< endl;
+    //     sign = sign * Fpn("-1.0",100); 
+    //     cout << "sign\t" << sign << endl;
+    //     fact = fact * ( Fpn("2.0", 100) * fpni + Fpn("1.0", 100) ) *  (Fpn("2.0", 100) * fpni ); 
+    //     cout << "fact\t" << fact << endl;
+    //     pow = pow * x * x; 
+    //     cout << "pow\t" << pow << endl;
+    //     res = res + ( pow / fact * sign); 
+    //     cout << "res\t" << res << endl;
+    // } 
+
+    // cout << Fpn("123.0")/Fpn("25.0") << endl;
+
+    // Fpn y("+188956800000.01",10);
+    // Fpn x("+120.01",10);
+    // Fpn z = y/x;
+
+    // cout << z.toString() << endl;
+
+    // cout << Fpn("-1234.51283745623847236847384652387654823764872364827364283756248756248756283765236")/Fpn("7.890005348756348765348765823765139485739847539847594827539847593847593847598343475634875601") << endl;
+    // cout << Fpn("+188.956800000")/Fpn("+0.000000120") << endl;
+    // cout << Fpn("+188.01")* Fpn("1.0") /Fpn("+2.01") << endl;
+    cout << Fpn("+12.0")/Fpn("1.1") << endl;
+
+    // string number = "123.0";
+    // string divisor = "25.0000000000";
+
+    // int numPrec = number.substr(number.find("."), number.size() ).size();
+    // int divPrec = divisor.substr(divisor.find("."), divisor.size() ).size();
+
+    // cout << numPrec << "\t" << number.find(".") << "\t" << number.size() << "\t" << number.substr(number.find("."), number.size() ) << endl;
+    // cout << divPrec << "\t" << divisor.find(".") << "\t" << divisor.size() << "\t" << divisor.substr(divisor.find("."), divisor.size() ) << endl;
+
+
+
     return 0;
 }

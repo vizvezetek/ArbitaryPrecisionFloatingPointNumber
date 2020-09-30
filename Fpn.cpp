@@ -49,6 +49,8 @@ Fpn::Fpn(const string number_){
         }
     }
     fractPart = removeZerosTheEndOfTheString(fractPart);
+
+    // fractPrecision = 100;
 }
 
 Fpn::Fpn(const string number_, const int fractPrecision_){
@@ -113,7 +115,7 @@ const int Fpn::getIntPrecision(){
 }
 
 const int Fpn::getFractPrecision(){
-    return fractPart.size();
+    return fractPrecision;
 }
 
 string Fpn::toString(){
@@ -165,6 +167,7 @@ Fpn& Fpn::operator = ( const Fpn& obj){
         number = obj.number;
         intPart = obj.intPart;
         fractPart = obj.fractPart;
+        fractPrecision = obj.fractPrecision;
     }
     return *this;
 }
@@ -357,7 +360,7 @@ Fpn Fpn::operator + (const Fpn& obj) {
 }
 
 Fpn Fpn::operator - (const Fpn& obj) { 
-    Fpn f1(this->getNumber());
+    Fpn f1(this->toString());
     Fpn f2(obj);
     char s1 = sign;
     char s2 = f2.getSign();
@@ -407,16 +410,43 @@ Fpn Fpn::operator * (const Fpn& f2){
 }
 
 Fpn Fpn::operator / (const Fpn& f2){
-    Fpn &f1(*this);
+    Fpn f1(this->toString());
+    Fpn f3(f2.number);
+    cout << "f1\t" << f1.toString() <<endl;
+    cout << "f2\t" << f3.toString() <<endl;
+
+    cout << "eredmeny \t" << divideIntsAsString(f1.toString(), f3.toString(), 100) << endl;
+
 
     // Fpn out( "5.0" );
-    // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) );
-    Fpn out( divideIntsAsString( this->getNumber(), f2.number , f1.getFractPrecision()>f2.fractPrecision ? f1.getFractPrecision() : f2.fractPrecision ) );
+    // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) ); // ==4,92
+
+    // Fpn out( divideIntsAsString( this->toString(), f2.number , f1.getFractPrecision()>f2.fractPrecision ? f1.getFractPrecision() : f2.fractPrecision ) );
+    Fpn out( divideIntsAsString( f1.toString(), f3.toString() , f1.getFractPrecision()>f3.getFractPrecision() ? f1.getFractPrecision() : f3.getFractPrecision() ) );
 
     // example 234.567 / 89.01 
     
     // set the sign 
-    if ( (f1.getSign() == '-' && f2.sign == '-') || (f1.getSign() == '+' && f2.sign == '+') ){
+    if ( (f1.getSign() == '-' && f3.getSign() == '-') || (f1.getSign() == '+' && f3.getSign() == '+') ){
+        out.setSign('+');
+    }
+    else {
+        out.setSign('-');
+    }
+
+    return out;
+}
+
+Fpn Fpn::operator / (Fpn &f2){
+    Fpn f1(this->toString());
+    // Fpn out( "5.0" );
+    // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) );
+    Fpn out( divideIntsAsString( this->getNumber(), f2.getNumber() , f1.getFractPrecision()>f2.getFractPrecision() ? f1.getFractPrecision() : f2.getFractPrecision() ) );
+
+    // example 234.567 / 89.01 
+    
+    // set the sign 
+    if ( (f1.getSign() == '-' && f2.getSign() == '-') || (f1.getSign() == '+' && f2.getSign() == '+') ){
         out.setSign('+');
     }
     else {
@@ -476,7 +506,7 @@ Fpn Fpn::fact(Fpn obj){
 Fpn Fpn::sin(Fpn x) 
 { 
     Fpn res(x.toString()); 
-    Fpn sign("1.0");
+    Fpn sign("1.0",100);
     Fpn fact = sign;
     Fpn pow = x; 
 
@@ -486,33 +516,27 @@ Fpn Fpn::sin(Fpn x)
     { 
         std::string s = std::to_string((float)i);
         Fpn fpni(s);
-        // cout << i << "\t" << s <<"\t" << fpni<< endl;
-        sign = sign * Fpn("-1.0"); 
-        fact = fact * (Fpn("2.0") * fpni + Fpn("1.0") ) *  (Fpn("2.0") * fpni ); 
-        // cout << fact << endl;
+        sign = sign * Fpn("-1.0",100); 
+        fact = fact * ( Fpn("2.0", 100) * fpni + Fpn("1.0", 100) ) *  (Fpn("2.0", 100) * fpni ); 
         pow = pow * x * x; 
-        // cout << pow << endl;
         res = res + (sign * pow / fact ); 
-
-        cout << fpni << "\t" << res << endl;
     } 
   
     return res;  
 } 
 
-long double cos2(double x) 
+Fpn Fpn::cos(Fpn x) 
 { 
-    double res = 1; 
-    double sign = 1, fact = 1,  
-                     pow = 1; 
+    Fpn res("1.0"); 
+    Fpn sign("1.0"), fact("1.0"),  pow("1.0"); 
     for (int i = 1; i < TAYLOR_PREC; i++) 
     { 
-        sign = sign * -1; 
-        fact = fact * (2 * i - 1) *  
-                           (2 * i); 
+        std::string s = std::to_string((float)i);
+        Fpn fpni(s);
+        sign = sign * Fpn("-1.0",100); 
+        fact = fact * (Fpn("2.0", 100) * fpni - Fpn("1.0", 100)) *  (Fpn("2.0", 100) * fpni); 
         pow = pow * x * x; 
-        res = res + sign *  
-              pow / fact; 
+        res = res + (sign * pow / fact ); 
     } 
   
     return res;  

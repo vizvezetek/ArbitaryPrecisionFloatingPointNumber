@@ -82,7 +82,7 @@ public:
     // Fpn operator + (Fpn const &obj);
     // Fpn operator - (Fpn &obj);
     // Fpn operator * (Fpn &obj);
-    // Fpn operator / (Fpn &obj);
+    Fpn operator / (Fpn &obj);
 
     Fpn operator + (const Fpn& obj);
     Fpn operator - (const Fpn& obj);
@@ -93,7 +93,7 @@ public:
     Fpn sqrt (Fpn &obj);
     Fpn pow (Fpn &obj);
     static Fpn sin (Fpn x);
-    Fpn cos (Fpn &obj);
+    static Fpn cos (Fpn x);
 
     static Fpn abs(Fpn obj);
     static Fpn round(Fpn obj);
