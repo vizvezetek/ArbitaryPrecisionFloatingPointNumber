@@ -7,7 +7,7 @@
 #include <tuple> //multiple return values
 #include <algorithm> 
 
-#define TAYLOR_PREC 50
+#define TAYLOR_PREC 45
 #define EPS 1e-13
 
 using namespace std;

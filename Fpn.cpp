@@ -165,8 +165,8 @@ void Fpn::setFractPrecision(const int fractPrecision_){
 Fpn& Fpn::operator = ( const Fpn& obj){
     if (this != &obj){
         sign = obj.sign;
-        number = obj.number;
-        intPart = obj.intPart;
+        number = obj.sign + obj.intPart + "." +obj.fractPart;
+        intPart = (obj.intPart.size()==0) ? "0" : obj.intPart;
         fractPart = obj.fractPart;
         fractPrecision = obj.fractPrecision;
     }
@@ -526,8 +526,8 @@ Fpn Fpn::sin(Fpn x)
         // cout << pow << "\t"<< fact << "\t"<< tempcalc << endl;
         res = (i%2 == 0) ? res+tempcalc : res-tempcalc;
        
-
-        cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
+        // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
+        // cout << res << endl;
     } 
   
     return res;  
@@ -717,6 +717,7 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
     }
     // cout << temp1 << "\t" << temp2 << "\t" << temp3 << endl;
 
+    if (temp3[0] == '.')  temp3.insert(0,"0");
 
     return Fpn (temp3);
 }

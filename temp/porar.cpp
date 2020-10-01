@@ -120,8 +120,8 @@ long double sin2(double x)
         // cout << fact << endl;
         pow = pow * x * x; 
         // cout << pow << endl;
-        res = res + sign *  
-              pow / fact; 
+        res = res + sign *  pow / fact; 
+        cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
     } 
   
     return res;  
@@ -149,21 +149,23 @@ int main (){
     
 
 
-    std::cout << std::setprecision(10) <<  "sqrt \t" << sqrt(13.0) <<endl;
-    std::cout << std::setprecision(10) <<  "sqrt2 \t" << sqrt2(13.0) <<endl; // ez lesz a jó.
+    // std::cout << std::setprecision(10) <<  "sqrt \t" << sqrt(13.0) <<endl;
+    // std::cout << std::setprecision(10) <<  "sqrt2 \t" << sqrt2(13.0) <<endl; // ez lesz a jó.
 
-    cout << std::setprecision(10) << "pow \t" <<  pow(11.3, -3.1) << endl;
-    cout << std::setprecision(10) << "pow2 \t" <<  pow2(11.3, -3.1) << endl; // ez lesz a jó
+    // cout << std::setprecision(10) << "pow \t" <<  pow(11.3, -3.1) << endl;
+    // cout << std::setprecision(10) << "pow2 \t" <<  pow2(11.3, -3.1) << endl; // ez lesz a jó
     
-    std::cout << std::setprecision(10) <<  "sin\t" << sin(22.2) <<endl;
-    std::cout << std::setprecision(10) <<  "sin2\t" << sin2(22.2) <<endl; // ez áll a legközelebb a jóhoz.
+    // std::cout << std::setprecision(10) <<  "sin\t" << sin(22.2) <<endl;
+    // std::cout << std::setprecision(10) <<  "sin2\t" << sin2(22.2) <<endl; // ez áll a legközelebb a jóhoz.
+    std::cout << std::setprecision(10) <<  "sin2\t" << sin2(6.0) <<endl; // ez áll a legközelebb a jóhoz.
+    std::cout << std::setprecision(10) <<  "sin\t" << sin(6.0) <<endl; // ez áll a legközelebb a jóhoz.
 
-    std::cout << std::setprecision(10) <<  "cos\t" << cos(22.2) <<endl;
-    std::cout << std::setprecision(10) <<  "cos2\t" << cos2(22.2) <<endl; //ok
+    // std::cout << std::setprecision(10) <<  "cos\t" << cos(22.2) <<endl;
+    // std::cout << std::setprecision(10) <<  "cos2\t" << cos2(22.2) <<endl; //ok
 
-    std::cout << "round: " << round2(-2.491) << endl;
-    std::cout << "fact2: " << fact2(3) << endl;
+    // std::cout << "round: " << round2(-2.491) << endl;
+    // std::cout << "fact2: " << fact2(3) << endl;
 
-    return 0;
+    // return 0;
 }
 
