@@ -412,10 +412,10 @@ Fpn Fpn::operator * (const Fpn& f2){
 Fpn Fpn::operator / (const Fpn& f2){
     Fpn f1(this->toString());
     Fpn f3(f2.number);
-    cout << "f1\t" << f1.toString() <<endl;
-    cout << "f2\t" << f3.toString() <<endl;
+    // cout << "f1\t" << f1.toString() <<endl;
+    // cout << "f2\t" << f3.toString() <<endl;
 
-    cout << "eredmeny \t" << divideIntsAsString(f1.toString(), f3.toString(), 100) << endl;
+    // cout << "eredmeny \t" << divideIntsAsString(f1.toString(), f3.toString(), 100) << endl;
 
 
     // Fpn out( "5.0" );
@@ -902,12 +902,17 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
     int numPrec = number.substr(number.find("."), number.size() ).size();
     int divPrec = divisor.substr(divisor.find("."), divisor.size() ).size();
 
+    // cout << "01\t" << number << "\t" << divisor << endl;
+
     if (numPrec>divPrec) {
         divisor.append(numPrec-divPrec, '0');
     }
     else {
         number.append(divPrec-numPrec, '0');
     }
+
+    // cout << "02\t" << number << "\t" << divisor << endl;
+
 
     string tempNum = number;
     string tempDiv = divisor;
@@ -916,9 +921,19 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
     tempNum.erase(tempNum.find("."),1);
     tempDiv.erase(tempDiv.find("."),1);
 
+    // cout << "03\t" << tempNum << "\t" << tempDiv << endl;
 
     string quotient, remainder;
     tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
+
+    tuple <string, string> geek;  
+    geek = modIntsAsString(tempNum, tempDiv); 
+
+    // cout << "03\t" << tempNum << "\t" << tempDiv << endl;
+    // cout << "04\t" << quotient << "\t" << remainder << endl;
+    // cout << "05\t" << get<0>(geek) << "\t" << get<1>(geek) << endl;
+
+
 
     out = quotient + "."; 
     actPrec++;
@@ -942,24 +957,27 @@ tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
 
     string out = "";
 
-    int counter = 0;
+    // int counter = 0;
+    string counter = "0";
     if (isSmallerInt(num1, num2)){
-        counter = 0;
+        counter = "0";
         // num1 = num1;
     }
     else{
-        while(isSmallerInt(num2, num1)){
+        while(isSmallerInt(num2, num1) || num1==num2 ){
 
             // num1 = removeZerosTheBeginOfTheString(num1);
             num1 = diffIntsAsString(num1, num2);
             num1 = removeZerosTheBeginOfTheString(num1);
 
-            counter ++;
+            // counter ++;
+            counter = addIntAsString(counter, "1");
         }
     }
     
 
-    return make_tuple( to_string(counter), num1 );  
+    // return make_tuple( to_string(counter), num1 );  
+    return make_tuple( counter, num1 );  
 }
 
 string Fpn::removeZerosTheBeginOfTheString(string s){
