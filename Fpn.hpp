@@ -7,7 +7,7 @@
 #include <tuple> //multiple return values
 #include <algorithm> 
 
-#define TAYLOR_PREC 100
+#define TAYLOR_PREC 50
 #define EPS 1e-13
 
 using namespace std;
@@ -79,8 +79,8 @@ public:
     // Fpn operator = (Fpn const &obj);
     Fpn& operator = (const Fpn& obj);
 
-    // Fpn operator + (Fpn const &obj);
-    // Fpn operator - (Fpn &obj);
+    // Fpn operator + (Fpn &obj);
+    // Fpn operator - (Fpn obj);
     // Fpn operator * (Fpn &obj);
     Fpn operator / (Fpn &obj);
 

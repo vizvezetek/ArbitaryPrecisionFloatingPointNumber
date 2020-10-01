@@ -115,7 +115,8 @@ const int Fpn::getIntPrecision(){
 }
 
 const int Fpn::getFractPrecision(){
-    return fractPrecision;
+    //the minimum precision is 100 digits
+    return (fractPrecision < 100 ) ? 100 : fractPrecision;
 }
 
 string Fpn::toString(){
@@ -422,7 +423,7 @@ Fpn Fpn::operator / (const Fpn& f2){
     // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) ); // ==4,92
 
     // Fpn out( divideIntsAsString( this->toString(), f2.number , f1.getFractPrecision()>f2.fractPrecision ? f1.getFractPrecision() : f2.fractPrecision ) );
-    Fpn out( divideIntsAsString( f1.toString(), f3.toString() , f1.getFractPrecision()>f3.getFractPrecision() ? f1.getFractPrecision() : f3.getFractPrecision() ) );
+    Fpn out( divideIntsAsString( f1.getNumber(), f3.getNumber() , f1.getFractPrecision()>f3.getFractPrecision() ? f1.getFractPrecision() : f3.getFractPrecision() ) );
 
     // example 234.567 / 89.01 
     
@@ -507,6 +508,7 @@ Fpn Fpn::sin(Fpn x)
 { 
     Fpn res(x.toString()); 
     Fpn sign("1.0",100);
+    Fpn tempcalc = sign;
     Fpn fact = sign;
     Fpn pow = x; 
 
@@ -516,10 +518,16 @@ Fpn Fpn::sin(Fpn x)
     { 
         std::string s = std::to_string((float)i);
         Fpn fpni(s);
-        sign = sign * Fpn("-1.0",100); 
+        // sign = sign * Fpn("-1.0",100); 
         fact = fact * ( Fpn("2.0", 100) * fpni + Fpn("1.0", 100) ) *  (Fpn("2.0", 100) * fpni ); 
         pow = pow * x * x; 
-        res = res + (sign * pow / fact ); 
+        // res = res + (sign * pow / fact ); 
+        tempcalc = (pow/fact);
+        // cout << pow << "\t"<< fact << "\t"<< tempcalc << endl;
+        res = (i%2 == 0) ? res+tempcalc : res-tempcalc;
+       
+
+        cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
     } 
   
     return res;  
@@ -619,7 +627,7 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
     }
     else {
         //simple minus
-
+        
         //set sign
         if (Fpn::isSmallerFloat(f1,f2) ){
             out.setSign(f2.getSign());
@@ -891,45 +899,135 @@ string Fpn::multiplyIntAsString(string num1, string num2){
     return s; 
 }
 
-// string Fpn::divideIntsAsString_(string number, string divisor, int precision){ 
+string Fpn::divideIntsAsString(string number, string divisor, int precision){  
+    
+    string out; 
+
+    // int precdiff = (int)f2.getFractPrecision() - (int)f1.getFractPrecision();
+    // tempstr.append(precdiff,'0');
+
+    // cout << number << "\t" << divisor << endl;
+    // cout << "precison: " << precision << endl;
+
+
+    int pointPos1 = number.find(".");
+    int pointPos2 = divisor.find(".");
+    int pointDiff = std::abs(pointPos1-pointPos2);
+    if (pointPos1>pointPos2 && pointDiff>3){
+        // pont áthelyezése divisor-ben pointpos1 dik helyre
+        divisor.erase(divisor.find("."),1);
+
+        //kibővítés nullákkal a string miatt
+        if (number.size()>divisor.size()) {
+            divisor.append(number.size()-divisor.size(), '0');
+            precision += number.size()-divisor.size();
+        }
+        else {
+            number.append(divisor.size()-number.size(), '0');
+            precision += divisor.size()-number.size();
+        }
+
+        // cout << "precison: " << precision << endl;
+
+        divisor.insert(pointPos1, ".");
+
+        number = removeZerosTheEndOfTheString(number);
+        number = removeZerosTheBeginOfTheString(number);
+
+        divisor = removeZerosTheEndOfTheString(divisor);
+        divisor = removeZerosTheBeginOfTheString(divisor);
+
+        divisor = (divisor.back() == '.') ? divisor.append("0") : divisor; // ha túlnullázta, akkor hozzácsapunk egyet, hogy a pont után legyen egy nulla.
+        number = (number.back() == '.') ? number.append("0") : number;
+    }
+
+    // cout << number << "\t" << divisor << endl;
+
+
+    //append zeros, because of the precision
+    int numPrec = number.substr(number.find("."), number.size() ).size();
+    int divPrec = divisor.substr(divisor.find("."), divisor.size() ).size();
+
+    if (numPrec>divPrec) {
+        divisor.append(numPrec-divPrec, '0');
+    }
+    else {
+        number.append(divPrec-numPrec, '0');
+    }
+
+    // cout << number << "\t" << divisor << endl;
+
+
+    string tempNum = number;
+    string tempDiv = divisor;
+
+    tempNum.erase(tempNum.find("."),1);
+    tempDiv.erase(tempDiv.find("."),1);
+
+    // cout << "qwe" << tempNum << "\t" << tempDiv << endl;
+
+
+    string quotient, remainder;
+    tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
+
+    // cout << "q: " << quotient << "\tR: " << remainder << endl;
+    // cout << "precison: " << precision << endl;
+
+
+    out = quotient + "."; 
+    int actPrec = 1;
+
+    //ha egész számú a kimenet és nullázódik a tört rész, akkor nem kell a tizedes résszel semmit csinálni
+    if (remainder.size() == 0){
+        out.append(precision, '0');
+        return out;
+    } 
+
+    tempNum = remainder+'0';
+
+    while( actPrec<precision ){
+        tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
+        out += quotient; 
+        actPrec++;
+        
+        //ha egész számú a kimenet és nullázódik a tört rész, akkor nem kell a tizedes résszel semmit csinálni
+        if (remainder.size() == 0){
+            // cout << "actPrec: " << precision-actPrec << endl;
+            out.append( (precision-actPrec) , '0');
+            break;
+        } 
+        // cout << remainder << endl;
+        tempNum = remainder+'0';
+    }
+
+    // cout << out << endl;
+        
+    ///asd
+    if (pointPos1>pointPos2 && pointDiff>3){
+        int outPointPos = out.find(".");
+        // cout << outPointPos << "\t" << pointDiff <<  endl;
+        out.erase(outPointPos,1);
+        out.insert(outPointPos+pointDiff, ".");
+
+        out = Fpn::removeZerosTheBeginOfTheString(out);
+    }
+    
+    return out; 
+} 
+
+
+// string Fpn::divideIntsAsString(string number, string divisor, int precision){ 
     
 //     string out; 
 
 //     // int precdiff = (int)f2.getFractPrecision() - (int)f1.getFractPrecision();
 //     // tempstr.append(precdiff,'0');
 
-//     int pointPos1 = number.find(".");
-//     int pointPos2 = divisor.find(".");
-//     int pointDiff = abs(pointPos1-pointPos2);
-//     if (pointPos1>pointPos2){
-//         // pont áthelyezése divisor-ben pointpos1 dik helyre
-//         divisor.erase(divisor.find("."),1);
-
-//         //kibővítés nullákkal a string miatt
-//         if (number.size()>divisor.size()) {
-//             divisor.append(number.size()-divisor.size(), '0');
-//             precision += number.size()-divisor.size();
-//         }
-//         else {
-//             number.append(divisor.size()-number.size(), '0');
-//             precision += divisor.size()-number.size();
-//         }
-
-//         divisor.insert(pointPos1, ".");
-//         number = removeZerosTheEndOfTheString(number);
-//         number = removeZerosTheBeginOfTheString(number);
-//         divisor = removeZerosTheEndOfTheString(divisor);
-//         divisor = removeZerosTheBeginOfTheString(divisor);
-//         divisor = (divisor.back() == '.') ? divisor.append("0") : divisor;
-//         number = (number.back() == '.') ? number.append("0") : number;
-//     }
-
-//     cout << number << "\t" << divisor << endl;
-
-
 //     //append zeros, because of the precision
 //     int numPrec = number.substr(number.find("."), number.size() ).size();
 //     int divPrec = divisor.substr(divisor.find("."), divisor.size() ).size();
+
+//     // cout << "01\t" << number << "\t" << divisor << endl;
 
 //     if (numPrec>divPrec) {
 //         divisor.append(numPrec-divPrec, '0');
@@ -938,20 +1036,32 @@ string Fpn::multiplyIntAsString(string num1, string num2){
 //         number.append(divPrec-numPrec, '0');
 //     }
 
-//     cout << number << "\t" << divisor << endl;
+//     // cout << "02\t" << number << "\t" << divisor << endl;
 
 
 //     string tempNum = number;
 //     string tempDiv = divisor;
+//     int actPrec = 0;
 
 //     tempNum.erase(tempNum.find("."),1);
 //     tempDiv.erase(tempDiv.find("."),1);
 
+//     // cout << "03\t" << tempNum << "\t" << tempDiv << endl;
+
 //     string quotient, remainder;
 //     tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
 
+//     tuple <string, string> geek;  
+//     geek = modIntsAsString(tempNum, tempDiv); 
+
+//     // cout << "03\t" << tempNum << "\t" << tempDiv << endl;
+//     // cout << "04\t" << quotient << "\t" << remainder << endl;
+//     // cout << "05\t" << get<0>(geek) << "\t" << get<1>(geek) << endl;
+
+
+
 //     out = quotient + "."; 
-//     int actPrec = 1;
+//     actPrec++;
 //     tempNum = remainder+'0';
 
 //     while( actPrec<precision ){
@@ -961,82 +1071,8 @@ string Fpn::multiplyIntAsString(string num1, string num2){
 //         actPrec++;
 //         tempNum = remainder+'0';
 //     }
-
-//     cout << out << endl;
-        
-//     ///asd
-//     if (pointPos1>pointPos2){
-//         int outPointPos = out.find(".");
-//         out.erase(outPointPos,1);
-//         out.insert(pointPos2+pointDiff, ".");
-
-//         out = Fpn::removeZerosTheBeginOfTheString(out);
-//     }
-    
 //     return out; 
 // } 
-
-
-string Fpn::divideIntsAsString(string number, string divisor, int precision){ 
-    
-    string out; 
-
-    // int precdiff = (int)f2.getFractPrecision() - (int)f1.getFractPrecision();
-    // tempstr.append(precdiff,'0');
-
-    //append zeros, because of the precision
-    int numPrec = number.substr(number.find("."), number.size() ).size();
-    int divPrec = divisor.substr(divisor.find("."), divisor.size() ).size();
-
-    // cout << "01\t" << number << "\t" << divisor << endl;
-
-    if (numPrec>divPrec) {
-        divisor.append(numPrec-divPrec, '0');
-    }
-    else {
-        number.append(divPrec-numPrec, '0');
-    }
-
-    // cout << "02\t" << number << "\t" << divisor << endl;
-
-
-    string tempNum = number;
-    string tempDiv = divisor;
-    int actPrec = 0;
-
-    tempNum.erase(tempNum.find("."),1);
-    tempDiv.erase(tempDiv.find("."),1);
-
-    // cout << "03\t" << tempNum << "\t" << tempDiv << endl;
-
-    string quotient, remainder;
-    tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
-
-    tuple <string, string> geek;  
-    geek = modIntsAsString(tempNum, tempDiv); 
-
-    // cout << "03\t" << tempNum << "\t" << tempDiv << endl;
-    // cout << "04\t" << quotient << "\t" << remainder << endl;
-    // cout << "05\t" << get<0>(geek) << "\t" << get<1>(geek) << endl;
-
-
-
-    out = quotient + "."; 
-    actPrec++;
-    tempNum = remainder+'0';
-
-    while( actPrec<precision ){
-        tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
-
-        out += quotient; 
-        actPrec++;
-        tempNum = remainder+'0';
-    }
-        
-    
-    
-    return out; 
-} 
 
 tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
 
