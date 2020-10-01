@@ -627,7 +627,6 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
     }
     else {
         //simple minus
-        
         //set sign
         if (Fpn::isSmallerFloat(f1,f2) ){
             out.setSign(f2.getSign());
@@ -646,6 +645,7 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
         
         //do the -
 
+        // out = extractFpns(f1, f2);
         out.setFractPart(extractFpns(f1, f2).getFractPart());
         out.setIntPart(extractFpns(f1, f2).getIntPart());
 
@@ -666,15 +666,71 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
 }
 
 Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
+    
+    //convert fpn strings to integer extract and insert the floating point to the right place
+    //example: 66.51-2222.510 = -2156.0
+    //example: 66.510  2222.510
+    //example: 66510  2222510
+    //example: diffInts ( 2222510, 66510)  = 2156000
+    //example: insert(rightPlace, '.') = 2156.0
+
+    // cout << f1 << "\t" << f2 << endl;
+
     string temp1 = f1.getIntPart() + f1.getFractPart();
     string temp2 = f2.getIntPart() + f2.getFractPart();
+    string temp3 = ""; 
 
-    string temp3 = diffIntsAsString(temp1, temp2);
+    // cout << f1 << "\t" << f2 << endl;
+    // cout << temp1 << "\t" << temp2 << endl;
 
-    temp3.insert(temp3.end()-f1.getFractPart().size(), '.');
+    if (f1.getFractPart().size() < f2.getFractPart().size()){
+        temp1.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
+    }
+    else if (f2.getFractPart().size() < f1.getFractPart().size()){
+        temp2.append(f1.getFractPart().size()-f2.getFractPart().size(), '0');
+    }
+    if (f2.getFractPart().size() == f1.getFractPart().size()){
+        temp1.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
+        temp2.append(f1.getFractPart().size()-f2.getFractPart().size(), '0');
+    }
+    // cout << temp1 << "\t" << temp2 << endl;
+
+    int floatPointPos = (f2.getFractPart().size() < f1.getFractPart().size()) ? f1.getFractPart().size() : f2.getFractPart().size();
+    // cout << floatPointPos << endl;
+    if(isSmallerInt(temp1,temp2)){
+        temp3 = diffIntsAsString(temp2, temp1);
+        // cout << "TEMP3: " << temp3 << endl;
+
+        // temp3.insert(temp3.end()-f2.getFractPart().size(), '.');
+        temp3.insert(temp3.end()-floatPointPos, '.');
+    }
+    else if(isSmallerInt(temp2,temp1)){
+        temp3 = diffIntsAsString(temp1, temp2);
+
+        // temp3.insert(temp3.end()-f1.getFractPart().size(), '.');
+        temp3.insert(temp3.end()-floatPointPos, '.');
+
+
+    }
+    else if (temp1 == temp2){
+        temp3 = temp1;
+    }
+    // cout << temp1 << "\t" << temp2 << "\t" << temp3 << endl;
+
 
     return Fpn (temp3);
 }
+
+// Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
+//     string temp1 = f1.getIntPart() + f1.getFractPart();
+//     string temp2 = f2.getIntPart() + f2.getFractPart();
+
+//     string temp3 = diffIntsAsString(temp1, temp2);
+
+//     temp3.insert(temp3.end()-f1.getFractPart().size(), '.');
+
+//     return Fpn (temp3);
+// }
 
 bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
 
