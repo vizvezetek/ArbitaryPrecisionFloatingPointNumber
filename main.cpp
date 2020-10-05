@@ -113,63 +113,102 @@ int main(){
 
     // Fpn p("122.00000000");
     Fpn o("3.14", 100);
-    cout << Fpn::sin(o) << "\t" << std::sin(3.14) << endl;
-    cout << Fpn::sin(Fpn("2.0")) << "\t" << std::sin(2.0) << endl;
-    cout << Fpn::sin(Fpn("3.9")) << "\t" << std::sin(3.9) << endl;
-    cout << Fpn::sin(Fpn("1.345")) << "\t" << std::sin(1.345) << endl;
-    cout << Fpn::sin(Fpn("2.345")) << "\t" << std::sin(2.345) << endl;
-    cout << Fpn::sin(Fpn("-2.012")) << "\t" << std::sin(-2.012) << endl;
-    cout << Fpn::sin(Fpn("-4.12")) << "\t" << std::sin(-4.12) << endl;
+    // cout << Fpn::sin(o) << "\t" << std::sin(3.14) << endl;
+    // cout << Fpn::sin(Fpn("2.0",100)) << "\t" << std::sin(2.0) << endl;
+    // cout << Fpn::sin(Fpn("3.9",100)) << "\t" << std::sin(3.9) << endl;
+    // cout << Fpn::sin(Fpn("1.345",100)) << "\t" << std::sin(1.345) << endl;
+    // // cout << Fpn::sin(Fpn("0.0",100)) << "\t" << std::sin(0.0) << endl;
+    // cout << Fpn::sin(Fpn("2.3",100)) << "\t" << std::sin(2.3) << endl;
+    // cout << Fpn::sin(Fpn("-2.012",100)) << "\t" << std::sin(-2.012) << endl;
+    // cout << Fpn::sin(Fpn("-4.12",100)) << "\t" << std::sin(-4.12) << endl;
     // cout << Fpn::cos(o) << "\t" << std::cos(3.14) << endl;
+    // cout << Fpn::cos(Fpn("-3.24556", 100)) << "\t" << std::cos(-3.24556) << endl;
+    // cout << Fpn::cos(Fpn("4.567", 100)) << "\t" << std::cos(4.567) << endl;
+    // cout << Fpn::cos(Fpn("6.78", 100)) << "\t" << std::cos(6.78) << endl;
+    // cout << Fpn::cos(Fpn("0.0", 100)) << "\t" << std::cos(0.0) << endl;
 
     // cout << Fpn("216.0")/Fpn("6.0") << endl;
 
     // cout << (fa/aa).toString() << endl;
 
-    // Fpn y("279936.0",100);
-    // Fpn x("5040.0",100);
-    // Fpn w("34.800000000",100);
-    // Fpn z("55.54285714285714200000",100);
+    Fpn y("279936.0",100);
+    Fpn x("5040.0",100);
+    Fpn w("34.800000000",100);
+    Fpn z("55.54285714285714200000",100);
 
-    // double a = 279936.0;
-    // double b = 5040.0;
-    // double c = 34.800000000;
-    // double d = 55.54285714285714200000;
+    double a = 279936.0;
+    double b = 5040.0;
+    double c = 34.800000000;
+    double d = 55.54285714285714200000;
 
-    // cout << (y-x).toString() << "\t" << (a-b) << endl;
-    // cout << (y-w).toString() << "\t" << (a-c) << endl;
-    // cout << (y-z).toString() << "\t" << (a-d) << endl;
-    // cout << (x-y).toString() << "\t" << (b-a) << endl;
-    // cout << (x-w).toString() << "\t" << (b-c) << endl;
-    // cout << (x-z).toString() << "\t" << (b-d) << endl;
-    // cout << (w-y).toString() << "\t" << (c-a) << endl;
-    // cout << (w-x).toString() << "\t" << (c-b) << endl;
-    // cout << (w-z).toString() << "\t" << (c-d) << endl;
-    // cout << (z-y).toString() << "\t" << (d-a) << endl;
-    // cout << (z-x).toString() << "\t" << (d-b) << endl;
-    // cout << (z-w).toString() << "\t" << (d-c) << endl;
+    //y+z ok
+    //z+y nem
+    // cout << "z + y \t" << z << "\t" << y << endl;
+    // cout << (d+a) << "\t = \t" << (z+y) <<endl;
+    // cout << (d+a) << "\n" << endl;
+    // cout << (z+y) <<endl;
 
-    // double a = 279936.0;
-    // double b = 5040.0;
-    // double c = 34.800000000;
-    // double d = 55.54285714285714200000;
+    // cout << "(y+x)=\t" << (y+x).toString() << "\t\t" << std::setprecision(16) << (a+b) << endl;
+    // cout << "(y+w)=\t" << (y+w).toString() << "\t\t" << std::setprecision(16) << (a+c) << endl;
+    // cout << "(y+z)=\t" << (y+z).toString() << "\t\t" << std::setprecision(16) << (a+d) << endl;
+    // cout << "(x+y)=\t" << (x+y).toString() << "\t\t" << std::setprecision(16) << (b+a) << endl;
+    // cout << "(x+w)=\t" << (x+w).toString() << "\t\t" << std::setprecision(16) << (b+c) << endl;
+    // cout << "(x+z)=\t" << (x+z).toString() << "\t\t" << std::setprecision(16) << (b+d) << endl;
+    // cout << "(w+y)=\t" << (w+y).toString() << "\t\t" << std::setprecision(16) << (c+a) << endl;
+    // cout << "(w+x)=\t" << (w+x).toString() << "\t\t" << std::setprecision(16) << (c+b) << endl;
+    // cout << "(w+z)=\t" << (w+z).toString() << "\t\t" << std::setprecision(16) << (c+d) << endl;
+    // cout << "(z+y)=\t" << (z+y).toString() << "\t\t" << std::setprecision(16) << (d+a) << endl;
+    // cout << "(z+x)=\t" << (z+x).toString() << "\t\t" << std::setprecision(16) << (d+b) << endl;
+    // cout << "(z+w)=\t" << (z+w).toString() << "\t\t" << std::setprecision(16) << (d+c) << endl;
 
-    // cout << (a-b) << endl;
-    // cout << (a-c) << endl;
-    // cout << (a-d) << endl;
-    // cout << (b-a) << endl;
-    // cout << (b-c) << endl;
-    // cout << (b-d) << endl;
-    // cout << (c-a) << endl;
-    // cout << (c-b) << endl;
-    // cout << (c-d) << endl;
-    // cout << (d-a) << endl;
-    // cout << (d-b) << endl;
-    // cout << (d-c) << endl;
+    // cout << endl;
+
+    // cout << "(y-x)=\t" << (y-x).toString() << "\t\t" << std::setprecision(16) << (a-b) << endl;
+    // cout << "(y-w)=\t" << (y-w).toString() << "\t\t" << std::setprecision(16) << (a-c) << endl;
+    // cout << "(y-z)=\t" << (y-z).toString() << "\t\t" << std::setprecision(16) << (a-d) << endl;
+    // cout << "(x-y)=\t" << (x-y).toString() << "\t\t" << std::setprecision(16) << (b-a) << endl;
+    // cout << "(x-w)=\t" << (x-w).toString() << "\t\t" << std::setprecision(16) << (b-c) << endl;
+    // cout << "(x-z)=\t" << (x-z).toString() << "\t\t" << std::setprecision(16) << (b-d) << endl;
+    // cout << "(w-y)=\t" << (w-y).toString() << "\t\t" << std::setprecision(16) << (c-a) << endl;
+    // cout << "(w-x)=\t" << (w-x).toString() << "\t\t" << std::setprecision(16) << (c-b) << endl;
+    // cout << "(w-z)=\t" << (w-z).toString() << "\t\t" << std::setprecision(16) << (c-d) << endl;
+    // cout << "(z-y)=\t" << (z-y).toString() << "\t\t" << std::setprecision(16) << (d-a) << endl;
+    // cout << "(z-x)=\t" << (z-x).toString() << "\t\t" << std::setprecision(16) << (d-b) << endl;
+    // cout << "(z-w)=\t" << (z-w).toString() << "\t\t" << std::setprecision(16) << (d-c) << endl;
+
+    // cout << endl;
+
+    // cout << "(y*x)=\t" << (y*x).toString() << "\t\t" << std::setprecision(16) << (a*b) << endl;
+    // cout << "(y*w)=\t" << (y*w).toString() << "\t\t" << std::setprecision(16) << (a*c) << endl;
+    // cout << "(y*z)=\t" << (y*z).toString() << "\t\t" << std::setprecision(16) << (a*d) << endl;
+    // cout << "(x*y)=\t" << (x*y).toString() << "\t\t" << std::setprecision(16) << (b*a) << endl;
+    // cout << "(x*w)=\t" << (x*w).toString() << "\t\t" << std::setprecision(16) << (b*c) << endl;
+    // cout << "(x*z)=\t" << (x*z).toString() << "\t\t" << std::setprecision(16) << (b*d) << endl;
+    // cout << "(w*y)=\t" << (w*y).toString() << "\t\t" << std::setprecision(16) << (c*a) << endl;
+    // cout << "(w*x)=\t" << (w*x).toString() << "\t\t" << std::setprecision(16) << (c*b) << endl;
+    // cout << "(w*z)=\t" << (w*z).toString() << "\t\t" << std::setprecision(16) << (c*d) << endl;
+    // cout << "(z*y)=\t" << (z*y).toString() << "\t\t" << std::setprecision(16) << (d*a) << endl;
+    // cout << "(z*x)=\t" << (z*x).toString() << "\t\t" << std::setprecision(16) << (d*b) << endl;
+    // cout << "(z*w)=\t" << (z*w).toString() << "\t\t" << std::setprecision(16) << (d*c) << endl;
+
+    // cout << endl;
+
+    // cout << "(y/x)=\t" << (y/x).toString() << "\t\t" << std::setprecision(16) << (a/b) << endl;
+    // cout << "(y/w)=\t" << (y/w).toString() << "\t\t" << std::setprecision(16) << (a/c) << endl;
+    // cout << "(y/z)=\t" << (y/z).toString() << "\t\t" << std::setprecision(16) << (a/d) << endl;
+    // cout << "(x/y)=\t" << (x/y).toString() << "\t\t" << std::setprecision(16) << (b/a) << endl;
+    // cout << "(x/w)=\t" << (x/w).toString() << "\t\t" << std::setprecision(16) << (b/c) << endl;
+    // cout << "(x/z)=\t" << (x/z).toString() << "\t\t" << std::setprecision(16) << (b/d) << endl;
+    // cout << "(w/y)=\t" << (w/y).toString() << "\t\t" << std::setprecision(16) << (c/a) << endl;
+    // cout << "(w/x)=\t" << (w/x).toString() << "\t\t" << std::setprecision(16) << (c/b) << endl;
+    // cout << "(w/z)=\t" << (w/z).toString() << "\t\t" << std::setprecision(16) << (c/d) << endl;
+    // cout << "(z/y)=\t" << (z/y).toString() << "\t\t" << std::setprecision(16) << (d/a) << endl;
+    // cout << "(z/x)=\t" << (z/x).toString() << "\t\t" << std::setprecision(16) << (d/b) << endl;
+    // cout << "(z/w)=\t" << (z/w).toString() << "\t\t" << std::setprecision(16) << (d/c) << endl;
 
     // cout << Fpn("-1234.51283745623847236847384652387654823764872364827364283756248756248756283765236")/Fpn("7.890005348756348765348765823765139485739847539847594827539847593847593847598343475634875601") << endl;
-    // cout << Fpn("+188.9568")/Fpn("+0.120") << endl;
-    // cout << Fpn("+188.01")* Fpn("1.0") /Fpn("+2.01") << endl;
+    // cout << (188.9568/0.120) << "\t" << Fpn("+188.9568")/Fpn("+0.120") << endl;
+    // cout << (188.01*1.0/2.01) << "\t" << Fpn("+188.01")* Fpn("1.0") /Fpn("+2.01") << endl;
     // cout << Fpn("+12.0")/Fpn("1.1") << endl;
 
     // string number = "123.0";
@@ -182,6 +221,21 @@ int main(){
     // cout << divPrec << "\t" << divisor.find(".") << "\t" << divisor.size() << "\t" << divisor.substr(divisor.find("."), divisor.size() ) << endl;
 
 
+    // cout << Fpn("0.0")/Fpn("+1.0") << "\t\t" << std::setprecision(16) << (188.9568/0.120) << endl;
+    // cout << Fpn("0.000000000000000100")/Fpn("+0.0") << endl;
+    // cout << 1/0 << endl;
+
+    // cout << (188.9568/0.120) << "\n" << Fpn("+188.9568")/Fpn("+0.120") << endl;
+    // cout << (188.9568/0.34420) << "\n" << Fpn("+188.9568")/Fpn("+0.34420") << endl;
+
+    cout << std::sin(2.3) << endl;
+    cout << Fpn::sin(Fpn("2.3",100)) << endl;
+
+    // cout << (64.3634/120) << endl;
+    // cout << Fpn("-0.27") - (Fpn("64.3634")/Fpn("120.0")) << endl;
+    // cout << Fpn("+0.536361916666666666666666666666666666666666666666") - Fpn("-0.27216666666666666666666666666666666666666") << endl;
+    
+    cout << Fpn::sqrt(Fpn("9999.22",100)) << endl;
 
     return 0;
 }

@@ -113,6 +113,8 @@ long double sin2(double x)
     double res = x; 
     double sign = 1, fact = 1,  
                      pow = x; 
+
+    cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
     for (int i = 1; i < TAYLOR_PREC; i++) 
     { 
         sign = sign * -1; 
@@ -157,14 +159,18 @@ int main (){
     
     // std::cout << std::setprecision(10) <<  "sin\t" << sin(22.2) <<endl;
     // std::cout << std::setprecision(10) <<  "sin2\t" << sin2(22.2) <<endl; // ez áll a legközelebb a jóhoz.
-    std::cout << std::setprecision(10) <<  "sin2\t" << sin2(6.0) <<endl; // ez áll a legközelebb a jóhoz.
-    std::cout << std::setprecision(10) <<  "sin\t" << sin(6.0) <<endl; // ez áll a legközelebb a jóhoz.
+    // std::cout << std::setprecision(10) <<  "sin2\t" << sin2(6.0) <<endl; // ez áll a legközelebb a jóhoz.
+    // std::cout << std::setprecision(10) <<  "sin\t" << sin(6.0) <<endl; // ez áll a legközelebb a jóhoz.
 
     // std::cout << std::setprecision(10) <<  "cos\t" << cos(22.2) <<endl;
     // std::cout << std::setprecision(10) <<  "cos2\t" << cos2(22.2) <<endl; //ok
 
     // std::cout << "round: " << round2(-2.491) << endl;
     // std::cout << "fact2: " << fact2(3) << endl;
+
+    cout << std::sin(2.3) << endl;
+    cout << sin2(2.3) << endl;
+
 
     // return 0;
 }

@@ -7,8 +7,8 @@
 #include <tuple> //multiple return values
 #include <algorithm> 
 
-#define TAYLOR_PREC 45
-#define EPS 1e-13
+#define TAYLOR_PREC 70
+// #define EPS 1e-13
 
 using namespace std;
 
@@ -90,7 +90,8 @@ public:
     Fpn operator / (const Fpn& f2);
 
     //FPN.math functions
-    Fpn sqrt (Fpn &obj);
+    static Fpn sSquare(Fpn n, Fpn i, Fpn j) ;
+    static Fpn sqrt (Fpn obj);
     Fpn pow (Fpn &obj);
     static Fpn sin (Fpn x);
     static Fpn cos (Fpn x);
