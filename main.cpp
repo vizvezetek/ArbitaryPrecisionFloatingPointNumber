@@ -113,21 +113,23 @@ int main(){
     // cout << asd/yxc << endl;
 
     // Fpn p("122.00000000");
-    // Fpn o("3.14", 100);
-    // cout << Fpn::sin(o) << "\t" << std::sin(3.14) << endl;
-    // cout << Fpn::sin(Fpn("2.3",100)) << "\t" << std::sin(2.3) << endl;
-    // cout << Fpn::sin(Fpn("3.9",100)) << "\t" << std::sin(3.9) << endl;
-    // cout << Fpn::sin(Fpn("1.345",100)) << "\t" << std::sin(1.345) << endl;
-    // // cout << Fpn::sin(Fpn("0.0",100)) << "\t" << std::sin(0.0) << endl;
-    // cout << Fpn::sin(Fpn("2.3",100)) << "\t" << std::sin(2.3) << endl;
-    // cout << Fpn::sin(Fpn("-2.012",100)) << "\t" << std::sin(-2.012) << endl;
-    // cout << Fpn::sin(Fpn("-4.12",100)) << "\t" << std::sin(-4.12) << endl;
-    // cout << Fpn::cos(o) << "\t" << std::cos(3.14) << endl;
-    cout << Fpn::cos(Fpn("-3.24556", 100)) << "\t" << std::cos(-3.24556) << endl;
-    cout << Fpn::cos(Fpn("4.567", 100)) << "\t" << std::cos(4.567) << endl;
-    cout << Fpn::cos(Fpn("6.78", 100)) << "\t" << std::cos(6.78) << endl;
-    cout << Fpn::cos(Fpn("0.0", 100)) << "\t" << std::cos(0.0) << endl;
-    cout << Fpn::cos(Fpn("0.7292", 100)) << "\t" << std::cos(0.7292) << endl;
+    Fpn o("3.14", 100);
+    cout << Fpn::sin(o) << "\t" << std::sin(3.14) << endl;
+    
+    cout << Fpn::sin(Fpn("2.3",100)) << "\t" << std::sin(2.3) << endl;
+
+    cout << "sin(3.9) \t" << Fpn::sin(Fpn("3.9",100)) << "\t" << std::sin(3.9) << endl;
+    cout << "sin(1.345) \t" << Fpn::sin(Fpn("1.345",100)) << "\t" << std::sin(1.345) << endl;
+    // cout << "sin(0.0" << Fpn::sin(Fpn("0.0",100)) << "\t" << std::sin(0.0) << endl;
+    cout << "sin(2.3) \t" << Fpn::sin(Fpn("2.3",100)) << "\t" << std::sin(2.3) << endl;
+    cout << "sin(-2.012) \t" << Fpn::sin(Fpn("-2.012",100)) << "\t" << std::sin(-2.012) << endl;
+    cout << "sin(-4.12) \t" << Fpn::sin(Fpn("-4.12",100)) << "\t" << std::sin(-4.12) << endl;
+    cout << Fpn::cos(o) << "\t" << std::cos(3.14) << endl;
+    cout << "cos(-3.24556) \t" << Fpn::cos(Fpn("-3.24556", 100)) << "\t" << std::cos(-3.24556) << endl;
+    cout << "cos(4.567) \t" << Fpn::cos(Fpn("4.567", 100)) << "\t" << std::cos(4.567) << endl;
+    cout << "cos(6.78) \t" << Fpn::cos(Fpn("6.78", 100)) << "\t" << std::cos(6.78) << endl;
+    // cout << "cos(0.0" << Fpn::cos(Fpn("0.0", 100)) << "\t" << std::cos(0.0) << endl;
+    cout << "cos(0.7292) \t" << Fpn::cos(Fpn("0.7292", 100)) << "\t" << std::cos(0.7292) << endl;
 
     // cout << Fpn("216.0")/Fpn("6.0") << endl;
 
@@ -271,6 +273,8 @@ int main(){
     // cout << Fpn::sqrt(Fpn("0.00000000122",100)) << "\t" << std::sqrt(0.00000000122) << endl;
     // cout << Fpn::sqrt(Fpn("1234.5678",100)) << "\t" << std::sqrt(1234.5678) << endl;
     // cout << Fpn::sqrt(Fpn("1.111111111",100)) << "\t" << std::sqrt(1.111111111) << endl;
+
+    // cout << "-2.0278333333333333333333333333333333333333333333 + 2.3 =" << Fpn("-2.0278333333333333333333333333333333333333333333")+Fpn("2.3") << endl;
 
     return 0;
 }

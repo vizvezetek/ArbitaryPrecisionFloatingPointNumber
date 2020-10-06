@@ -115,6 +115,10 @@ long double sin2(double x)
                      pow = x; 
 
     cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
+    cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
+    cout << endl;
+
+
     for (int i = 1; i < TAYLOR_PREC; i++) 
     { 
         sign = sign * -1; 
@@ -124,6 +128,8 @@ long double sin2(double x)
         // cout << pow << endl;
         res = res + sign *  pow / fact; 
         cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
+
+        if (i==1) break;
     } 
   
     return res;  
