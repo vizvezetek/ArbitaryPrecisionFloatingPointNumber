@@ -571,7 +571,7 @@ Fpn Fpn::sin(Fpn x)
         // cout << fact << endl;
         pow = pow * x * x; 
         // cout << pow << endl;
-        res = res + sign *  pow / fact; 
+        res = ((sign *  pow) / fact) +res ; 
         // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
     } 
 
@@ -595,11 +595,80 @@ Fpn Fpn::cos(Fpn x)
     return res;  
 } 
 
+//public
+Fpn Fpn::sqrt(Fpn n) 
+{ 
+    bool isModified = false;
+    // Fpn modMultiplier("100.0");
+    Fpn modDivider("10.0");
 
+    if (n.getIntPart()=="0" && n.getFractPart()=="0" ){  //sqrt(0) = 0
+        return Fpn("0.0");
+    }
+    else if (n == Fpn("1.0")){  //sqrt(1) = 1
+        return n;
+    }
+    else if (n < Fpn("0.0")){   //sqrt(NEGATIVE) is a fucking math error
+        throw "FLOATING POINT EXCEPTION";
+    }
+    else if (n.getIntPart()=="0" && n.getFractPart()!="0" ){    //example: sqrt(0.36) == 1/sqrt(1/36.0) 
+                                                                //example: sqrt(0.36) == sqrt(0.36*100)/10
+        isModified = true;
+        string temp = n.getFractPart();
+        int i;
+        for (i = 0; temp[i]=='0'; i++); //count zeros the begin of the fract part
+        i = (i%2 ==0 )? i : i+1;    //legyen páros (ennek boldogságos matematikai okai vannak, hogy rohadna el)
+
+        // modifiy modmultiplier
+        temp.clear();
+        temp = "100";
+        temp.append(i, '0');
+        temp.append(".0");
+
+        n = n*Fpn(temp);
+
+        // modifiy divider
+        temp.clear();
+        temp = "10";
+        //
+        i = i/2; //úgyis páros, szóval egész a végeredmény
+        temp.append(i, '0');
+        temp.append(".0");
+        modDivider = Fpn(temp);
+        // cout << "/" << temp << endl;
+
+        // n = Fpn("1.0")/n;
+
+    }
+
+
+    Fpn i("1.0"); 
+
+    while (true) { 
+  
+        if (i * i == n) { 
+            // return i; 
+            return isModified ? (i/modDivider) : i; 
+            // return isModified ? (Fpn("1.0")/i) : i; 
+        } 
+        else if (i * i > n) { 
+            Fpn temp =  i-Fpn("1.0"); 
+            Fpn res = sSquare(n, temp , i); 
+            // return res;
+            return isModified ? (res/modDivider) : res ;
+            // return isModified ? (Fpn("1.0")/res) : res ;
+        } 
+        i = i + Fpn ("1.0"); 
+    } 
+} 
+
+//*******************************************************************************************************************************
+//private functions
+//*******************************************************************************************************************************
 
 Fpn Fpn::sSquare(Fpn n, Fpn i, Fpn j) 
 {   
-    Fpn EPS("0.0000000000000000000000000000000000000000001");
+    Fpn EPS("0.00000000000000000000000000000000000000001");
 
     Fpn mid = (i + j) / Fpn("2.0",100); 
     Fpn mul = mid * mid; 
@@ -611,31 +680,6 @@ Fpn Fpn::sSquare(Fpn n, Fpn i, Fpn j)
     else
         return sSquare(n, i, mid); 
 } 
-  
-Fpn Fpn::sqrt(Fpn n) 
-{ 
-    Fpn i("1.0"); 
-
-    while (true) { 
-  
-        if (i * i == n) { 
-            // cout << fixed << setprecision(0) << i; 
-            return i; 
-        } 
-        else if (i * i > n) { 
-            Fpn temp =  i-Fpn("1.0"); 
-            Fpn res = sSquare(n, temp , i); 
-            // cout << fixed << setprecision(5) << res; 
-            return res;
-        } 
-        i = i + Fpn ("1.0"); 
-    } 
-} 
-
-//*******************************************************************************************************************************
-//private functions
-//*******************************************************************************************************************************
-
 
 Fpn Fpn::addFpns(Fpn f1, Fpn f2){
     Fpn out("0.0");
