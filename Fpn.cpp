@@ -411,10 +411,35 @@ Fpn Fpn::operator - (const Fpn& obj) {
 Fpn Fpn::operator * (const Fpn& f2){
     Fpn f1(this->toString());
 
-    string temp = multiplyIntAsString( f1.getIntPart()+f1.getFractPart() , f2.intPart+f2.fractPart );
+    int f1zeros = 0;
+    int f2zeros = 0;
+
+    string temp = "";
+
+    // cout << temp << "\t" << f1 << "\t" << f2 <<  endl;
+
+    if (f1.getIntPart() == "0"){
+        f1zeros ++;
+        //count f1 appendable zeros to the begin of the temp string. If it wouldn't calc, then the string(at the point insert) going to be out of the string range.
+        for(int i = 0 ; f1.getFractPart()[i] == '0'; i++) {f1zeros++;}
+        // cout << temp << endl;
+        // cout <<"KURVAAAAAa" << endl;
+        temp.append(f1zeros, '0');
+        // cout << temp << endl;
+    }
+    if (f2.intPart == "0"){
+        f2zeros ++;
+        //count f2 appendable zeros to the begin of the temp string. If it wouldn't calc, then the string(at the point insert) going to be out of the string range.
+        for(int i = 0 ; f2.fractPart[i] == '0'; i++) {f2zeros++;}
+        temp.append(f2zeros, '0');
+    }
+
+    temp.append( multiplyIntAsString( f1.getIntPart()+f1.getFractPart() , f2.intPart+f2.fractPart ));
+    
 
     //set the floating point to the right position
 
+    // cout << temp << endl;
     temp.insert(temp.end()-(f1.getFractPart().size() + f2.fractPart.size() ) , '.');
     Fpn out(temp);
 
@@ -424,6 +449,10 @@ Fpn Fpn::operator * (const Fpn& f2){
     }
     else {
         out.setSign('-');
+    }
+
+    if (out.getIntPart().size() == 0){
+        out.setIntPart("0");
     }
 
     return out;
@@ -588,6 +617,7 @@ Fpn Fpn::sin(Fpn x)
 
         // cout << "+res: " << res << endl;
         // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
+        // cout << endl;
 
         // if (i==1) break;
     } 
