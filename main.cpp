@@ -141,9 +141,9 @@ int main(){
     // cout << std::sin(0.7292) << "\t" << Fpn::sin(Fpn("0.7292", 100)) << endl; // 0.666273
     // cout << Fpn::sin(Fpn("10.7292", 100)) << endl; // 0.666273
     cout << Fpn::sin(Fpn("-100.7292", 100)) << endl; // 0.666273
-    cout << Fpn::sin(Fpn("0.7292", 100)) << endl; // 0.666273
-    cout << Fpn::sin(Fpn("20.7292", 100)) << endl; // 0.666273
-    cout << Fpn::sin(Fpn("-20.0", 100)) << endl; // 0.666273
+    // cout << Fpn::sin(Fpn("0.7292", 100)) << endl; // 0.666273
+    // cout << Fpn::sin(Fpn("20.7292", 100)) << endl; // 0.666273
+    // cout << Fpn::sin(Fpn("-20.0", 100)) << endl; // 0.666273
 
     // cout << Fpn("0.1096292946485810868172341248")*Fpn("0.7292") << endl;
 

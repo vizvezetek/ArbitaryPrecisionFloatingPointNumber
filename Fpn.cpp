@@ -555,6 +555,22 @@ Fpn Fpn::fact(Fpn obj){
 Fpn Fpn::sin(Fpn x) 
 { 
     Fpn res(x.toString()); 
+
+    //convert the number X to an equal value with the 2pi period
+    if (res > Fpn("0.0") && res>Fpn(doublesPi) ){
+        while (res > Fpn(doublesPi) ){
+            res = res -Fpn(doublesPi);
+        }
+    }
+    else if (res < Fpn("0.0") && res<Fpn(NdoublesPi) ){
+        while (res < Fpn(NdoublesPi) ){
+            res = res + Fpn(doublesPi);
+        }
+    }
+    else if (res == Fpn("0.0")){
+        return Fpn("0.0");
+    }
+
     Fpn sign("1.0",100);
     Fpn tempcalc = sign;
     Fpn fact = sign;
@@ -569,7 +585,6 @@ Fpn Fpn::sin(Fpn x)
         return res;
     }
 
-    // cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
     // for (int i = 1; i < TAYLOR_PREC; i++) 
     // { 
     //     std::string s = std::to_string((float)i);
@@ -590,7 +605,8 @@ Fpn Fpn::sin(Fpn x)
 
     //     if (i==2) break;
     // } 
-  
+
+    // cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
     // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
     // cout << endl;
     
@@ -598,8 +614,6 @@ Fpn Fpn::sin(Fpn x)
     { 
         std::string s = std::to_string((float)i);
         Fpn fpni(s);
-
-
 
         sign = sign = sign * Fpn("-1.0",100); 
         fact = fact * (( Fpn("2.0", 100) * fpni + Fpn("1.0", 100) ) * (Fpn("2.0", 100) * fpni )); 
@@ -619,7 +633,7 @@ Fpn Fpn::sin(Fpn x)
         // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
         // cout << endl;
 
-        // if (i==1) break;
+        if (i==10) break;
     } 
 
     return res;  
@@ -627,6 +641,22 @@ Fpn Fpn::sin(Fpn x)
 
 Fpn Fpn::cos(Fpn x) 
 { 
+    
+    // //convert the number X to an equal value with the 2pi period
+    // if (x > Fpn("0.0") && x>Fpn(doublesPi) ){
+    //     while (x > Fpn(doublesPi) ){
+    //         x = x -Fpn(doublesPi);
+    //     }
+    // }
+    // else if (x < Fpn("0.0") && x<Fpn(NdoublesPi) ){
+    //     while (x < Fpn(NdoublesPi) ){
+    //         x = x + Fpn(doublesPi);
+    //     }
+    // }
+    // else if (x == Fpn("0.0")){
+    //     return Fpn("1.0");
+    // }
+
     Fpn res("1.0"); 
     Fpn sign("1.0"), fact("1.0"),  pow("1.0"); 
     for (int i = 1; i < TAYLOR_PREC; i++) 

@@ -1,6 +1,10 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <math.h>
+
+# define M_PI 3.14159265358979323846  /* pi */
+# define DM_PI 6.28318530717958647692  /* 2*pi */
 
 #define TAYLOR_PREC 110
 #define EPS 1e-13
@@ -110,14 +114,27 @@ long double pow2(double x, double y){
 
 long double sin2(double x) 
 { 
+    //convert the number X to an equal value with the 2pi period
+    if (x > 0 && x>(DM_PI) ){
+        while (x > (DM_PI) ){
+            x -= (DM_PI);
+        }
+    }
+    else if (x < 0 && x<(-DM_PI) ){
+        while (x < (-DM_PI) ){
+            x += (DM_PI);
+        }
+    }
+    else if (x == 0){
+        return 0;
+    }
+    
     double res = x; 
-    double sign = 1, fact = 1,  
-                     pow = x; 
+    double sign = 1, fact = 1,  pow = x; 
 
-    cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
-    cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
-    cout << endl;
-
+    // cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
+    // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
+    // cout << endl;
 
     for (int i = 1; i < TAYLOR_PREC; i++) 
     { 
@@ -127,9 +144,9 @@ long double sin2(double x)
         pow = pow * x * x; 
         // cout << pow << endl;
         res = res + sign *  pow / fact; 
-        cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
+        // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
 
-        if (i==1) break;
+        if (i==10) break;
     } 
   
     return res;  
@@ -137,6 +154,21 @@ long double sin2(double x)
 
 long double cos2(double x) 
 { 
+
+    if (x > 0 && x>(DM_PI) ){
+        while (x > (DM_PI) ){
+            x -= (DM_PI);
+        }
+    }
+    else if (x < 0 && x<(-DM_PI) ){
+        while (x < (-DM_PI) ){
+            x += (DM_PI);
+        }
+    }
+    else if (x == 0){
+        return 1.0;
+    }
+
     double res = 1; 
     double sign = 1, fact = 1,  
                      pow = 1; 
@@ -174,9 +206,36 @@ int main (){
     // std::cout << "round: " << round2(-2.491) << endl;
     // std::cout << "fact2: " << fact2(3) << endl;
 
-    cout << std::sin(2.3) << endl;
-    cout << sin2(2.3) << endl;
+    // cout << std::sin(2.3) << endl;
+    // cout << sin2(2.3) << endl;
 
+    // cout << sin2(-100.7292) << endl; // 0.666273
+    // cout << sin2(-100.7292) << endl; // 0.666273
+    // cout << sin2(-69.3133) << endl; // 0.666273
+    // cout << sin2(-12.7646) << endl; // 0.666273
+    // cout << sin2(-6.48142) << endl; // 0.666273
+    // cout << sin2(-0.198235) << endl; // 0.666273
+    // cout << sin2(6.08495) << endl; // 0.666273
+    // cout << sin2(12.3681) << endl; // 0.666273
+
+    // cout << sin2(-1000.7292) << endl; // 0.666273
+    // cout << sin(-1000.7292) << endl; // 0.666273
+
+    // cout << sin2(1000.7292) << endl; // 0.666273
+    // cout << sin(1000.7292) << endl; // 0.666273
+
+    // cout << cos2(-1000.7292) << endl; // 0.666273
+    // cout << cos(-1000.7292) << endl; // 0.666273
+
+    // cout << cos2(1000.7292) << endl; // 0.666273
+    // cout << cos(1000.7292) << endl; // 0.666273
+
+
+    cout << sin2(5.7292) << endl; // 0.666273
+    cout << sin(5.7292) << endl; // 0.666273
+
+    cout << cos2(-5.7292) << endl; // 0.666273
+    cout << cos(-5.7292) << endl; // 0.666273
 
     // return 0;
 }
