@@ -36,7 +36,8 @@ Fpn::Fpn(const string number_){
         if (number[i] == '.' || number[i] == ','){
             number[i] = '.';
             intPrecision = i;
-            fractPrecision = number.size()-i-1;
+            // fractPrecision = number.size()-i-1;
+            fractPrecision = 100; //ezt így nem szabadna...
             floatingpoint = true;
             continue; //because of the floating point
         }
@@ -443,6 +444,8 @@ Fpn Fpn::operator * (const Fpn& f2){
     temp.insert(temp.end()-(f1.getFractPart().size() + f2.fractPart.size() ) , '.');
     Fpn out(temp);
 
+    // out.setFractPrecision( f1.getFractPrecision() > f2.fractPrecision ? f1.getFractPrecision() : f2.fractPrecision );
+
     //set the sign
     if ( (f1.getSign() == '-' && f2.sign == '-') || (f1.getSign() == '+' && f2.sign == '+') ){
         out.setSign('+');
@@ -454,6 +457,14 @@ Fpn Fpn::operator * (const Fpn& f2){
     if (out.getIntPart().size() == 0){
         out.setIntPart("0");
     }
+
+    // fract precision cut
+    if (out.getFractPart().size() > out.getFractPrecision() && out.getFractPart().size() > 100){
+        out.setFractPart( out.getFractPart().substr( 0, out.getFractPrecision() ) );
+    }
+
+    //remove zeros the begin of the int part. Example 00.123 -> 0.123
+    out.setIntPart( removeZerosTheBeginOfTheString( out.getIntPart() ) ) ;
 
     return out;
 }
@@ -554,7 +565,7 @@ Fpn Fpn::fact(Fpn obj){
 
 Fpn Fpn::sin(Fpn x) 
 { 
-    Fpn res(x.toString()); 
+    Fpn res(x); 
 
     //convert the number X to an equal value with the 2pi period
     if (res > Fpn("0.0") && res>Fpn(doublesPi) ){
@@ -562,8 +573,8 @@ Fpn Fpn::sin(Fpn x)
             res = res -Fpn(doublesPi);
         }
     }
-    else if (res < Fpn("0.0") && res<Fpn(NdoublesPi) ){
-        while (res < Fpn(NdoublesPi) ){
+    else if (res < Fpn("0.0") ){
+        while (res < Fpn(doublesPi) ){
             res = res + Fpn(doublesPi);
         }
     }
@@ -571,12 +582,19 @@ Fpn Fpn::sin(Fpn x)
         return Fpn("0.0");
     }
 
+    return sinTaylorSum(res);
+
+} 
+
+Fpn Fpn::sinTaylorSum(Fpn x) 
+{ 
+    Fpn res(x.toString()); 
     Fpn sign("1.0",100);
     Fpn tempcalc = sign;
     Fpn fact = sign;
     Fpn pow = x; 
 
-    // cout << res << sign << fact << pow <<endl;
+    // cout << x << res << sign << fact << pow <<endl;
 
     // sin(0)=sin(pi)=sin(2pi)... =0
     if (x.toString() == "0.0"){
@@ -585,6 +603,7 @@ Fpn Fpn::sin(Fpn x)
         return res;
     }
 
+    // cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
     // for (int i = 1; i < TAYLOR_PREC; i++) 
     // { 
     //     std::string s = std::to_string((float)i);
@@ -605,8 +624,7 @@ Fpn Fpn::sin(Fpn x)
 
     //     if (i==2) break;
     // } 
-
-    // cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
+  
     // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
     // cout << endl;
     
@@ -615,25 +633,30 @@ Fpn Fpn::sin(Fpn x)
         std::string s = std::to_string((float)i);
         Fpn fpni(s);
 
+
+
         sign = sign = sign * Fpn("-1.0",100); 
         fact = fact * (( Fpn("2.0", 100) * fpni + Fpn("1.0", 100) ) * (Fpn("2.0", 100) * fpni )); 
 
         // cout << "fact: " << fact << endl;
 
+        // cout << "pow: " << pow << endl;
+        // cout << "(x*x): " << (x * x) << endl;
         pow = pow * (x * x); 
 
         // cout << "pow: " << pow << endl;
         // cout << "res0: " << res << endl;
         // cout << "sign*pow: " << (sign *  pow) << endl;
         // cout << "((sign *  pow) / fact): " << ((sign *  pow) / fact) << endl;
-
         res = ((sign *  pow) / fact) +res ; 
+
+        res.setFractPart( res.getFractPart().substr( 0, fixedPrec ) );
 
         // cout << "+res: " << res << endl;
         // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
         // cout << endl;
 
-        if (i==10) break;
+        // if (i==1) break;
     } 
 
     return res;  
@@ -641,35 +664,67 @@ Fpn Fpn::sin(Fpn x)
 
 Fpn Fpn::cos(Fpn x) 
 { 
-    
-    // //convert the number X to an equal value with the 2pi period
-    // if (x > Fpn("0.0") && x>Fpn(doublesPi) ){
-    //     while (x > Fpn(doublesPi) ){
-    //         x = x -Fpn(doublesPi);
-    //     }
-    // }
-    // else if (x < Fpn("0.0") && x<Fpn(NdoublesPi) ){
-    //     while (x < Fpn(NdoublesPi) ){
-    //         x = x + Fpn(doublesPi);
-    //     }
-    // }
-    // else if (x == Fpn("0.0")){
-    //     return Fpn("1.0");
-    // }
+    Fpn res(x.toString()); 
 
-    Fpn res("1.0"); 
-    Fpn sign("1.0"), fact("1.0"),  pow("1.0"); 
-    for (int i = 1; i < TAYLOR_PREC; i++) 
-    { 
-        std::string s = std::to_string((float)i);
-        Fpn fpni(s);
-        sign = sign * Fpn("-1.0",100); 
-        fact = fact * (Fpn("2.0", 100) * fpni - Fpn("1.0", 100)) *  (Fpn("2.0", 100) * fpni); 
-        pow = pow * x * x; 
-        res = res + (sign * pow / fact ); 
-    } 
-  
-    return res;  
+   //convert the number X to an equal value with the 2pi period
+    if (res > Fpn("0.0") && res>Fpn(doublesPi) ){
+        while (res > Fpn(doublesPi) ){
+            res = res -Fpn(doublesPi);
+        }
+    }
+    else if (res < Fpn("0.0") ){
+        while (res < Fpn(doublesPi) ){
+            res = res + Fpn(doublesPi);
+        }
+    }
+    else if (res == Fpn("0.0")){
+        return Fpn("1.0");
+    }
+
+    // fract precision cut
+    if (res.getFractPart().size() > res.getFractPrecision() && res.getFractPart().size() > 100){
+        res.setFractPart( res.getFractPart().substr( 0, res.getFractPrecision() ) );
+    }
+
+    return cosTaylorSum(res);
+
+} 
+
+Fpn Fpn::cosTaylorSum(Fpn x) 
+{ 
+    //cos(x)=sin(x+pi/2)
+    // cout << x+Fpn(halfsPi) << endl;
+    return sin(x+Fpn(halfsPi));
+
+    // Fpn res("1.0"); 
+    // Fpn sign("1.0"), fact("1.0"),  pow("1.0"); 
+
+    // for (int i = 1; i < TAYLOR_PREC; i++) 
+    // { 
+    //     // cout << i << endl;
+    //     // cout  << i << "\t" << sign << "\t" << fact << "\t" << pow << "\t" << res  << endl;
+    //     // std::string s = std::to_string((float)i);
+
+    //     std::stringstream stream;
+    //     stream << std::fixed << (float)i;
+    //     std::string s = stream.str();
+    //     Fpn fpni(s);
+    //     // cout << "2QQQ:" ;
+    //     sign = sign * Fpn("-1.0",100); 
+    //     // cout << "3QQQ:" ;
+    //     fact = fact * (Fpn("2.0", 100) * fpni - Fpn("1.0", 100)) *  (Fpn("2.0", 100) * fpni); 
+    //     // cout << "4QQQ:" ;
+    //     pow = pow * x * x; 
+    //     // cout << "5QQQ:" ;
+    //     res = res + (sign * pow / fact ); 
+    //     // cout << "6QQQ:" ;
+    //     // cout << sign << "\t" << fact << "\t" << pow << "\t" << res  << endl;
+    //     // cout << "7QQQ:\n" ;
+        
+    // } 
+    // return res;  
+
+    
 } 
 
 //public
