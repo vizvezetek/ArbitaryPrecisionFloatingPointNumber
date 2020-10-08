@@ -11,7 +11,7 @@ with open(output_oneParam, 'w') as output_f:
     i = -100.0
     while (i<100):
         i += 1.01
-        print (i)
+        # print (i)
         subprocess.run(["./../main", str(i) ], stdout=output_f, stderr=output_f)
 
 
