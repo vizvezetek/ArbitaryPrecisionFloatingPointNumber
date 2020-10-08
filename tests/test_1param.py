@@ -26,7 +26,7 @@ with open(output_oneParam, 'w') as output_f:
 #         j = -100.0
 #         while (j<100):
 #             j += 1.01
-#             print (i,' ',j)
+# #             print (i,' ',j)
 #             subprocess.run(["sudo","./main", str(i), str(j) ], stdout=output_f, stderr=output_f)
 #         i += 1.01
 

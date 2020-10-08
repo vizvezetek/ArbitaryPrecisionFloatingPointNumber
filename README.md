@@ -2,6 +2,8 @@
 
 Compiled by gcc (c++ 14).
 
+The doxygen generated docs available at: https://vizvezetek.github.io/ArbitaryPrecisionFloatingPointNumber/
+
 ### How it works:
 ```c++
 #include <iostream>
