@@ -1,0 +1,22 @@
+name: compile and test
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v2
+      - run: make
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+      - name: generate output
+        run: cd tests
+        run: |
+          python run_tests.py
+      # - name: check output
+      #   run: diff doubleOutput.txt fpnOutput.txt
