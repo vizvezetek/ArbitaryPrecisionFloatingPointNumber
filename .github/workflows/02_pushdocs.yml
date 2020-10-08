@@ -3,7 +3,7 @@ name: pushdocs.yml
 on:
   push:	
     branches:	
-      - main
+      - master
       - gh-pages
 
 jobs:
