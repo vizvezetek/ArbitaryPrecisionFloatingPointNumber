@@ -1421,7 +1421,6 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
 
 tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
 
-
     string out = "";
 
     // int counter = 0;
@@ -1440,8 +1439,7 @@ tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
             // counter ++;
             counter = addIntAsString(counter, "1");
         }
-    }
-    
+    } 
 
     // return make_tuple( to_string(counter), num1 );  
     return make_tuple( counter, num1 );  
