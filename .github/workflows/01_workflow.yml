@@ -14,9 +14,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.6
-      - name: generate output
-        run: cd tests
-        run: |
-          python run_tests.py
+      - name: generate tests2
+        run: python tests/test_1param.py
+      - name: generate tests2
+        run: python tests/test_2param.py
       # - name: check output
       #   run: diff doubleOutput.txt fpnOutput.txt
