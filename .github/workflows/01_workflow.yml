@@ -14,9 +14,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.6
-      - name: generate tests with one param
-        run: sudo python3 tests/test_1param.py
-      - name: generate tests with two param
-        run: sudo python3 tests/test_2param.py
-      # - name: check output
+        
+      # - name: generate tests with one param
+      #   run: sudo python3 tests/test_1param.py
+      # - name: generate tests with two param
+      #   run: sudo python3 tests/test_2param.py
+      # # - name: check output
       #   run: diff doubleOutput.txt fpnOutput.txt
