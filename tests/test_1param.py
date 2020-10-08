@@ -12,7 +12,7 @@ with open(output_oneParam, 'w') as output_f:
     while (i<100):
         i += 1.01
         # print (i)
-        subprocess.run(["./main", str(i) ], stdout=output_f, stderr=output_f)
+        subprocess.run(["sudo","./main", str(i) ], stdout=output_f, stderr=output_f)
 
 
 # output_twoParam = "tests/outTwoParam.csv"
@@ -27,6 +27,6 @@ with open(output_oneParam, 'w') as output_f:
 #         while (j<100):
 #             j += 1.01
 #             print (i,' ',j)
-#             subprocess.run(["./main", str(i), str(j) ], stdout=output_f, stderr=output_f)
+#             subprocess.run(["sudo","./main", str(i), str(j) ], stdout=output_f, stderr=output_f)
 #         i += 1.01
 
