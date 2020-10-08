@@ -10,13 +10,13 @@ jobs:
       - name: checkout repo content
         uses: actions/checkout@v2
       - run: make
-      - name: setup python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.6
-      - name: generate tests2
-        run: python tests/test_1param.py
-      - name: generate tests2
-        run: python tests/test_2param.py
+      # - name: setup python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.6
+      # - name: generate tests2
+      #   run: python tests/test_1param.py
+      # - name: generate tests2
+      #   run: python tests/test_2param.py
       # - name: check output
       #   run: diff doubleOutput.txt fpnOutput.txt
