@@ -33,17 +33,17 @@ static float mutation = .25;
 
 
 // float drop_wave (float x1, float x2) { //  renamed
-// float test_function (float x1, float x2) { //  (0,0) glob_min: -1
-//     return 
-//         -(
-//             1 + cos( 12*sqrt( pow(x1,2)+pow(x1,2) ) )
-//         )
-//         /
-//         (
-//             0.5* ( pow(x1,2)+pow(x2,2) ) +2
-//         )
-//     ;
-// }
+float f_drop_wawe (float x1, float x2) { //  (0,0) glob_min: -1
+    return 
+        -(
+            1 + cos( 12*sqrt( pow(x1,2)+pow(x1,2) ) )
+        )
+        /
+        (
+            0.5* ( pow(x1,2)+pow(x2,2) ) +2
+        )
+    ;
+}
 
 float f_sphere (float x1, float x2) { //  (0,0) glob_min: -1
     return (x1*x1)+(x2*x2);
@@ -161,9 +161,8 @@ static float fitness(char * str)		//fitness function
 	float x1 = getFloatValuesFromBinArray(str, 0);
 	float x2 = getFloatValuesFromBinArray(str, 1);
 
-	// return test_function( x1, x2) ;
-	return f_sphere( x1, x2) ;
-	// return (int)(x1+x2) ;
+	return f_drop_wawe( x1, x2) ;
+	// return f_sphere( x1, x2) ;
 }
 
 
