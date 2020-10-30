@@ -47,26 +47,55 @@ private:
     int fractPrecision;      ///< precision of the fraction part. Default 100. If it's set in the construct, then not 100. :D 
 
     // private functions ************************************
-    string addIntAsString(string s1, string s2);
-    string diffIntsAsString(string str1, string str2);
-    string multiplyIntAsString(string num1, string num2);
-    string divideIntsAsString(string number, string divisor, int precision);
 
-    tuple<string, string>  modIntsAsString(string num1, string num2 );
+    /// This is adding to integer value as a string. Example 23 + 34 = 57
+    string addIntAsString(string s1, string s2);
+
+    /// Get difference between two integer strings. Ex: 43-11 = 32
+    string diffIntsAsString(string str1, string str2);
+
+    /// Multiply two integer strings. Example: 11*11=121
+    string multiplyIntAsString(string num1, string num2);
+
+    /// Divide ints as string
+    string divideIntsAsString(string number, string divisor, int precision/** Precision of the result if it not finite */);
+
     
+    /**
+     * \brief This is a % (mod) function implementation by extraxtions.
+     * \param num1 
+     * \param num2 
+     * \return a tuple<string,string>. First is how many times is it in, the second is the remainder.
+    */
+    tuple<string, string> modIntsAsString(string num1, string num2 );
+    
+    /// if str1 < str2 returns true
     bool isSmallerInt(string str1, string str2);
+
+    /// if str1 < str2 returns true
     bool isSmallerFloat(Fpn f1, Fpn f2);
+
+    /// Extraction method of the - operator. \return Fpn result
     Fpn extractFpns(Fpn f1, Fpn f2);
+
+    /// Add method of the + operator. \return Fpn result
     Fpn addFpns(Fpn f1, Fpn f2);
 
+    /// Taylor series sum for sine function. \return Fpn result
     static Fpn sinTaylorSum(Fpn x);
+    /// Taylor series sum for cos function. \return Fpn result
     static Fpn cosTaylorSum(Fpn x);
 
+    /// Helper function for sqrt() \return Fpn result
     static Fpn sSquare(Fpn n, Fpn i, Fpn j) ;
 
+    /// this removes zeros from begin of the string. Example 001233 => 1233 \return string result
     string removeZerosTheBeginOfTheString(string s);
+    
+    /// this removes zeros from end of the string. Example 123300 => 1233 \return string result
     string removeZerosTheEndOfTheString(string s);
 
+    /// ostream operator
     friend std::ostream& operator<<(std::ostream&, const Fpn&);
     
     
@@ -83,12 +112,12 @@ public:
     ~Fpn(){}
 
     //getter, setter, toString *****************************
-    const char getSign();
-    const string getNumber();
-    const string getIntPart();
-    const string getFractPart();
-    const int getIntPrecision();
-    const int getFractPrecision();
+    const char getSign(); ///getter for sine ex.: '+'
+    const string getNumber(); /// getter for number. Example: 2.3456
+    const string getIntPart(); /// getter for integer part. example 2
+    const string getFractPart(); /// getter for fraction part. example 3456
+    const int getIntPrecision(); /// getter for integer precision. example: 1
+    const int getFractPrecision(); /// getter for floating point precision. example 2 or 100
 
     void setSign(const char sign_);
     void setNumber(const string number_);
