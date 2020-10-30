@@ -164,7 +164,22 @@ static char randchar()		//random char form CHARMAP, what includes 0 and 1
 // 	return result;
 // }
 
+const char * getRandNumberString(int length){
+// const string getRandNumberString(int length){
+	
+	string s = "";
 
+	for (int i = 0; i< length; i++){
+		string temp (1, randchar());
+		s.append(temp);
+	}
+
+	char* out = (char *)malloc(length * sizeof(char*));
+   
+    strncpy(out, s.c_str() , length);
+
+	return out;
+}
 
 char* init_pop(){		// initial population
 	int full_size = pop_size*64;
@@ -177,7 +192,7 @@ char* init_pop(){		// initial population
 	for (i=0; i<2048; i++){
 		
 		// strcpy (temp,  floatToCharBinaryArr(  getRandInRange(MINX1, MAXX1, STEPX1) ) );
-		strcpy (temp,  "01234567890123456789012345678901" );
+		strcpy (temp,  getRandNumberString(32) );
 		for(j=0; j<32; j++){ //tempX1 append to result
 			*(result + char_counter ) = temp[j];
 			char_counter++;
@@ -186,7 +201,7 @@ char* init_pop(){		// initial population
 		// printf("\n%s\n", temp );
 
 		// strcpy (temp,  floatToCharBinaryArr(  getRandInRange(MINX2, MAXX2, STEPX2) ) );
-		strcpy (temp, "10123456789012345678901234567890" );
+		strcpy (temp, getRandNumberString(32) );
 		for(j=0; j<32; j++){ //tempX2 append to result
 			*(result + char_counter ) = temp[j];
 			char_counter++;
@@ -217,19 +232,22 @@ static Fpn fitness(char * str)		//fitness function
 	// float x1 = getFloatValuesFromBinArray(str, 0);
 	// float x2 = getFloatValuesFromBinArray(str, 1);
 
-	string temp(str); 
+	// string temp(str); 
 
-	string str1 = temp.substr(0,32);
-	string str2 = temp.substr(32,32);
+	// string str1 = temp.substr(0,32);
+	// string str2 = temp.substr(32,32);
 
-	str1.insert(1,".");
-	str2.insert(1,".");
+	// str1.insert(1,".");
+	// str2.insert(1,".");
 
-	Fpn x1 (str1);
-	Fpn x2 (str2);
+	// Fpn x1 (str1);
+	// Fpn x2 (str2);
 
-	cout << "x1:" << x1<<endl;
-	cout << "x2:" << x2<<endl;
+	Fpn x1 = getFpnFromCharArr(str,0);
+	Fpn x2 = getFpnFromCharArr(str,1);
+
+	// cout << "x1:" << x1 << endl;
+	// cout << "x2:" << x2 << endl;
 
 	// return test_function( x1, x2) ;
 	return FPN_drop_wawe( x1, x2) ;
@@ -241,6 +259,9 @@ static int fit_cmp(const void *el1, const void *el2) 	//fitness compare for the 
 {
 	Fpn a = fitness((char*)el1);
 	Fpn b = fitness((char*)el2);
+
+	// cout << "el1: " << (char*)el1 << " \t el2: " << (char*)el2 << endl;
+	cout << "a: " << a << " \t b: " << b << endl;
 
 	if (a > b) return 1;
 	if (a < b) return -1;
@@ -333,6 +354,7 @@ int main()
 	char *b = (char*)malloc(total_sz);
 	p = init_pop();
 	
+	cout << "TEST " << getFpnFromCharArr("11223300000000000000000000",0) <<endl;
 
     while (1) {
 		qsort(p, pop_size, el_sz, fit_cmp);
