@@ -343,7 +343,7 @@ int main()
 {
 	int i = 0;
 	// float bestfit = RAND_MAX;
-	Fpn bestfit("10000000000000000000000000000000000000000000000000000000000000000000.0");
+	Fpn bestfit("100000.0");
 	int opt;
 	srand((unsigned int)time(NULL));
 
