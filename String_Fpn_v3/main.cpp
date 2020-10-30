@@ -49,6 +49,11 @@ float test_function (float x1, float x2) { //  (0,0) glob_min: -1
     ;
 }
 
+float f_sphere (float x1, float x2) { //  (0,0) glob_min: -1
+    return (x1*x1)+(x2*x2);
+}
+
+
 //ok
 Fpn FPN_drop_wawe (Fpn x1, Fpn x2) { //  (0,0) glob_min: -1
     
