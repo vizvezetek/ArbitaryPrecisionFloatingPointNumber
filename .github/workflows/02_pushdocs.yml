@@ -27,7 +27,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: documentation
-        path: DOCS/latex/refman.pdf
+        path: DOCS/html/fulldocs.pdf
 
     - name: Push git subdirectory as branch
       uses: s0/git-publish-subdir-action@v2.4.0
