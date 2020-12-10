@@ -372,13 +372,58 @@ public:
 
     //FPN.math functions
 
+    /**
+     * \brief square functiton
+     * \param Fpn obj
+     * \return calculated Fpn object of sqrt(obj)
+    */
     static Fpn sqrt (Fpn obj);
+    
+    /**
+     * \brief power function
+     * \param Fpn &obj reference
+     * \return calculated Fpn object pow(obj)
+    */
     Fpn pow (Fpn &obj);
+    
+    /**
+     * \brief sine function
+     * \param Fpn x
+     * \return calculated Fpn object of sin(x)
+    */
     static Fpn sin (Fpn x);
+    
+    /**
+     * \brief cosine function
+     * \param Fpn x
+     * \return calculated Fpn object of cos(x)
+    */
     static Fpn cos (Fpn x);
 
+
+    /**
+     * \brief abs function 
+     * (+) -> (+)
+     * (-) -> (+)
+     * \param Fpn obj
+     * \return abs value of Fpn val
+    */
     static Fpn abs(Fpn obj);
+
+    
+    /**
+     * \brief rounding a number to integer
+     * \param Fpn obj
+     * \return calculated Fpn object
+    */
     static Fpn round(Fpn obj);
+
+    
+    /**
+     * \brief factorial of param value
+     * \param Fpn obj
+     * \return calculated Fpn object
+    */
     static Fpn fact(Fpn obj);
 
 
