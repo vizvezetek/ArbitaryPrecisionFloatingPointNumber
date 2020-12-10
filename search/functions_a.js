@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['removezerosthebeginofthestring',['removeZerosTheBeginOfTheString',['../classFpn.html#aa3f2983237e6931a1ad8200913952256',1,'Fpn']]],
-  ['removezerostheendofthestring',['removeZerosTheEndOfTheString',['../classFpn.html#a2b30c6dc7753985d35f877e92f8b4800',1,'Fpn']]],
+  ['removezerosthebeginofthestring',['removeZerosTheBeginOfTheString',['../classFpn.html#a8263f5e81dd9d7c9a9942dd8828f427c',1,'Fpn']]],
+  ['removezerostheendofthestring',['removeZerosTheEndOfTheString',['../classFpn.html#a2a4670d490816429dba513c08a3206ae',1,'Fpn']]],
   ['round',['round',['../classFpn.html#a7c11e78d82c08ca4dc028a70261f897f',1,'Fpn']]]
 ];
