@@ -31,7 +31,7 @@ Fpn::Fpn(const Fpn& f): sign(f.sign), number(f.number), intPart(f.intPart), frac
 Fpn::Fpn(Fpn& f): sign(f.getSign()), number(f.getNumber()), intPart(f.getIntPart()), fractPart(f.getFractPart()){}
 
 // [+-]?([0-9]*[.])?[0-9]+
-Fpn::Fpn(const string number_){
+Fpn::Fpn(const std::string number_){
  
 
     if(number_[0]=='+'){
@@ -71,7 +71,7 @@ Fpn::Fpn(const string number_){
     // fractPrecision = 100;
 }
 
-Fpn::Fpn(const string number_, const int fractPrecision_){
+Fpn::Fpn(const std::string number_, const int fractPrecision_){
  
     fractPrecision = fractPrecision_;
 
@@ -116,15 +116,15 @@ const char Fpn::getSign(){
     return sign;
 }
 
-const string Fpn::getNumber(){
+const std::string Fpn::getNumber(){
     return intPart + '.' + fractPart;
 }
 
-const string Fpn::getIntPart(){
+const std::string Fpn::getIntPart(){
     return intPart;
 }
 
-const string Fpn::getFractPart(){
+const std::string Fpn::getFractPart(){
     return fractPart;
 }
 
@@ -137,7 +137,7 @@ const int Fpn::getFractPrecision(){
     return (fractPrecision < 100 ) ? 100 : fractPrecision;
 }
 
-string Fpn::toString(){
+std::string Fpn::toString(){
     return sign + intPart + '.' + removeZerosTheEndOfTheString(fractPart);
 }
 
@@ -153,11 +153,11 @@ void Fpn::setSign(const char sign_){
     sign = sign_;
 }
 
-void Fpn::setNumber(const string number_){
+void Fpn::setNumber(const std::string number_){
     number = number_;
 }
 
-void Fpn::setIntPart(const string intPart_){
+void Fpn::setIntPart(const std::string intPart_){
     if (intPart_.size()==0){
         intPart = "0";
     }
@@ -166,7 +166,7 @@ void Fpn::setIntPart(const string intPart_){
     }
 }
 
-void Fpn::setFractPart(const string fractPart_){
+void Fpn::setFractPart(const std::string fractPart_){
     //cut the fract part at the precision
     if (fractPart_.size() >= fractPrecision && fractPrecision < 100){
         fractPart = fractPart_.substr(0, 100);
@@ -352,9 +352,6 @@ bool operator > (Fpn &obj1, Fpn &obj2){
 }
 
 bool Fpn::operator > (const Fpn& obj2) const{
-    // Fpn obj1(number);
-    // Fpn obj2(obj);
-    // return obj2 < obj1;
     return obj2 < *this; 
 }
 
@@ -363,8 +360,6 @@ bool operator <= (Fpn &obj1, Fpn &obj2){
 }
 
 bool Fpn::operator <= (const Fpn& obj2) const{
-    // Fpn obj1(number);
-    // Fpn obj2(obj);
     return *this==obj2 || *this<obj2;
 }
 
@@ -418,7 +413,7 @@ Fpn Fpn::operator * (const Fpn& f2){
     int f1zeros = 0;
     int f2zeros = 0;
 
-    string temp = "";
+    std::string temp = "";
 
     if (f1.getIntPart() == "0"){
         f1zeros ++;
@@ -658,7 +653,7 @@ Fpn Fpn::sqrt(Fpn n)
     else if (n.getIntPart()=="0" && n.getFractPart()!="0" ){    //example: sqrt(0.36) == 1/sqrt(1/36.0) 
                                                                 //example: sqrt(0.36) == sqrt(0.36*100)/10
         isModified = true;
-        string temp = n.getFractPart();
+        std::string temp = n.getFractPart();
         int i;
         for (i = 0; temp[i]=='0'; i++); //count zeros the begin of the fract part
         i = (i%2 ==0 )? i : i+1;    //legyen páros (ennek boldogságos matematikai okai vannak)
@@ -740,27 +735,27 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
 
         //f1 + f2
 
-        string carry = "!";
+        std::string carry = "!";
 
         //1. fract part.
 
-        string tempFract1 = f1.getFractPart();
-        string tempFract2 = f2.getFractPart();
+        std::string tempFract1 = f1.getFractPart();
+        std::string tempFract2 = f2.getFractPart();
 
         //append zeros
 
         if (tempFract1.size() > tempFract2.size() ){
-            string tempstr = tempFract2;
+            std::string tempstr = tempFract2;
             tempstr.append((int)tempFract1.size() - (int)tempFract2.size(),'0');
             tempFract2 = tempstr;
         }
         else if (tempFract1.size() < tempFract2.size() ){
-            string tempstr = tempFract1;
+            std::string tempstr = tempFract1;
             tempstr.append((int)tempFract2.size() - (int)tempFract1.size(),'0');
             tempFract1 = tempstr;
         }
 
-        string tempstr = addIntAsString(tempFract1, tempFract2);
+        std::string tempstr = addIntAsString(tempFract1, tempFract2);
 
         if (tempstr.size() > tempFract1.size()){
             carry = tempstr[0];
@@ -836,9 +831,9 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
     //example: insert(rightPlace, '.') = 2156.0
 
 
-    string temp1 = f1.getIntPart() + f1.getFractPart();
-    string temp2 = f2.getIntPart() + f2.getFractPart();
-    string temp3 = ""; 
+    std::string temp1 = f1.getIntPart() + f1.getFractPart();
+    std::string temp2 = f2.getIntPart() + f2.getFractPart();
+    std::string temp3 = ""; 
 
     if (f1.getFractPart().size() < f2.getFractPart().size()){
         temp1.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
@@ -874,8 +869,8 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
 
 bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
 
-    string f1fract = f1.getFractPart();
-    string f2fract = f2.getFractPart();
+    std::string f1fract = f1.getFractPart();
+    std::string f2fract = f2.getFractPart();
 
     if (f1.getFractPart().size() < f2.getFractPart().size()){
         f1fract.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
@@ -907,7 +902,7 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
     }
 }
 
-bool Fpn::isSmallerInt(string str1, string str2) { 
+bool Fpn::isSmallerInt(std::string str1, std::string str2) { 
     // Calculate lengths of both string 
     int n1 = str1.length(), n2 = str2.length(); 
   
@@ -928,14 +923,14 @@ bool Fpn::isSmallerInt(string str1, string str2) {
     return false; 
 } 
 
-string Fpn::addIntAsString(string str1, string str2){
+std::string Fpn::addIntAsString(std::string str1, std::string str2){
     // Before proceeding further, make sure length 
     // of str2 is larger. 
     if (str1.length() > str2.length()) 
         swap(str1, str2); 
   
     // Take an empty string for storing result 
-    string str = ""; 
+    std::string str = ""; 
   
     // Calculate length of both string 
     int n1 = str1.length(), n2 = str2.length(); 
@@ -974,14 +969,14 @@ string Fpn::addIntAsString(string str1, string str2){
     return str;
 }
 
-string Fpn::diffIntsAsString(string str1, string str2) { 
+std::string Fpn::diffIntsAsString(std::string str1, std::string str2) { 
     // Before proceeding further, make sure str1 
     // is not smaller 
     if (Fpn::isSmallerInt(str1, str2)) 
         swap(str1, str2); 
   
     // Take an empty string for storing result 
-    string str = ""; 
+    std::string str = ""; 
   
     // Calculate length of both string 
     int n1 = str1.length(), n2 = str2.length(); 
@@ -1037,7 +1032,7 @@ string Fpn::diffIntsAsString(string str1, string str2) {
     return str; 
 } 
 
-string Fpn::multiplyIntAsString(string num1, string num2){ 
+std::string Fpn::multiplyIntAsString(std::string num1, std::string num2){ 
     int n1 = num1.size(); 
     int n2 = num2.size(); 
     if (n1 == 0 || n2 == 0) 
@@ -1045,7 +1040,7 @@ string Fpn::multiplyIntAsString(string num1, string num2){
    
     // will keep the result number in vector 
     // in reverse order 
-    vector<int> result(n1 + n2, 0); 
+    std::vector<int> result(n1 + n2, 0); 
    
     // Below two indexes are used to find positions 
     // in result.  
@@ -1100,7 +1095,7 @@ string Fpn::multiplyIntAsString(string num1, string num2){
     return "0"; 
    
     // generate the result string 
-    string s = ""; 
+    std::string s = ""; 
        
     while (i >= 0) 
         s += std::to_string(result[i--]); 
@@ -1108,9 +1103,9 @@ string Fpn::multiplyIntAsString(string num1, string num2){
     return s; 
 }
 
-string Fpn::divideIntsAsString(string number, string divisor, int precision){  
+std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int precision){  
     
-    string out; 
+    std::string out; 
 
     if (number == "0.0"){
         return "0.0";
@@ -1161,8 +1156,8 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
     }
 
 
-    string tempNum = number;
-    string tempDiv = divisor;
+    std::string tempNum = number;
+    std::string tempDiv = divisor;
 
     tempNum.erase(tempNum.find("."),1);
     tempDiv.erase(tempDiv.find("."),1);
@@ -1172,7 +1167,7 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
     tempNum = removeZerosTheBeginOfTheString(tempNum);
     tempDiv = removeZerosTheBeginOfTheString(tempDiv);
 
-    string quotient, remainder;
+    std::string quotient, remainder;
     tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
 
     out = quotient + "."; 
@@ -1211,20 +1206,17 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
     return out; 
 } 
 
-tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
+std::tuple<std::string, std::string>  Fpn::modIntsAsString(std::string num1, std::string num2 ){
 
-    string out = "";
+    std::string out = "";
 
-    // int counter = 0;
-    string counter = "0";
+    std::string counter = "0";
     if (isSmallerInt(num1, num2)){
         counter = "0";
-        // num1 = num1;
     }
     else{
         while(isSmallerInt(num2, num1) || num1==num2 ){
 
-            // num1 = removeZerosTheBeginOfTheString(num1);
             num1 = diffIntsAsString(num1, num2);
             num1 = removeZerosTheBeginOfTheString(num1);
 
@@ -1232,14 +1224,12 @@ tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
             counter = addIntAsString(counter, "1");
         }
     } 
-
-    // return make_tuple( to_string(counter), num1 );  
-    return make_tuple( counter, num1 );  
+    return std::make_tuple( counter, num1 );  
 }
 
-string Fpn::removeZerosTheBeginOfTheString(string s){
+std::string Fpn::removeZerosTheBeginOfTheString(std::string s){
     if (s.at(0) == '0'){
-        string temp = s;
+        std::string temp = s;
         int i;
         for (i = 0; temp[i]=='0'; i++){}
 
@@ -1249,7 +1239,7 @@ string Fpn::removeZerosTheBeginOfTheString(string s){
     return s;
 }
 
-string Fpn::removeZerosTheEndOfTheString(string s){
+std::string Fpn::removeZerosTheEndOfTheString(std::string s){
     //if the last char is '0'
     if (s.at(s.length()-1) == '0'){
         int i = s.length()-1;

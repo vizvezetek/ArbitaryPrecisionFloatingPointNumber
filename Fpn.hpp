@@ -79,7 +79,7 @@
 #define sEuler "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354"
 
 
-using namespace std;    
+// using namespace std;    
 
 
 class Fpn{
@@ -92,13 +92,13 @@ private:
     char sign;      
     
     /// the number in string format. ex: "123.4567"
-    string number;      
+    std::string number;      
     
     /// the integer part of the number. ex: "123"
-    string intPart;      
+    std::string intPart;      
     
     /// the faction part of the number. ex: "4567"
-    string fractPart;      
+    std::string fractPart;      
     
     /// the precision of the integer part. ex: "3"
     // int intPrecision;      
@@ -114,7 +114,7 @@ private:
      * \param string s2
      * \return the calculated string value
     */
-    string addIntAsString(string s1, string s2);
+    std::string addIntAsString(std::string s1, std::string s2);
 
     /** 
      * \brief Get difference between two integer strings. Ex: 43-11 = 32
@@ -122,7 +122,7 @@ private:
      * \param string str2
      * \return the calculated string value 
     */
-    string diffIntsAsString(string str1, string str2);
+    std::string diffIntsAsString(std::string str1, std::string str2);
 
     /** 
      * \brief Multiply two integer strings. Example: 11*11=121
@@ -130,7 +130,7 @@ private:
      * \param string num2
      * \return the multiplied value as String 
     */
-    string multiplyIntAsString(string num1, string num2);
+    std::string multiplyIntAsString(std::string num1, std::string num2);
 
     /** 
      * \brief Divide ints as string
@@ -139,7 +139,7 @@ private:
      * \param precision
      * \return the calculcated values
     */
-    string divideIntsAsString(string number, string divisor, int precision/** Precision of the result if it not finite */);
+    std::string divideIntsAsString(std::string number, std::string divisor, int precision/** Precision of the result if it not finite */);
 
     
     /**
@@ -148,72 +148,79 @@ private:
      * \param num2 
      * \return a tuple<string,string>. First is how many times is it in, the second is the remainder.
     */
-    tuple<string, string> modIntsAsString(string num1, string num2 );
+    std::tuple<std::string, std::string> modIntsAsString(std::string num1, std::string num2 );
     
     /** 
      * \brief if str1 < str2 returns true
-     * \param
+     * \param string str1
+     * \param string str2
+     * \return true if str1 is bigger then str2
     */
-    bool isSmallerInt(string str1, string str2);
+    bool isSmallerInt(std::string str1, std::string str2);
 
     /** 
      * \brief if str1 < str2 returns true
-     * \param
+     * \param Fpn f1
+     * \param Fpn f2
+     * \return true if str1 < str2
     */
     bool isSmallerFloat(Fpn f1, Fpn f2);
 
     /** 
      * \brief Extraction method of the - operator. 
-     * \param
-     * \return Fpn result
+     * \param Fpn f1
+     * \param Fpn f2
+     * \return extracted Fpn result
     */
     Fpn extractFpns(Fpn f1, Fpn f2);
 
     /** 
      * \brief Add method of the + operator. 
-     * \param
-     * \return Fpn result
+     * \param Fpn f1
+     * \param Fpn f2
+     * \return added Fpn result
     */
     Fpn addFpns(Fpn f1, Fpn f2);
 
     /** 
      * \brief Taylor series sum for sine function. 
-     * \param
-     * \return Fpn result
+     * \param Fpn x
+     * \return calculated Fpn result of sin(x)
     */
     static Fpn sinTaylorSum(Fpn x);
 
     /** 
      * \brief Taylor series sum for cos function. 
-     * \param
-     * \return Fpn result
+     * \param Fpn x
+     * \return calculated Fpn result of cos(x)
     */
     static Fpn cosTaylorSum(Fpn x);
 
     /** 
      * \brief Helper function for sqrt() 
-     * \param
+     * \param Fpn n
+     * \param Fpn i
+     * \param Fpn j
      * \return Fpn result
     */
     static Fpn sSquare(Fpn n, Fpn i, Fpn j) ;
 
     /** 
      * \brief this removes zeros from begin of the string. Example 001233 => 1233 
-     * \param
+     * \param string s
      * \return string result
     */
-    string removeZerosTheBeginOfTheString(string s);
+    std::string removeZerosTheBeginOfTheString(std::string s);
     
     /** 
      * \brief this removes zeros from end of the string. Example 123300 => 1233 
-     * \param
+     * \param string s
      * \return string result
     */
-    string removeZerosTheEndOfTheString(string s);
+    std::string removeZerosTheEndOfTheString(std::string s);
 
     /** 
-     * \brief ostream operator
-     * \param
+     * \brief ostream operator for std::cout
     */
     friend std::ostream& operator<<(std::ostream&, const Fpn&);
     
@@ -228,25 +235,23 @@ public:
      * @param const string number_ 
      * @param const int fractPrecision_
     */
-    Fpn(const string number_, const int fractPrecision_);
+    Fpn(const std::string number_, const int fractPrecision_);
     
     /** 
      * \brief 
-     * \param
-     * @param const string number_ 
+     * \param const string number_ 
     */
-    Fpn(const string number_);
+    Fpn(const std::string number_);
     
     /** 
      * \brief copyconstructor for const Fpn reference
-     * \param
-     * @param const Fpn& obj
+     * \param const Fpn& obj
     */
     Fpn(const Fpn& obj);
     
     /**
      * \brief copyconstructor for Fpn reference
-     * \param 
+     * \param Fpn& obj
     */
     Fpn(Fpn& obj);
     
@@ -256,82 +261,75 @@ public:
     */
     Fpn();
 
-    //destructor *******************************************
+    /// destructor
     ~Fpn(){}
 
     //getter, setter, toString *****************************
     
     /** 
      * \brief getter for sign ex.: '+'
-     * \param
     */
     const char getSign(); 
     
     /** 
      * \brief getter for number. Example: 2.3456
-     * \param
     */
-    const string getNumber(); 
+    const std::string getNumber(); 
     
     /** 
      * \brief getter for integer part. example 2
-     * \param
     */
-    const string getIntPart(); 
+    const std::string getIntPart(); 
     
     /** 
      * \brief getter for fraction part. example 3456
-     * \param
     */
-    const string getFractPart(); 
+    const std::string getFractPart(); 
     
     /** 
      * \brief getter for integer precision. example: 1
-     * \param
     */
     const int getIntPrecision(); 
     
     /** 
      * \brief getter for floating point precision. example 2 or 100
-     * \param
     */
     const int getFractPrecision(); 
 
     /** 
      * \brief setter for sign
-     * \param
+     * \param const char sign_)
     */
     void setSign(const char sign_);
     
     /** 
      * \brief setter for whole number part
-     * \param
+     * \param const string number_)
     */
-    void setNumber(const string number_);
+    void setNumber(const std::string number_);
 
     /** 
      * \brief setter for integer part
-     * \param
+     * \param const string intPart_
     */
-    void setIntPart(const string intPart_);
+    void setIntPart(const std::string intPart_);
 
     /** 
      * \brief setter for fraction part
-     * \param
+     * \param const string fractPart_
     */
-    void setFractPart(const string fractPart_);
+    void setFractPart(const std::string fractPart_);
 
     /** 
      * \brief setter for floating point precision for the calculations
-     * \param
+     * \param const int fractPrecision_
     */
     void setFractPrecision(const int fractPrecision_);
 
     /** 
      * \brief simple toString method
-     * \param
     */
-    string toString();
+    std::string toString();
 
 
     //operators ********************************************
@@ -339,37 +337,36 @@ public:
 
     /**
      * \brief simple = method by an overloaded operator
-     * \param
     */
     Fpn& operator = (const Fpn& obj);
 
     /**
      * \brief simple / method by an overloaded operator
-     * \param
+     * \param Fpn &obj
     */
     Fpn operator / (Fpn &obj);
 
     /**
      * \brief simple + method by an overloaded operator
-     * \param
+     * \param const Fpn& obj
     */
     Fpn operator + (const Fpn& obj);
     
     /**
      * \brief simple - method by an overloaded operator
-     * \param
+     * \param const Fpn& obj
     */
     Fpn operator - (const Fpn& obj);
     
     /**
      * \brief simple * method by an overloaded operator
-     * \param
+     * \param const Fpn& f2
     */
     Fpn operator * (const Fpn& f2);
 
     /**
      * \brief simple / method by an overloaded operator
-     * \param
+     * \param const Fpn& f2
     */
     Fpn operator / (const Fpn& f2);
 
