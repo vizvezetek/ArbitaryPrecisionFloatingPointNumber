@@ -1,0 +1,16 @@
+name: Valgrind check (Memory Leaks and Errors)
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Install Valgrind
+        run: sudo apt install valgrind
+
+      - name: Memory Leak and Error Check
+        uses: actions/checkout@v2
+      - run: make && valgrind --leak-check=full --error-exitcode=1 --track-origins=yes ./main 0.5 0.5
