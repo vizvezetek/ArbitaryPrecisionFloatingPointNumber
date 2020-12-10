@@ -1,4 +1,4 @@
-name: pushdocs.yml
+name: Generate Doxygen docs and push to gh-pages branch
 
 on:
   push:	
