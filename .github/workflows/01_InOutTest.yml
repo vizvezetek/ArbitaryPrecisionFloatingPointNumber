@@ -1,4 +1,4 @@
-name: compile and test
+name: In-Out test
 
 on:
   push
@@ -19,5 +19,3 @@ jobs:
         run: sudo python3 tests/test_1param.py
       - name: generate tests with two param
         run: sudo python3 tests/test_2param.py
-      # - name: check output
-      #   run: diff doubleOutput.txt fpnOutput.txt

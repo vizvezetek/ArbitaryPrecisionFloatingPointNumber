@@ -1,0 +1,46 @@
+[==========] Running 19 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 19 tests from unitTests
+[ RUN      ] unitTests.assign_equal
+[       OK ] unitTests.assign_equal (0 ms)
+[ RUN      ] unitTests.assign_add
+[       OK ] unitTests.assign_add (0 ms)
+[ RUN      ] unitTests.assign_subtract
+[       OK ] unitTests.assign_subtract (0 ms)
+[ RUN      ] unitTests.assign_divide
+[       OK ] unitTests.assign_divide (0 ms)
+[ RUN      ] unitTests.assign_multiply
+[       OK ] unitTests.assign_multiply (0 ms)
+[ RUN      ] unitTests.operator_smaller
+[       OK ] unitTests.operator_smaller (0 ms)
+[ RUN      ] unitTests.operator_larger
+[       OK ] unitTests.operator_larger (0 ms)
+[ RUN      ] unitTests.operator_equal
+[       OK ] unitTests.operator_equal (0 ms)
+[ RUN      ] unitTests.operator_not_equal
+[       OK ] unitTests.operator_not_equal (0 ms)
+[ RUN      ] unitTests.getter_and_setter_SIGN
+[       OK ] unitTests.getter_and_setter_SIGN (0 ms)
+[ RUN      ] unitTests.getter_and_setter_INTPART
+[       OK ] unitTests.getter_and_setter_INTPART (1 ms)
+[ RUN      ] unitTests.getter_and_setter_FRACTPART
+[       OK ] unitTests.getter_and_setter_FRACTPART (0 ms)
+[ RUN      ] unitTests.getter_FRACTPRECISION
+[       OK ] unitTests.getter_FRACTPRECISION (0 ms)
+[ RUN      ] unitTests.getter_NUMBER
+[       OK ] unitTests.getter_NUMBER (0 ms)
+[ RUN      ] unitTests.math_SQRT
+[       OK ] unitTests.math_SQRT (1 ms)
+[ RUN      ] unitTests.math_SIN
+[       OK ] unitTests.math_SIN (0 ms)
+[ RUN      ] unitTests.math_COS
+[       OK ] unitTests.math_COS (0 ms)
+[ RUN      ] unitTests.math_ABS
+[       OK ] unitTests.math_ABS (0 ms)
+[ RUN      ] unitTests.math_ROUND
+[       OK ] unitTests.math_ROUND (0 ms)
+[----------] 19 tests from unitTests (4 ms total)
+
+[----------] Global test environment tear-down
+[==========] 19 tests from 1 test case ran. (4 ms total)
+[  PASSED  ] 19 tests.

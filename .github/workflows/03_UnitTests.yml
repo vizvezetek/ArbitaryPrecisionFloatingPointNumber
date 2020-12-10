@@ -1,0 +1,20 @@
+name: Unittests
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v2
+      - run: make
+
+      - uses: actions/checkout@v2
+      - name: Install GoogleTest dependencies
+        run: sudo apt install libgtest-dev && sudo apt install cmake && cd /usr/src/gtest && sudo cmake . && sudo make && sudo cp *.a /usr/lib && sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a && sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+
+      - name: Make and run unittests
+        uses: actions/checkout@v2
+      - run: cd tests && cmake . && make && ./runUnitTests
