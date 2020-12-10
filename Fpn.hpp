@@ -32,7 +32,7 @@
 
 // #define EPS 1e-13
 
-using namespace std;
+using namespace std;    
 
 class Fpn{
 

@@ -856,13 +856,9 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
 }
 
 bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
-    // if(f1 < f2) return true;
 
     string f1fract = f1.getFractPart();
     string f2fract = f2.getFractPart();
-
-    // cout << f1 << "\t" << f2 << endl;
-    // cout << f1fract << "\t" << f2fract << endl;
 
     if (f1.getFractPart().size() < f2.getFractPart().size()){
         f1fract.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
@@ -875,30 +871,20 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
         f2fract.append(f1.getFractPart().size()-f2.getFractPart().size(), '0');
     }
 
-    // cout << f1fract << "\t" << f2fract << endl;
-
-
-    // cout <<"\n\n IS SMALLER " << f1 << " THAN " <<f2 << endl;
-
     if ( Fpn::isSmallerInt( f1.getIntPart(), f2.getIntPart() ) ){
-        // cout << "1\n\n" << endl;
         return true;
     }
     else if ( Fpn::isSmallerInt( f2.getIntPart(), f1.getIntPart() ) ){
-        // cout << "2\n\n" << endl;
         return false;
     }
     else { //equals
         if ( Fpn::isSmallerInt( f1fract, f2fract ) ){
-            // cout << "3\n\n" << endl;
             return true;
         }
         else if ( Fpn::isSmallerInt( f2fract, f1fract ) ){
-            // cout << "4\n\n" << endl;
             return false;
         }
         else{
-            // cout << "5\n\n" << endl;
             return false;
         }
     }
@@ -1250,7 +1236,13 @@ string Fpn::removeZerosTheEndOfTheString(string s){
     //if the last char is '0'
     if (s.at(s.length()-1) == '0'){
         int i = s.length()-1;
-        for ( ; s[i]=='0'; i--){}
+
+        char lastChar = '0';
+        while(lastChar=='0' && i!=0){
+            lastChar = s[i];
+            i-=1;
+        }
+
         s.erase(i+1, s.length());
 
         //if the string is empty because of zeros
