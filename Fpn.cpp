@@ -1,3 +1,20 @@
+/**
+ * \class Fpn
+ * 
+ * \file Fpn.cpp
+ * 
+ * \note This is an arbitary precision floating point arithmetic. The actual under development version is available at: https://github.com/vizvezetek/ArbitaryPrecisionFloatingPointNumber
+ * 
+ * It includes the main operators(+,-,*,/,=,<,>, etc.) in functions, and basic trigonometrical operations.
+ * In this case, because of my tests I temporary fixed the floating precision in 100 elements. The reason is to reduce the runtime at the bigger and complicated calculations. 
+ * 
+ * \author Koncz Péter (kope)
+ * 
+ * \version 6.9
+ * 
+ * \date 2020/11/25 22:07
+*/
+
 
 #include "Fpn.hpp"
 
