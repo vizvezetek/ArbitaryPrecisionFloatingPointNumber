@@ -244,13 +244,15 @@ public:
     */
     Fpn(const Fpn& obj);
     
+    /**
      * \brief copyconstructor for Fpn reference
-    /**\param 
+     * \param 
     */
     Fpn(Fpn& obj);
     
+    /**
      * \brief The "zero constructor" gives an object with +0.0 value
-    /**\param 
+     * \param 
     */
     Fpn();
 
