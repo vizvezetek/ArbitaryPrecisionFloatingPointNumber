@@ -9,15 +9,25 @@ using namespace std;
 
 int main(int argc, char* argv[]){
 
+	/**
+	 * Run the compiled code with 1 or 2 parameters
+	 * 
+	 * $ make
+	 * 
+	 * $ ./main 222.111
+	 * or
+	 * $ ./main 222.111 333.222
+	*/
+
     if (argc == 2){
         try
 		{
             ///char* -> double && double -> string -> Fpn
+
             double d1 = (double)strtod(argv[1],NULL);
             Fpn f1(std::to_string((double)d1),100);
 
 			if (d1>0) cout << d1 << ";" << f1 << ";sqrt(" << d1 << ");" << std::sqrt(d1) << ";" << Fpn::sqrt(f1) << ";" << endl;
-			// // // cout << d1 << ";" << f1 << ";pow(" << d1 << ");" << std::pow(d1) << ";" << Fpn::pow(f1) << ";" << endl;
 			cout << d1 << ";" << f1 << ";abs(" << d1 << ");" << std::abs(d1) << ";" << Fpn::abs(f1) << ";" << endl;
 			cout << d1 << ";" << f1 << ";round(" << d1 << ");" << std::round(d1) << ";" << Fpn::round(f1) << ";" << endl;
 			cout << d1 << ";" << f1 << ";sin(" << d1 << ");" << std::sin(d1) << ";" << Fpn::sin(f1) << ";" << endl;
