@@ -880,6 +880,10 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
     }
 }
 
+/**
+ * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers/
+ * date: 2020. 03.
+*/
 bool Fpn::isSmallerInt(std::string str1, std::string str2) { 
     // Calculate lengths of both string 
     int n1 = str1.length(), n2 = str2.length(); 

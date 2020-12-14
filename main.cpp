@@ -31,7 +31,8 @@ int main(int argc, char* argv[]){
 	else if (argc == 3){
         try
 		{
-            ///char* -> double && double -> string -> Fpn
+            /// char* -> double && double -> string -> Fpn
+
             double d1 = (double)strtod(argv[1],NULL);
             double d2 = (double)strtod(argv[2],NULL);
             Fpn f1(std::to_string((double)d1),100);
