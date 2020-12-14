@@ -110,33 +110,34 @@ private:
 
     /** 
      * \brief This is adding to integer value as a string. Example 23 + 34 = 57
-     * \param string s1
-     * \param string s2
+     * \param string s1, integer in string format
+     * \param string s2, integer in string format
      * \return the calculated string value
     */
     std::string addIntAsString(std::string s1, std::string s2);
 
     /** 
      * \brief Get difference between two integer strings. Ex: 43-11 = 32
-     * \param string str1
-     * \param string str2
+     * \param string str1, integer in string format
+     * \param string str2, integer in string format
      * \return the calculated string value 
     */
     std::string diffIntsAsString(std::string str1, std::string str2);
 
     /** 
      * \brief Multiply two integer strings. Example: 11*11=121
-     * \param string num1
-     * \param string num2
+     * \param string num1, integer in string format
+     * \param string num2, integer in string format
      * \return the multiplied value as String 
     */
     std::string multiplyIntAsString(std::string num1, std::string num2);
 
     /** 
      * \brief Divide ints as string
-     * \param number
-     * \param divisor
-     * \param precision
+     * \param string number, integer in string format
+     * \param string divisor, integer in string format
+     * \param int precision, int
+     * \throw the divisor can't be a zero
      * \return the calculcated values
     */
     std::string divideIntsAsString(std::string number, std::string divisor, int precision/** Precision of the result if it not finite */);
@@ -144,16 +145,16 @@ private:
     
     /**
      * \brief This is a % (mod) function implementation by extraxtions.
-     * \param num1 
-     * \param num2 
+     * \param num1 , integer in string format
+     * \param num2 , integer in string format
      * \return a tuple<string,string>. First is how many times is it in, the second is the remainder.
     */
     std::tuple<std::string, std::string> modIntsAsString(std::string num1, std::string num2 );
     
     /** 
      * \brief if str1 < str2 returns true
-     * \param string str1
-     * \param string str2
+     * \param string str1, integer in string format
+     * \param string str2, integer in string format
      * \return true if str1 is bigger then str2
     */
     bool isSmallerInt(std::string str1, std::string str2);
@@ -227,8 +228,6 @@ private:
     
 public:
     //constructors *****************************************
-
-    // Fpn(char sign_, const string number_, int fractPrecision_ );
 
     /** 
      * \brief Simple constructor. It makes an Fpn from the const string number_ and constraints the fract part precision by the const int fractPrecision_) 
@@ -375,6 +374,7 @@ public:
     /**
      * \brief square functiton
      * \param Fpn obj
+     * \throw Sqrt parameter must be equal or greater then zero. 
      * \return calculated Fpn object of sqrt(obj)
     */
     static Fpn sqrt (Fpn obj);
@@ -427,22 +427,95 @@ public:
     static Fpn fact(Fpn obj);
 
 
-    // friend bool operator == (Fpn& obj1, Fpn& obj2);
+    
+    
+    /**
+     * \brief boolean != operator. True, if(obj1 != obj2) is true.
+     * \param Fpn &obj1
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     friend bool operator != (Fpn &obj1, Fpn &obj2);
+    
+    /**
+     * \brief boolean < operator. True, if(obj1 < obj2) is true.
+     * \param Fpn &obj1
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     friend bool operator < (Fpn &obj1, Fpn &obj2);
+    
+    /**
+     * \brief boolean > operator. True, if(obj1 > obj2) is true.
+     * \param Fpn &obj1
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     friend bool operator > (Fpn &obj1, Fpn &obj2);
+    
+    /**
+     * \brief boolean <= operator. True, if(obj1 <= obj2) is true.
+     * \param Fpn &obj1
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     friend bool operator <= (Fpn &obj1, Fpn &obj2);
+    
+    /**
+     * \brief boolean >= operator. True, if(obj1 >= obj2) is true.
+     * \param Fpn &obj1
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     friend bool operator >= (Fpn &obj1, Fpn &obj2);
 
+    /**
+     * \brief boolean == operator. True, if(obj1 == obj2) is true.
+     * \param this
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     bool operator == (const Fpn& obj2) const;
+
+    /**
+     * \brief boolean == operator. True, if(obj1 == obj2) is true.
+     * \param this
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     bool operator != (const Fpn& obj2) const;
+    
+    /**
+     * \brief boolean < operator. True, if(obj1 < obj2) is true.
+     * \param this
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     bool operator < (const Fpn& obj2) const;
+    
+    /**
+     * \brief boolean > operator. True, if(obj1 > obj2) is true.
+     * \param this
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     bool operator > (const Fpn& obj2) const;
+    
+    /**
+     * \brief boolean <= operator. True, if(obj1 <= obj2) is true.
+     * \param this
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     bool operator <= (const Fpn& obj2) const;
+    
+    /**
+     * \brief boolean >= operator. True, if(obj1 >= obj2) is true.
+     * \param this
+     * \param Fpn &obj2
+     * \return the boolean value. True or false.
+    */
     bool operator >= (const Fpn& obj2) const;
-
-
-
 
 };
 

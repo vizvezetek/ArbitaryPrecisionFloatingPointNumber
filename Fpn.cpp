@@ -1,3 +1,4 @@
+
 /**
  * \class Fpn
  * 
@@ -15,15 +16,12 @@
  * \date 2020/11/25 22:07
 */
 
-
 #include "Fpn.hpp"
 
-//*******************************************************************************************************************************
-//public functions
-//*******************************************************************************************************************************
+///*******************************************************************************************************************************
+///public functions
+///*******************************************************************************************************************************
 
-//initialization list constructor
-// Fpn::Fpn(char sign_, const string number_, int fractPrecision_ ): sign (sign_), number(number_), fractPrecision(fractPrecision_){}
 
 Fpn::Fpn(): sign('+'), number("0.0"), intPart("0"), fractPart("0"){}
 
@@ -54,7 +52,7 @@ Fpn::Fpn(const std::string number_){
             number[i] = '.';
             // intPrecision = i;
             // fractPrecision = number.size()-i-1;
-            fractPrecision = fixedPrec; //ezt így nem szabadna...
+            fractPrecision = fixedPrec;
             floatingpoint = true;
             continue; //because of the floating point
         }
@@ -647,8 +645,8 @@ Fpn Fpn::sqrt(Fpn n)
     else if (n == Fpn("1.0")){  //sqrt(1) = 1
         return n;
     }
-    else if (n < Fpn("0.0")){   //sqrt(NEGATIVE) is a fucking math error
-        throw "FLOATING POINT EXCEPTION";
+    else if (n < Fpn("0.0")){   //sqrt(NEGATIVE) is an exception
+        throw "Sqrt parameter must be equal or greater then zero.";
     }
     else if (n.getIntPart()=="0" && n.getFractPart()!="0" ){    //example: sqrt(0.36) == 1/sqrt(1/36.0) 
                                                                 //example: sqrt(0.36) == sqrt(0.36*100)/10
@@ -1110,7 +1108,7 @@ std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int
     if (number == "0.0"){
         return "0.0";
     }
-    if (divisor == "0.0"){
+    if (divisor == "0.0"){ // the divisor can't be a zero.
         throw "FLOATING POINT EXCEPTION";
     }
 
