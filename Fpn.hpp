@@ -9,7 +9,7 @@
  * 
  * \author Koncz Péter (kope)
  * 
- * \version 6.9
+ * \version 0.9
  * 
  * \date 2020/11/25 22:07
 */

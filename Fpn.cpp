@@ -11,7 +11,7 @@
  * 
  * \author Koncz Péter (kope)
  * 
- * \version 6.9
+ * \version 0.9
  * 
  * \date 2020/11/25 22:07
 */
@@ -26,12 +26,12 @@
 Fpn::Fpn(): sign('+'), number("0.0"), intPart("0"), fractPart("0"){}
 
 Fpn::Fpn(const Fpn& f): sign(f.sign), number(f.number), intPart(f.intPart), fractPart(f.fractPart){}
+
 Fpn::Fpn(Fpn& f): sign(f.getSign()), number(f.getNumber()), intPart(f.getIntPart()), fractPart(f.getFractPart()){}
 
 // [+-]?([0-9]*[.])?[0-9]+
 Fpn::Fpn(const std::string number_){
  
-
     if(number_[0]=='+'){
         sign = '+';
         number = number_.substr( 1, (int)number_.size() );
@@ -50,8 +50,6 @@ Fpn::Fpn(const std::string number_){
 
         if (number[i] == '.' || number[i] == ','){
             number[i] = '.';
-            // intPrecision = i;
-            // fractPrecision = number.size()-i-1;
             fractPrecision = fixedPrec;
             floatingpoint = true;
             continue; //because of the floating point
@@ -65,8 +63,6 @@ Fpn::Fpn(const std::string number_){
         }
     }
     fractPart = removeZerosTheEndOfTheString(fractPart);
-
-    // fractPrecision = 100;
 }
 
 Fpn::Fpn(const std::string number_, const int fractPrecision_){
@@ -107,8 +103,9 @@ Fpn::Fpn(const std::string number_, const int fractPrecision_){
     fractPart = removeZerosTheEndOfTheString(fractPart);
 }
 
-
-//getters
+///
+/// getters
+///
 
 const char Fpn::getSign(){
     return sign;
@@ -140,12 +137,13 @@ std::string Fpn::toString(){
 }
 
 std::ostream& operator<<(std::ostream &strm, const Fpn &a) {
-//   return strm << a.sign << a.intPart << '.' <<a.fractPart;
   return strm << a.sign << a.intPart << '.' << a.fractPart;
 
 }
 
-//setters
+///
+/// setters
+///
 
 void Fpn::setSign(const char sign_){
     sign = sign_;
@@ -186,8 +184,9 @@ void Fpn::setFractPrecision(const int fractPrecision_){
     }
 }
 
-
-//operators
+///
+/// operators
+///
 
 Fpn& Fpn::operator = ( const Fpn& obj){
     if (this != &obj){
@@ -278,8 +277,6 @@ bool operator < (Fpn &obj1, Fpn &obj2){
 
 bool Fpn::operator < (const Fpn& obj2) const{
 
-    // Fpn obj1(number);
-    // Fpn obj2(obj);
 
     if (sign == obj2.sign  && intPart == obj2.intPart && fractPart == obj2.fractPart){
         return false;
@@ -398,7 +395,6 @@ Fpn Fpn::operator - (const Fpn& obj) {
         return addFpns(f1, f2);
     }
     // +-+ => ++-
-    // if (s1=='+' && s2=='+'){  //because of the warning handling. 
     else {
         f2.setSign('-');
         return addFpns(f1, f2);
@@ -525,8 +521,7 @@ Fpn Fpn::round(Fpn obj){
 Fpn Fpn::fact(Fpn obj){
     Fpn zero("0.0");
     Fpn one("+1.0");
-    // return (&obj == &zero) ? &one : (&obj * &Fpn::fact( (&obj - &one) ));
-    // return (obj == Fpn("0.0")) ? Fpn("1.0") : (Fpn::fact( (obj - one) ) * obj );
+
     if (obj == zero){
         return Fpn("1.0");
     }
@@ -571,8 +566,6 @@ Fpn Fpn::sinTaylorSum(Fpn x)
     Fpn tempcalc = sign;
     Fpn fact = sign;
     Fpn pow = x; 
-
-    // cout << x << res << sign << fact << pow <<endl;
 
     // sin(0)=sin(pi)=sin(2pi)... =0
     if (x.toString() == "0.0"){
@@ -654,7 +647,7 @@ Fpn Fpn::sqrt(Fpn n)
         std::string temp = n.getFractPart();
         int i;
         for (i = 0; temp[i]=='0'; i++); //count zeros the begin of the fract part
-        i = (i%2 ==0 )? i : i+1;    //legyen páros (ennek boldogságos matematikai okai vannak)
+        i = (i%2 ==0 )? i : i+1;    //must be an even number
 
         // modifiy modmultiplier
         temp.clear();
@@ -667,41 +660,32 @@ Fpn Fpn::sqrt(Fpn n)
         // modifiy divider
         temp.clear();
         temp = "10";
-        //
-        i = i/2; //úgyis páros, szóval egész a végeredmény
+        
+        i = i/2;    // i is even number, so the end result (i/2) is an integer
         temp.append(i, '0');
         temp.append(".0");
         modDivider = Fpn(temp);
-        // cout << "/" << temp << endl;
-
-        // n = Fpn("1.0")/n;
-
     }
-
 
     Fpn i("1.0"); 
 
     while (true) { 
   
         if (i * i == n) { 
-            // return i; 
             return isModified ? (i/modDivider) : i; 
-            // return isModified ? (Fpn("1.0")/i) : i; 
         } 
         else if (i * i > n) { 
             Fpn temp =  i-Fpn("1.0"); 
             Fpn res = sSquare(n, temp , i); 
-            // return res;
             return isModified ? (res/modDivider) : res ;
-            // return isModified ? (Fpn("1.0")/res) : res ;
         } 
         i = i + Fpn ("1.0"); 
     } 
 } 
 
-//*******************************************************************************************************************************
-//private functions
-//*******************************************************************************************************************************
+///*******************************************************************************************************************************
+/// private functions
+///*******************************************************************************************************************************
 
 Fpn Fpn::sSquare(Fpn n, Fpn i, Fpn j) 
 {   
@@ -735,7 +719,7 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
 
         std::string carry = "!";
 
-        //1. fract part.
+        //1. fraction part.
 
         std::string tempFract1 = f1.getFractPart();
         std::string tempFract2 = f2.getFractPart();
@@ -767,7 +751,7 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
             tempstr.clear();
         }
 
-        //2. int part.
+        //2. integer part.
 
         tempstr = addIntAsString(f1.getIntPart(), f2.getIntPart());
 
@@ -784,8 +768,6 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
             tempstr.clear();
             carry.clear();
         }
-
-
     }
     else {
 
@@ -809,7 +791,6 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
                 out.setIntPart("0");
             }
         }
-
     }
     
     //remove the 0's from the being of the string : 000123.456 -> 123.456 
@@ -827,7 +808,6 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
     //example: 66510  2222510
     //example: diffInts ( 2222510, 66510)  = 2156000
     //example: insert(rightPlace, '.') = 2156.0
-
 
     std::string temp1 = f1.getIntPart() + f1.getFractPart();
     std::string temp2 = f2.getIntPart() + f2.getFractPart();
@@ -881,10 +861,10 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
         f2fract.append(f1.getFractPart().size()-f2.getFractPart().size(), '0');
     }
 
-    if ( Fpn::isSmallerInt( f1.getIntPart(), f2.getIntPart() ) ){
+    if ( Fpn::isSmallerInt( f1.getIntPart(), f2.getIntPart() ) ){   // if f1 < f2
         return true;
     }
-    else if ( Fpn::isSmallerInt( f2.getIntPart(), f1.getIntPart() ) ){
+    else if ( Fpn::isSmallerInt( f2.getIntPart(), f1.getIntPart() ) ){ // if f2 < f1
         return false;
     }
     else { //equals
@@ -921,6 +901,11 @@ bool Fpn::isSmallerInt(std::string str1, std::string str2) {
     return false; 
 } 
 
+
+/**
+ * source: https://www.geeksforgeeks.org/sum-two-large-numbers/
+ * date: 2020. 03.
+*/
 std::string Fpn::addIntAsString(std::string str1, std::string str2){
     // Before proceeding further, make sure length 
     // of str2 is larger. 
@@ -967,6 +952,10 @@ std::string Fpn::addIntAsString(std::string str1, std::string str2){
     return str;
 }
 
+/**
+ * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers
+ * date: 2020.03
+*/
 std::string Fpn::diffIntsAsString(std::string str1, std::string str2) { 
     // Before proceeding further, make sure str1 
     // is not smaller 
@@ -1030,6 +1019,10 @@ std::string Fpn::diffIntsAsString(std::string str1, std::string str2) {
     return str; 
 } 
 
+/**
+ * source: https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
+ * date: 2020.03
+*/
 std::string Fpn::multiplyIntAsString(std::string num1, std::string num2){ 
     int n1 = num1.size(); 
     int n2 = num2.size(); 
@@ -1116,10 +1109,10 @@ std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int
     int pointPos2 = divisor.find(".");
     int pointDiff = std::abs(pointPos1-pointPos2);
     if (pointPos1>pointPos2 && pointDiff>3){
-        // pont áthelyezése divisor-ben pointpos1 dik helyre
+        // moving the point in the divisor to the pointpos1's position
         divisor.erase(divisor.find("."),1);
 
-        //kibővítés nullákkal a string miatt
+        //adding zeros because of the string
         if (number.size()>divisor.size()) {
             divisor.append(number.size()-divisor.size(), '0');
             precision += number.size()-divisor.size();
@@ -1137,8 +1130,8 @@ std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int
         divisor = removeZerosTheEndOfTheString(divisor);
         divisor = removeZerosTheBeginOfTheString(divisor);
 
-        divisor = (divisor.back() == '.') ? divisor.append("0") : divisor; // ha túlnullázta, akkor hozzácsapunk egyet, hogy a pont után legyen egy nulla.
-        number = (number.back() == '.') ? number.append("0") : number;
+        divisor = (divisor.back() == '.') ? divisor.append("0") : divisor; // if too many zeros are deleted, then have to add ONE piece of '0', because after the floating point must to be one. 
+        number = (number.back() == '.') ? number.append("0") : number;      
     }
 
 
@@ -1171,7 +1164,7 @@ std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int
     out = quotient + "."; 
     int actPrec = 1;
 
-    //ha egész számú a kimenet és nullázódik a tört rész, akkor nem kell a tizedes résszel semmit csinálni
+    // if the output is an integer, then the fraction part is zeroing, then you don't need anything to do with the fraction part
     if (remainder.size() == 0){
         out.append(precision, '0');
         return out;
@@ -1184,7 +1177,7 @@ std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int
         out += quotient; 
         actPrec++;
         
-        //ha egész számú a kimenet és nullázódik a tört rész, akkor nem kell a tizedes résszel semmit csinálni
+        // if the output is an integer, then the fraction part is zeroing, then you don't need anything to do with the fraction part
         if (remainder.size() == 0){
             out.append( (precision-actPrec) , '0');
             break;
