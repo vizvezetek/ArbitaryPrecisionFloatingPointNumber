@@ -879,7 +879,7 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
     }
 }
 
-/**
+/*
  * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers/
  * date: 2020. 03.
 */
@@ -906,7 +906,7 @@ bool Fpn::isSmallerInt(std::string str1, std::string str2) {
 } 
 
 
-/**
+/*
  * source: https://www.geeksforgeeks.org/sum-two-large-numbers/
  * date: 2020. 03.
 */
@@ -953,7 +953,7 @@ std::string Fpn::addIntAsString(std::string str1, std::string str2){
     return str;
 }
 
-/**
+/*
  * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers
  * date: 2020.03
 */
@@ -1013,77 +1013,76 @@ std::string Fpn::diffIntsAsString(std::string str1, std::string str2) {
     return str; 
 } 
 
-/**
+/*
  * source: https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
  * date: 2020.03
 */
 std::string Fpn::multiplyIntAsString(std::string num1, std::string num2){ 
+
     int n1 = num1.size(); 
     int n2 = num2.size(); 
-    if (n1 == 0 || n2 == 0) 
-    return "0"; 
+    if (n1 == 0 || n2 == 0){
+        return "0"; 
+    }
    
-    // will keep the result number in vector 
-    // in reverse order 
+    // will keep the result number in vector, in reverse order 
     std::vector<int> result(n1 + n2, 0); 
    
-    // Below two indexes are used to find positions 
-    // in result.  
+    // indexes for positions 
     int i_n1 = 0;  
     int i_n2 = 0;  
        
-    // Go from right to left in num1 
+    // from right to left in num1 
     for (int i=n1-1; i>=0; i--){ 
         int carry = 0; 
         int n1 = num1[i] - '0'; 
    
-        // To shift position to left after every 
-        // multiplication of a digit in num2 
+        // shift positions to left after every multiplication
         i_n2 = 0;  
            
-        // Go from right to left in num2              
+        // from right to left in num2              
         for (int j=n2-1; j>=0; j--){ 
-            // Take current digit of second number 
+            // take current digit of second number 
             int n2 = num2[j] - '0'; 
    
-            // Multiply with current digit of first number 
-            // and add result to previously stored result 
-            // at current position.  
+            // multiply with current digit of first number and add result to previously stored result at current position.  
             int sum = n1*n2 + result[i_n1 + i_n2] + carry; 
    
-            // Carry for next iteration 
+            // carry value for next iteration 
             carry = sum/10; 
    
-            // Store result 
+            // add value to result arr. 
             result[i_n1 + i_n2] = sum % 10; 
    
             i_n2++; 
         } 
    
         // store carry in next cell 
-        if (carry > 0) 
+        if (carry > 0){
             result[i_n1 + i_n2] += carry; 
-   
-        // To shift position to left after every 
-        // multiplication of a digit in num1. 
+        }
+
+        // step the position
         i_n1++; 
     } 
    
-    // ignore '0's from the right 
+    // step zeros from the end of the str
     int i = result.size() - 1; 
-    while (i>=0 && result[i] == 0) 
-    i--; 
+
+    while (i>=0 && result[i] == 0){
+        i--; 
+    } 
    
-    // If all were '0's - means either both or 
-    // one of num1 or num2 were '0' 
-    if (i == -1) 
-    return "0"; 
+    // if nr1 or nr2 is zero
+    if (i == -1){
+        return "0"; 
+    }
    
-    // generate the result string 
-    std::string s = ""; 
+    std::string s = ""; // result
        
-    while (i >= 0) 
-        s += std::to_string(result[i--]); 
+    while (i >= 0){
+        s += std::to_string(result[i--]);
+    }
    
     return s; 
 }

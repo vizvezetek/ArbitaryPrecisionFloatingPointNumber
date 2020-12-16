@@ -113,6 +113,8 @@ private:
      * \param string s1, integer in string format
      * \param string s2, integer in string format
      * \return the calculated string value
+     * source: https://www.geeksforgeeks.org/sum-two-large-numbers/
+     * date: 2020. 03.
     */
     std::string addIntAsString(std::string s1, std::string s2);
 
@@ -121,6 +123,8 @@ private:
      * \param string str1, integer in string format
      * \param string str2, integer in string format
      * \return the calculated string value 
+     * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers
+     * date: 2020.03
     */
     std::string diffIntsAsString(std::string str1, std::string str2);
 
@@ -129,6 +133,8 @@ private:
      * \param string num1, integer in string format
      * \param string num2, integer in string format
      * \return the multiplied value as String 
+     * source: https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
+     * date: 2020.03
     */
     std::string multiplyIntAsString(std::string num1, std::string num2);
 
@@ -164,6 +170,8 @@ private:
      * \param Fpn f1
      * \param Fpn f2
      * \return true if str1 < str2
+     * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers/
+     * date: 2020. 03.
     */
     bool isSmallerFloat(Fpn f1, Fpn f2);
 
