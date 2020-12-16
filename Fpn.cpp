@@ -535,7 +535,6 @@ Fpn Fpn::fact(Fpn obj){
     }
 }
 
-
 Fpn Fpn::sin(Fpn x) 
 { 
     Fpn res(x); 
@@ -885,9 +884,10 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
  * date: 2020. 03.
 */
 bool Fpn::isSmallerInt(std::string str1, std::string str2) { 
-    // Calculate lengths of both string 
+    // calculate lengths of both string 
     int n1 = str1.length(), n2 = str2.length(); 
   
+    // if the size is bigger, then the humber is bigger
     if (n1 < n2) 
         return true; 
     if (n2 < n1) 
@@ -911,44 +911,41 @@ bool Fpn::isSmallerInt(std::string str1, std::string str2) {
  * date: 2020. 03.
 */
 std::string Fpn::addIntAsString(std::string str1, std::string str2){
-    // Before proceeding further, make sure length 
-    // of str2 is larger. 
-    if (str1.length() > str2.length()) 
+    // str2 must be longer then str2
+    if (str1.length() > str2.length()){
         swap(str1, str2); 
+    }
+
+    std::string str = "";  // result
+
+    int n1 = str1.length();
+    int n2 = str2.length(); 
   
-    // Take an empty string for storing result 
-    std::string str = ""; 
-  
-    // Calculate length of both string 
-    int n1 = str1.length(), n2 = str2.length(); 
-  
-    // Reverse both of strings 
+    // reverse strings, because the carry value goes to the end of the string
     reverse(str1.begin(), str1.end()); 
     reverse(str2.begin(), str2.end()); 
   
     int carry = 0; 
-    for (int i=0; i<n1; i++) 
-    { 
-        // Do school mathematics, compute sum of 
-        // current digits and carry 
+
+    // calc the result of the strings, get the carry bit and concat it to the result 
+    for (int i=0; i<n1; i++){
         int sum = ((str1[i]-'0')+(str2[i]-'0')+carry); 
         str.push_back(sum%10 + '0'); 
-  
-        // Calculate carry for next step 
+   
         carry = sum/10; 
     } 
   
-    // Add remaining digits of larger number 
-    for (int i=n1; i<n2; i++) 
-    { 
+    // add remaining digits of larger number 
+    for (int i=n1; i<n2; i++){ 
         int sum = ((str2[i]-'0')+carry); 
         str.push_back(sum%10 + '0'); 
         carry = sum/10; 
     } 
   
-    // Add remaining carry 
-    if (carry) 
+    // add remaining carry 
+    if (carry) {
         str.push_back(carry+'0'); 
+    }
   
     // reverse resultant string 
     reverse(str.begin(), str.end()); 
@@ -961,63 +958,56 @@ std::string Fpn::addIntAsString(std::string str1, std::string str2){
  * date: 2020.03
 */
 std::string Fpn::diffIntsAsString(std::string str1, std::string str2) { 
-    // Before proceeding further, make sure str1 
-    // is not smaller 
+    // str2 must be longer then str2
     if (Fpn::isSmallerInt(str1, str2)) 
         swap(str1, str2); 
+
+    std::string str = ""; // result 
   
-    // Take an empty string for storing result 
-    std::string str = ""; 
+    int n1 = str1.length();
+    int n2 = str2.length(); 
   
-    // Calculate length of both string 
-    int n1 = str1.length(), n2 = str2.length(); 
-  
-    // Reverse both of strings 
+    // reverse strings, because the carry value goes to the end of the string
     reverse(str1.begin(), str1.end()); 
     reverse(str2.begin(), str2.end()); 
       
     int carry = 0; 
   
-    // Run loop till small string length 
-    // and subtract digit of str1 to str2 
-    for (int i=0; i<n2; i++) 
-    { 
-        // Do school mathematics, compute difference of 
-        // current digits 
-          
+    // subtract digit of str1 to str2
+    for (int i=0; i<n2; i++){  
+
         int sub = ((str1[i]-'0')-(str2[i]-'0')-carry); 
           
-        // If subtraction is less then zero 
-        // we add then we add 10 into sub and 
-        // take carry as 1 for calculating next step 
+        // if the result -, then make it +, and the carry value will be 1
         if (sub < 0) { 
             sub = sub + 10; 
             carry = 1; 
         } 
-        else
+        else{
             carry = 0; 
+        }
   
         str.push_back(sub + '0'); 
     } 
   
     // subtract remaining digits of larger number 
-    for (int i=n2; i<n1; i++) 
-    { 
+    for (int i=n2; i<n1; i++){ 
+
         int sub = ((str1[i]-'0') - carry); 
           
-        // if the sub value is -ve, then make it positive 
-        if (sub < 0) 
-        { 
+        // if the sub value is -, then make it + 
+        if (sub < 0) { 
             sub = sub + 10; 
             carry = 1; 
         } 
-        else
+        else{
             carry = 0; 
+        }
               
         str.push_back(sub + '0'); 
     } 
   
-    // reverse resultant string 
+    // reverse the result for the right value 
     reverse(str.begin(), str.end()); 
   
     return str; 
