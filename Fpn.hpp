@@ -239,14 +239,14 @@ public:
 
     /** 
      * \brief Simple constructor. It makes an Fpn from the const string number_ and constraints the fract part precision by the const int fractPrecision_) 
-     * @param const string number_ 
-     * @param const int fractPrecision_
+     * @param const string number_ in "-3.657" format 
+     * @param const int fractPrecision_ 
     */
     Fpn(const std::string number_, const int fractPrecision_);
     
     /** 
-     * \brief 
-     * \param const string number_ 
+     * \brief Simple constructor. 
+     * \param const string number_ in "-3.657" format 
     */
     Fpn(const std::string number_);
     

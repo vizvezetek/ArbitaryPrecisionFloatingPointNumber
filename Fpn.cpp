@@ -23,13 +23,16 @@
 ///*******************************************************************************************************************************
 
 
+/*The "zero constructor" gives an object with +0.0 value*/
 Fpn::Fpn(): sign('+'), number("0.0"), intPart("0"), fractPart("0"){}
 
+/*copyconstructor for const Fpn reference*/
 Fpn::Fpn(const Fpn& f): sign(f.sign), number(f.number), intPart(f.intPart), fractPart(f.fractPart){}
 
+/*copyconstructor for Fpn reference*/
 Fpn::Fpn(Fpn& f): sign(f.getSign()), number(f.getNumber()), intPart(f.getIntPart()), fractPart(f.getFractPart()){}
 
-// [+-]?([0-9]*[.])?[0-9]+
+/*Simple constructor. number_ in"-3.657" format is OK. */
 Fpn::Fpn(const std::string number_){
  
     if(number_[0]=='+'){
@@ -65,6 +68,7 @@ Fpn::Fpn(const std::string number_){
     fractPart = removeZerosTheEndOfTheString(fractPart);
 }
 
+/*Simple constructor. It makes an Fpn from the const string number_ and constraints the fract part precision by the const int fractPrecision_)  number_ in"-3.657" format is OK. */
 Fpn::Fpn(const std::string number_, const int fractPrecision_){
  
     fractPrecision = fractPrecision_;
@@ -107,35 +111,43 @@ Fpn::Fpn(const std::string number_, const int fractPrecision_){
 /// getters
 ///
 
+/*getter for sign ex.: '+'*/
 const char Fpn::getSign(){
     return sign;
 }
 
+/*getter for number. Example: 2.3456*/
 const std::string Fpn::getNumber(){
     return intPart + '.' + fractPart;
 }
 
+/*getter for integer part. example 2*/
 const std::string Fpn::getIntPart(){
     return intPart;
 }
 
+/*getter for fraction part. example 2*/
 const std::string Fpn::getFractPart(){
     return fractPart;
 }
 
+/*getter for integer precision. example: 1*/
 const int Fpn::getIntPrecision(){
     return intPart.size();
 }
 
+/*getter for floating point precision. example 2 or 100*/
 const int Fpn::getFractPrecision(){
     //the minimum precision is 100 digits
     return (fractPrecision < 100 ) ? 100 : fractPrecision;
 }
 
+/*Simple toString function. Return the whole number. Ex: "-234.567" */
 std::string Fpn::toString(){
     return sign + intPart + '.' + removeZerosTheEndOfTheString(fractPart);
 }
 
+/*ostream operator for cout<<*/
 std::ostream& operator<<(std::ostream &strm, const Fpn &a) {
   return strm << a.sign << a.intPart << '.' << a.fractPart;
 
@@ -145,14 +157,17 @@ std::ostream& operator<<(std::ostream &strm, const Fpn &a) {
 /// setters
 ///
 
+/*setter for sign*/
 void Fpn::setSign(const char sign_){
     sign = sign_;
 }
 
+/*setter for whole number part*/
 void Fpn::setNumber(const std::string number_){
     number = number_;
 }
 
+/*setter for integer part*/
 void Fpn::setIntPart(const std::string intPart_){
     if (intPart_.size()==0){
         intPart = "0";
@@ -162,6 +177,7 @@ void Fpn::setIntPart(const std::string intPart_){
     }
 }
 
+/*setter for fraction part*/
 void Fpn::setFractPart(const std::string fractPart_){
     //cut the fract part at the precision
     if (fractPart_.size() >= fractPrecision && fractPrecision < 100){
@@ -175,6 +191,7 @@ void Fpn::setFractPart(const std::string fractPart_){
     }
 }
 
+/*setter for fract percision*/
 void Fpn::setFractPrecision(const int fractPrecision_){
     if (fractPrecision_ <= 100){
         fractPrecision = 100;
@@ -188,6 +205,7 @@ void Fpn::setFractPrecision(const int fractPrecision_){
 /// operators
 ///
 
+/*simple = method by an overloaded operator*/
 Fpn& Fpn::operator = ( const Fpn& obj){
     if (this != &obj){
         sign = obj.sign;
@@ -199,15 +217,18 @@ Fpn& Fpn::operator = ( const Fpn& obj){
     return *this;
 }
 
+/*simple == method by an overloaded operator*/
 bool Fpn::operator == (const Fpn& obj2) const{
 
     return (sign == obj2.sign  && intPart == obj2.intPart && fractPart == obj2.fractPart) ? true : false ;
 }
 
+/*simple != method by an overloaded operator*/
 bool operator != (Fpn &obj1, Fpn &obj2){
     return !(obj1==obj2);
 }
 
+/*simple < method by an overloaded operator*/
 bool operator < (Fpn &obj1, Fpn &obj2){
 
     if (obj1 == obj2){
@@ -275,6 +296,7 @@ bool operator < (Fpn &obj1, Fpn &obj2){
     return true;
 }
 
+/*simple < method by an overloaded operator*/
 bool Fpn::operator < (const Fpn& obj2) const{
 
 
@@ -342,30 +364,37 @@ bool Fpn::operator < (const Fpn& obj2) const{
     return true;
 }
 
+/*simple > method by an overloaded operator*/
 bool operator > (Fpn &obj1, Fpn &obj2){
     return obj2 < obj1;
 }
 
+/*simple > method by an overloaded operator*/
 bool Fpn::operator > (const Fpn& obj2) const{
     return obj2 < *this; 
 }
 
+/*simple <= method by an overloaded operator*/
 bool operator <= (Fpn &obj1, Fpn &obj2){
     return obj1==obj2 || obj1<obj2;
 }
 
+/*simple <= method by an overloaded operator*/
 bool Fpn::operator <= (const Fpn& obj2) const{
     return *this==obj2 || *this<obj2;
 }
 
+/*simple >= method by an overloaded operator*/
 bool operator >= (Fpn &obj1, Fpn &obj2){
     return obj1==obj2 || obj1>obj2;
 }
 
+/*simple >= method by an overloaded operator*/
 bool Fpn::operator >= (const Fpn& obj2) const{
     return *this==obj2 || *this>obj2;
 }
 
+/*simple + method by an overloaded operator. Uses the addFpns() function.*/
 Fpn Fpn::operator + (const Fpn& obj) {
 
     Fpn temp(this->toString());
@@ -373,6 +402,7 @@ Fpn Fpn::operator + (const Fpn& obj) {
     return addFpns(temp, obj) ; 
 }
 
+/*simple - method by an overloaded operator*/
 Fpn Fpn::operator - (const Fpn& obj) { 
     Fpn f1(this->toString());
     Fpn f2(obj);
@@ -401,6 +431,7 @@ Fpn Fpn::operator - (const Fpn& obj) {
     }
 }
 
+/*simple * method by an overloaded operator*/
 Fpn Fpn::operator * (const Fpn& f2){
     Fpn f1(this->toString());
 
@@ -453,6 +484,7 @@ Fpn Fpn::operator * (const Fpn& f2){
     return out;
 }
 
+/*simple / method by an overloaded operator*/
 Fpn Fpn::operator / (const Fpn& f2){
     Fpn f1(this->toString());
     Fpn f3(f2.number);
@@ -472,6 +504,7 @@ Fpn Fpn::operator / (const Fpn& f2){
     return out;
 }
 
+/*simple / method by an overloaded operator*/
 Fpn Fpn::operator / (Fpn &f2){
     Fpn f1(this->toString());
 
@@ -492,6 +525,7 @@ Fpn Fpn::operator / (Fpn &f2){
 
 //FPN.math
 
+/*abs() function for Fpn objects*/
 Fpn Fpn::abs(Fpn obj){
     if (obj.getSign() == '-'){
         obj.setSign('+');
@@ -500,6 +534,7 @@ Fpn Fpn::abs(Fpn obj){
     return obj;
 }
 
+/*Rounding method for Fpn objects*/
 Fpn Fpn::round(Fpn obj){
     if ( obj.getFractPart()[0] >= '5'){
         Fpn one = Fpn("1.0");
@@ -518,6 +553,7 @@ Fpn Fpn::round(Fpn obj){
     }
 }
 
+/*Factorial method*/
 Fpn Fpn::fact(Fpn obj){
     Fpn zero("0.0");
     Fpn one("+1.0");
@@ -535,6 +571,7 @@ Fpn Fpn::fact(Fpn obj){
     }
 }
 
+/*sine function*/
 Fpn Fpn::sin(Fpn x) 
 { 
     Fpn res(x); 
@@ -558,6 +595,7 @@ Fpn Fpn::sin(Fpn x)
 
 } 
 
+/*Taylor series sum for sine function. */
 Fpn Fpn::sinTaylorSum(Fpn x) 
 { 
     Fpn res(x.toString()); 
@@ -592,6 +630,7 @@ Fpn Fpn::sinTaylorSum(Fpn x)
     return res;  
 } 
 
+/*cosine function*/
 Fpn Fpn::cos(Fpn x) 
 { 
     Fpn res(x.toString()); 
@@ -620,12 +659,13 @@ Fpn Fpn::cos(Fpn x)
 
 } 
 
+/*Taylor series sum for cos function. */
 Fpn Fpn::cosTaylorSum(Fpn x) 
 { 
     return sin(x+Fpn(halfsPi)); 
 } 
 
-//public
+/*square function*/
 Fpn Fpn::sqrt(Fpn n) 
 { 
     bool isModified = false;
@@ -686,6 +726,7 @@ Fpn Fpn::sqrt(Fpn n)
 /// private functions
 ///*******************************************************************************************************************************
 
+/*Helper function for sqrt() */
 Fpn Fpn::sSquare(Fpn n, Fpn i, Fpn j) 
 {   
     Fpn EPS("0.00000000000000000000000000000000000000001");
@@ -701,6 +742,7 @@ Fpn Fpn::sSquare(Fpn n, Fpn i, Fpn j)
         return sSquare(n, i, mid); 
 } 
 
+/*Add method of the + operator. */
 Fpn Fpn::addFpns(Fpn f1, Fpn f2){
     Fpn out("0.0");
 
@@ -799,6 +841,7 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
     return out;
 }
 
+/*Extraction method of the - operator. */
 Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
     
     //convert fpn strings to integer extract and insert the floating point to the right place
@@ -844,6 +887,7 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
     return Fpn (temp3);
 }
 
+/*if str1 < str2 returns true*/
 bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
 
     std::string f1fract = f1.getFractPart();
@@ -882,6 +926,7 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
 /*
  * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers/
  * date: 2020. 03.
+ * if str1 < str2 returns true
 */
 bool Fpn::isSmallerInt(std::string str1, std::string str2) { 
     // calculate lengths of both string 
@@ -909,6 +954,7 @@ bool Fpn::isSmallerInt(std::string str1, std::string str2) {
 /*
  * source: https://www.geeksforgeeks.org/sum-two-large-numbers/
  * date: 2020. 03.
+ * This is adding to integer value as a string. Example 23 + 34 = 57
 */
 std::string Fpn::addIntAsString(std::string str1, std::string str2){
     // str2 must be longer then str2
@@ -956,6 +1002,7 @@ std::string Fpn::addIntAsString(std::string str1, std::string str2){
 /*
  * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers
  * date: 2020.03
+ * Get difference between two integer strings. Ex: 43-11 = 32
 */
 std::string Fpn::diffIntsAsString(std::string str1, std::string str2) { 
     // str2 must be longer then str2
@@ -1016,6 +1063,7 @@ std::string Fpn::diffIntsAsString(std::string str1, std::string str2) {
 /*
  * source: https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
  * date: 2020.03
+ * Multiply two integer strings. Example: 11*11=121
 */
 std::string Fpn::multiplyIntAsString(std::string num1, std::string num2){ 
 
@@ -1087,6 +1135,7 @@ std::string Fpn::multiplyIntAsString(std::string num1, std::string num2){
     return s; 
 }
 
+/*Divide ints as string example: 333-222*/
 std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int precision){  
     
     std::string out; 
@@ -1190,6 +1239,7 @@ std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int
     return out; 
 } 
 
+/*This is a % (mod) function implementation by extraxtions. return a tuple<string,string>. First is how many times is it in, the second is the remainder.*/
 std::tuple<std::string, std::string>  Fpn::modIntsAsString(std::string num1, std::string num2 ){
 
     std::string out = "";
@@ -1211,6 +1261,7 @@ std::tuple<std::string, std::string>  Fpn::modIntsAsString(std::string num1, std
     return std::make_tuple( counter, num1 );  
 }
 
+/*this removes zeros from begin of the string. Example 001233 => 1233 */
 std::string Fpn::removeZerosTheBeginOfTheString(std::string s){
     if (s.at(0) == '0'){
         std::string temp = s;
@@ -1223,6 +1274,7 @@ std::string Fpn::removeZerosTheBeginOfTheString(std::string s){
     return s;
 }
 
+/*this removes zeros from end of the string. Example 123300 => 1233 */
 std::string Fpn::removeZerosTheEndOfTheString(std::string s){
     //if the last char is '0'
     if (s.at(s.length()-1) == '0'){
