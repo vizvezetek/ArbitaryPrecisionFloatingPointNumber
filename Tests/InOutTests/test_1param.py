@@ -3,7 +3,7 @@ import os
 import sys
 
 
-output_oneParam = "s/InOutTests/outOneParam.csv"
+output_oneParam = "Tests/InOutTests/outOneParam.csv"
 
 with open(output_oneParam, 'w') as output_f:
     output_f.write("double; Fpn; method; (double)result; (Fpn)result ") 
