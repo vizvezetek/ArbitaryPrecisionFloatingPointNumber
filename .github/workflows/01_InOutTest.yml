@@ -16,6 +16,6 @@ jobs:
           python-version: 3.6
         
       - name: generate tests with one param
-        run: sudo python3 tests/test_1param.py
+        run: sudo python3 Tests/InOutTests/test_1param.py
       - name: generate tests with two param
-        run: sudo python3 tests/test_2param.py
+        run: sudo python3 Tests/InOutTests/test_2param.py

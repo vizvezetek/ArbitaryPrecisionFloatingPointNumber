@@ -17,4 +17,4 @@ jobs:
 
       - name: Make and run unittests
         uses: actions/checkout@v2
-      - run: cd tests && cmake . && make && ./runUnitTests
+      - run: cd Tests/UnitTests && cmake . && make && ./runUnitTests
