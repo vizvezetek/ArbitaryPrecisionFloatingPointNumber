@@ -3,36 +3,38 @@
  * Some functions and methods are from the original file.
 */
 
-#include <iostream>
-#include <cstring>
-#include <cstdlib>
-#include <string>
-#include <ctime>
-#include <cmath>
-
-#include "Fpn.hpp"
-
-using namespace std;
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
 
 
-#define CHARMAP "0123456789"
-#define O_SPARTA 0x01
+#define CHARMAP "01"
+#define Os_ 0x01
 #define RANDBETWEEN(A,B) A + rand()/(RAND_MAX/(B - A))
 #define CHANCE(A) rand() < A * RAND_MAX
 
-#define pop_size 2048
+#define population_size 2048
 #define binarr_size 32
+#define MINX1 -6.0
+#define MAXX1 6.0
+#define STEPX1 0.025
+#define MINX2 -6.0
+#define MAXX2 6.0
+#define STEPX2 0.025
 
 #define GLOBMIN -1.0
 
 
-static int el_sz;
-static int total_sz;
+static int elements;
+static int total;
 static char options = 0;
-// static unsigned int pop_size = 2048;
+// static unsigned int population_size = 2048;
 static unsigned int challengers = 3;
-static float elitism = .1;
-static float mutation = .25;
+static float elitism = 0.1;
+static float mutation = 0.25;
 
 
 float test_function (float x1, float x2) { //  (0,0) glob_min: -1
@@ -46,41 +48,6 @@ float test_function (float x1, float x2) { //  (0,0) glob_min: -1
         )
     ;
 }
-
-float f_sphere (float x1, float x2) { //  (0,0) glob_min: -1
-    return (x1*x1)+(x2*x2);
-}
-
-
-//ok
-Fpn FPN_drop_wawe (Fpn x1, Fpn x2) { //  (0,0) glob_min: -1
-    
-	Fpn part1 = Fpn("-1.0")*( Fpn("1.0") + Fpn::cos( Fpn("12.0")* Fpn::sqrt( (x1*x1)+(x2*x2) ) ) );
-	Fpn part2 = (Fpn("0.5")* ( (x1*x1)+(x2*x2) )  + Fpn("2.0"));
-	
-	return (part1/part2);
-}
-
-Fpn Fpn_sphere (Fpn x1, Fpn x2) { //  (0,0) glob_min: -1
-    return (x1*x1)+(x2*x2);
-}
-
-float f_drop_wawe (float x1, float x2) { //  (0,0) glob_min: -1
-    return 
-        -(
-            1 + cos( 12*sqrt( pow(x1,2)+pow(x2,2) ) )
-        )
-        /
-        (
-            0.5* ( pow(x1,2)+pow(x2,2) ) +2
-        )
-    ;
-}
-
-float f_sphere (float x1, float x2) { //  (0,0) glob_min: -1
-    return (x1*x1)+(x2*x2);
-}
-
 
 
 char* floatToCharBinaryArr (float inp)		// float converts to IEEE754 as char* arr
@@ -144,87 +111,62 @@ float getRandInRange(float min, float max, float step)		//returns a random float
     return randnum;
 }
 
-//ok
+
 static char rndchr(char* map)		//random char from a char collection
 {
 	return *(map+RANDBETWEEN(0, strlen(map)));
 }
-//ok
+
 static char randchar()		//random char form CHARMAP, what includes 0 and 1
 {
 	return rndchr(CHARMAP);
 }
 
-const char * getRandNumberString(int length){
-	
-	string s = "";
-
-	for (int i = 0; i< length; i++){
-		string temp (1, randchar());
-		s.append(temp);
-	}
-
-	char* out = (char *)malloc(length * sizeof(char*));
-   
-    strncpy(out, s.c_str() , length);
-
-	return out;
-}
 
 char* init_pop(){		// initial population
-	int full_size = pop_size*64;
+	int full_size = population_size*64;
 
-	char* result = (char*)malloc(full_size); // 64 = 2*32, what describes two dimensions as a float
+	char* result = malloc(full_size); // 64 = 2*32, what describes two dimensions as a float
 	int i,j;
-	int char_counter = 0;
-	char* temp = (char*)malloc(32);
+	int charcounter = 0;
+	char* temp = malloc(32);
 
 	for (i=0; i<2048; i++){
-
-		strcpy (temp,  getRandNumberString(32) );
+		
+		strcpy (temp,  floatToCharBinaryArr(  getRandInRange(MINX1, MAXX1, STEPX1) ) );
 		for(j=0; j<32; j++){ //tempX1 append to result
-			*(result + char_counter ) = temp[j];
-			char_counter++;
+			*(result + charcounter ) = temp[j];
+			charcounter++;
+
 		}
 
-		strcpy (temp, getRandNumberString(32) );
+		strcpy (temp,  floatToCharBinaryArr(  getRandInRange(MINX2, MAXX2, STEPX2) ) );
 		for(j=0; j<32; j++){ //tempX2 append to result
-			*(result + char_counter ) = temp[j];
-			char_counter++;
+			*(result + charcounter ) = temp[j];
+			charcounter++;
 		}
-	}
 
+	}
 	free(temp);
 	return result;
 }
 
 
-Fpn getFpnFromCharArr(char * str, int num){
-	string temp(str); 
-
-	string str1 = temp.substr(num*32,32);
-
-	str1.insert(1,".");
-
-	return Fpn(str1);
-}
-
-static Fpn fitness(char * str)		//fitness function
+static float fitness(char * str)		//fitness function
 {
-	
+	// |test function - target value| 
+	float x1 = getFloatValuesFromBinArray(str, 0);
+	float x2 = getFloatValuesFromBinArray(str, 1);
 
-	Fpn x1 = getFpnFromCharArr(str,0);
-	Fpn x2 = getFpnFromCharArr(str,1);
-
-	return Fpn_sphere( x1, x2) ;
-
+	return test_function( x1, x2) ;
+	// return (int)(x1+x2) ;
 }
 
 
 static int fit_cmp(const void *el1, const void *el2) 	//fitness compare for the trnmt
 {
-	Fpn a = fitness((char*)el1);
-	Fpn b = fitness((char*)el2);
+	float a = fitness((char*)el1);
+	float b = fitness((char*)el2);
 
 	if (a > b) return 1;
 	if (a < b) return -1;
@@ -234,19 +176,19 @@ static int fit_cmp(const void *el1, const void *el2) 	//fitness compare for the 
 
 static void mutate(char *p)		//mutation
 {
-	*(p + RANDBETWEEN(0, el_sz)) = randchar();
+	*(p + RANDBETWEEN(0, elements)) = randchar();
 }
 
 
 static char* rnd_el(char *p)
 {
-	unsigned int top = pop_size;
+	unsigned int top = population_size;
 
-	if ((options & O_SPARTA) == O_SPARTA) {
-		top = pop_size * elitism;
+	if ((options & Os_) == Os_) {
+		top = population_size * elitism;
 	}
 
-	return p + el_sz * (int)(RANDBETWEEN(0, top));
+	return p + elements * (int)(RANDBETWEEN(0, top));
 }
 
 
@@ -255,8 +197,8 @@ static char* trnmnt(char *p)
 	size_t i;
 	char* winner = rnd_el(p);
 	char* challenger;
-	Fpn f1 = fitness(winner);
-	Fpn f2;
+	float f1 = fitness(winner);
+	float f2;
 
 	for (i = challengers; i > 0; i--) {
 		challenger = rnd_el(p);
@@ -275,57 +217,55 @@ static void mate(char *p, char *buffer)		// Perform mating
 {
 	char *a, *b;
 	size_t i, pivot;
-	size_t skip = (size_t)(elitism * pop_size) * el_sz;
-	memcpy(buffer, p, total_sz);
+	size_t skip = (size_t)(elitism * population_size) * elements;
+	memcpy(buffer, p, total);
 
-	for (i = skip; i <= total_sz-el_sz; i += el_sz) {
+	for (i = skip; i <= total-elements; i += elements) {
 		a = trnmnt(p);
 		b = trnmnt(p);
-		pivot = RANDBETWEEN(0, el_sz);
+		pivot = RANDBETWEEN(0, elements);
 
-		strncpy(buffer + i, a, el_sz);
+		strncpy(buffer + i, a, elements);
 		strncpy(buffer + i, b, pivot);
 
 		if (CHANCE(mutation)) { 
 			mutate(buffer + i); 
 		}
 
-		if (i < total_sz - el_sz) {
-			i += el_sz;
-			strncpy(buffer + i, b, el_sz);
+		if (i < total - elements) {
+			i += elements;
+			strncpy(buffer + i, b, elements);
 			strncpy(buffer + i, a, pivot);
 			if (CHANCE(mutation)) { mutate(buffer + i); }
 		}
 	}
 
-	memcpy(p, buffer, total_sz);
+	memcpy(p, buffer, total);
 }
 
 
 int main()
 {
 	int i = 0;
-
-	Fpn bestfit("100000.0"); // it must be a really big number
+	float bestfit = RAND_MAX;
 	int opt;
 	srand((unsigned int)time(NULL));
 
-	el_sz = 2 * binarr_size;
-	total_sz = pop_size * el_sz;
+	elements = 2 * binarr_size;
+	total = population_size * elements;
 
-	char *p = (char*)malloc(pop_size*64);
-	char *b = (char*)malloc(total_sz);
+	char *p = malloc(population_size*64);
+	char *b = malloc(total);
 	p = init_pop();
 	
 
     while (1) {
-		qsort(p, pop_size, el_sz, fit_cmp);
+		qsort(p, population_size, elements, fit_cmp);
 		i ++;
 
-		if (!(bestfit == fitness(p)) /*&& !isnan( bestfit )*/ ) {
+		if (bestfit != fitness(p) && !isnan( bestfit ) ) {
 			bestfit = fitness(p);
-			
-			cout << "["<<i<<"]\t x1: " <<  getFpnFromCharArr(p,0)  << " x2: " <<  getFpnFromCharArr(p,1) << " f(x): " << bestfit << endl;
+			printf("[%03d] x1: %.20f x2: %.20f f(x):%.20f \n", i, getFloatValuesFromBinArray(p,0), getFloatValuesFromBinArray(p,1), (float)bestfit);
 		}
 
 		mate(p, b);
@@ -333,6 +273,8 @@ int main()
 
 	free(p);
 	free(b);
+
+
 
     return 0;
 }
