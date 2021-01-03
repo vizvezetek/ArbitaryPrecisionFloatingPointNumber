@@ -9,7 +9,7 @@ jobs:
     steps:
 
       - name: Install Valgrind
-        run: sudo apt-get install valgrind
+        run:  sudo apt-get clean && sudo apt-get update  && sudo apt-get install valgrind
 
       - name: Memory Leak and Error Check
         uses: actions/checkout@v2
