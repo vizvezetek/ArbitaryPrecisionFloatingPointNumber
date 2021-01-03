@@ -3,7 +3,7 @@ import os
 import sys
 
 
-output_oneParam = "tests/outOneParam.csv"
+output_oneParam = "Test/InOutTests/outOneParam.csv"
 
 with open(output_oneParam, 'w') as output_f:
     output_f.write("double; Fpn; method; (double)result; (Fpn)result ") 
@@ -15,7 +15,7 @@ with open(output_oneParam, 'w') as output_f:
         subprocess.run(["sudo","./main", str(i) ], stdout=output_f, stderr=output_f)
 
 
-# output_twoParam = "tests/outTwoParam.csv"
+# output_twoParam = "Test/InOutTests/outTwoParam.csv"
 
 # with open(output_twoParam, 'w') as output_f:
 #     output_f.write("double1;double2;Fpn1;Fpn2; method; (double)result; (Fpn)result ") 
