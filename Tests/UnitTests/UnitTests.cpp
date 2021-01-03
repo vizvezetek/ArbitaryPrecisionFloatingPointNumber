@@ -1,4 +1,4 @@
-#include "../Fpn.cpp"
+#include "../../Fpn.cpp"
 #include <gtest/gtest.h>
 
 //ASSIGNMENT OPERATORS [ = + - / * ]
