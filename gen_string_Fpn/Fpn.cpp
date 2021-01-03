@@ -1,22 +1,40 @@
 
+/**
+ * \class Fpn
+ * 
+ * \file Fpn.cpp
+ * 
+ * \note This is an arbitary precision floating point arithmetic. The actual under development version is available at: https://github.com/vizvezetek/ArbitaryPrecisionFloatingPointNumber
+ * 
+ * It includes the main operators(+,-,*,/,=,<,>, etc.) in functions, and basic trigonometrical operations.
+ * In this case, because of my tests I temporary fixed the floating precision in 100 elements. The reason is to reduce the runtime at the bigger and complicated calculations. 
+ * 
+ * \author Koncz Péter (kope)
+ * 
+ * \version 0.9
+ * 
+ * \date 2020/11/25 22:07
+*/
+
 #include "Fpn.hpp"
 
-//*******************************************************************************************************************************
-//public functions
-//*******************************************************************************************************************************
+///*******************************************************************************************************************************
+///public functions
+///*******************************************************************************************************************************
 
-//initialization list constructor
-Fpn::Fpn(char sign_, const string number_, int intPrecision_, int fractPrecision_ ): sign (sign_), number(number_), intPrecision(intPrecision_), fractPrecision(fractPrecision_){}
 
+/*The "zero constructor" gives an object with +0.0 value*/
 Fpn::Fpn(): sign('+'), number("0.0"), intPart("0"), fractPart("0"){}
 
+/*copyconstructor for const Fpn reference*/
 Fpn::Fpn(const Fpn& f): sign(f.sign), number(f.number), intPart(f.intPart), fractPart(f.fractPart){}
+
+/*copyconstructor for Fpn reference*/
 Fpn::Fpn(Fpn& f): sign(f.getSign()), number(f.getNumber()), intPart(f.getIntPart()), fractPart(f.getFractPart()){}
 
-// //newFpnFromString(const char* s);
-Fpn::Fpn(const string number_){
+/*Simple constructor. number_ in"-3.657" format is OK. */
+Fpn::Fpn(const std::string number_){
  
-
     if(number_[0]=='+'){
         sign = '+';
         number = number_.substr( 1, (int)number_.size() );
@@ -35,9 +53,7 @@ Fpn::Fpn(const string number_){
 
         if (number[i] == '.' || number[i] == ','){
             number[i] = '.';
-            intPrecision = i;
-            // fractPrecision = number.size()-i-1;
-            fractPrecision = 100; //ezt így nem szabadna...
+            fractPrecision = fixedPrec;
             floatingpoint = true;
             continue; //because of the floating point
         }
@@ -50,11 +66,10 @@ Fpn::Fpn(const string number_){
         }
     }
     fractPart = removeZerosTheEndOfTheString(fractPart);
-
-    // fractPrecision = 100;
 }
 
-Fpn::Fpn(const string number_, const int fractPrecision_){
+/*Simple constructor. It makes an Fpn from the const string number_ and constraints the fract part precision by the const int fractPrecision_)  number_ in"-3.657" format is OK. */
+Fpn::Fpn(const std::string number_, const int fractPrecision_){
  
     fractPrecision = fractPrecision_;
 
@@ -76,7 +91,7 @@ Fpn::Fpn(const string number_, const int fractPrecision_){
 
         if (number[i] == '.' || number[i] == ','){
             number[i] = '.';
-            intPrecision = i;
+            // intPrecision = i;
             // fractPrecision = number.size()-i-1;
             floatingpoint = true;
             continue; //because of the floating point
@@ -92,55 +107,68 @@ Fpn::Fpn(const string number_, const int fractPrecision_){
     fractPart = removeZerosTheEndOfTheString(fractPart);
 }
 
+///
+/// getters
+///
 
-//getters
-
+/*getter for sign ex.: '+'*/
 const char Fpn::getSign(){
     return sign;
 }
 
-const string Fpn::getNumber(){
+/*getter for number. Example: 2.3456*/
+const std::string Fpn::getNumber(){
     return intPart + '.' + fractPart;
 }
 
-const string Fpn::getIntPart(){
+/*getter for integer part. example 2*/
+const std::string Fpn::getIntPart(){
     return intPart;
 }
 
-const string Fpn::getFractPart(){
+/*getter for fraction part. example 2*/
+const std::string Fpn::getFractPart(){
     return fractPart;
 }
 
+/*getter for integer precision. example: 1*/
 const int Fpn::getIntPrecision(){
     return intPart.size();
 }
 
+/*getter for floating point precision. example 2 or 100*/
 const int Fpn::getFractPrecision(){
     //the minimum precision is 100 digits
     return (fractPrecision < 100 ) ? 100 : fractPrecision;
 }
 
-string Fpn::toString(){
+/*Simple toString function. Return the whole number. Ex: "-234.567" */
+std::string Fpn::toString(){
     return sign + intPart + '.' + removeZerosTheEndOfTheString(fractPart);
 }
 
+/*ostream operator for cout<<*/
 std::ostream& operator<<(std::ostream &strm, const Fpn &a) {
-//   return strm << a.sign << a.intPart << '.' <<a.fractPart;
   return strm << a.sign << a.intPart << '.' << a.fractPart;
 
 }
 
-//setters
+///
+/// setters
+///
 
+/*setter for sign*/
 void Fpn::setSign(const char sign_){
     sign = sign_;
 }
 
-void Fpn::setNumber(const string number_){
+/*setter for whole number part*/
+void Fpn::setNumber(const std::string number_){
     number = number_;
 }
 
-void Fpn::setIntPart(const string intPart_){
+/*setter for integer part*/
+void Fpn::setIntPart(const std::string intPart_){
     if (intPart_.size()==0){
         intPart = "0";
     }
@@ -149,7 +177,8 @@ void Fpn::setIntPart(const string intPart_){
     }
 }
 
-void Fpn::setFractPart(const string fractPart_){
+/*setter for fraction part*/
+void Fpn::setFractPart(const std::string fractPart_){
     //cut the fract part at the precision
     if (fractPart_.size() >= fractPrecision && fractPrecision < 100){
         fractPart = fractPart_.substr(0, 100);
@@ -162,10 +191,7 @@ void Fpn::setFractPart(const string fractPart_){
     }
 }
 
-void Fpn::setIntPrecision(const int intPrecision_){ // plus zeros, when the size is ok.
-    intPrecision = intPrecision_;
-}
-
+/*setter for fract percision*/
 void Fpn::setFractPrecision(const int fractPrecision_){
     if (fractPrecision_ <= 100){
         fractPrecision = 100;
@@ -175,13 +201,11 @@ void Fpn::setFractPrecision(const int fractPrecision_){
     }
 }
 
+///
+/// operators
+///
 
-//operators
-
-// Fpn Fpn::operator = (Fpn const &obj){
-//     return obj;
-// }
-
+/*simple = method by an overloaded operator*/
 Fpn& Fpn::operator = ( const Fpn& obj){
     if (this != &obj){
         sign = obj.sign;
@@ -193,21 +217,18 @@ Fpn& Fpn::operator = ( const Fpn& obj){
     return *this;
 }
 
-// bool operator == (Fpn& obj1, Fpn& obj2){
-
-//     return (obj1.getSign() == obj2.getSign() && obj1.getIntPart() == obj2.getIntPart() && obj1.getFractPart() == obj2.getFractPart()) ? true : false ;
-// }
-
+/*simple == method by an overloaded operator*/
 bool Fpn::operator == (const Fpn& obj2) const{
 
     return (sign == obj2.sign  && intPart == obj2.intPart && fractPart == obj2.fractPart) ? true : false ;
 }
 
-
+/*simple != method by an overloaded operator*/
 bool operator != (Fpn &obj1, Fpn &obj2){
     return !(obj1==obj2);
 }
 
+/*simple < method by an overloaded operator*/
 bool operator < (Fpn &obj1, Fpn &obj2){
 
     if (obj1 == obj2){
@@ -275,10 +296,9 @@ bool operator < (Fpn &obj1, Fpn &obj2){
     return true;
 }
 
+/*simple < method by an overloaded operator*/
 bool Fpn::operator < (const Fpn& obj2) const{
 
-    // Fpn obj1(number);
-    // Fpn obj2(obj);
 
     if (sign == obj2.sign  && intPart == obj2.intPart && fractPart == obj2.fractPart){
         return false;
@@ -344,35 +364,37 @@ bool Fpn::operator < (const Fpn& obj2) const{
     return true;
 }
 
+/*simple > method by an overloaded operator*/
 bool operator > (Fpn &obj1, Fpn &obj2){
     return obj2 < obj1;
 }
 
+/*simple > method by an overloaded operator*/
 bool Fpn::operator > (const Fpn& obj2) const{
-    // Fpn obj1(number);
-    // Fpn obj2(obj);
-    // return obj2 < obj1;
     return obj2 < *this; 
 }
 
+/*simple <= method by an overloaded operator*/
 bool operator <= (Fpn &obj1, Fpn &obj2){
     return obj1==obj2 || obj1<obj2;
 }
 
+/*simple <= method by an overloaded operator*/
 bool Fpn::operator <= (const Fpn& obj2) const{
-    // Fpn obj1(number);
-    // Fpn obj2(obj);
     return *this==obj2 || *this<obj2;
 }
 
+/*simple >= method by an overloaded operator*/
 bool operator >= (Fpn &obj1, Fpn &obj2){
     return obj1==obj2 || obj1>obj2;
 }
 
+/*simple >= method by an overloaded operator*/
 bool Fpn::operator >= (const Fpn& obj2) const{
     return *this==obj2 || *this>obj2;
 }
 
+/*simple + method by an overloaded operator. Uses the addFpns() function.*/
 Fpn Fpn::operator + (const Fpn& obj) {
 
     Fpn temp(this->toString());
@@ -380,6 +402,7 @@ Fpn Fpn::operator + (const Fpn& obj) {
     return addFpns(temp, obj) ; 
 }
 
+/*simple - method by an overloaded operator*/
 Fpn Fpn::operator - (const Fpn& obj) { 
     Fpn f1(this->toString());
     Fpn f2(obj);
@@ -402,31 +425,26 @@ Fpn Fpn::operator - (const Fpn& obj) {
         return addFpns(f1, f2);
     }
     // +-+ => ++-
-    // if (s1=='+' && s2=='+'){  //because of the warning handling. 
     else {
         f2.setSign('-');
         return addFpns(f1, f2);
     }
 }
 
+/*simple * method by an overloaded operator*/
 Fpn Fpn::operator * (const Fpn& f2){
     Fpn f1(this->toString());
 
     int f1zeros = 0;
     int f2zeros = 0;
 
-    string temp = "";
-
-    // cout << temp << "\t" << f1 << "\t" << f2 <<  endl;
+    std::string temp = "";
 
     if (f1.getIntPart() == "0"){
         f1zeros ++;
         //count f1 appendable zeros to the begin of the temp string. If it wouldn't calc, then the string(at the point insert) going to be out of the string range.
         for(int i = 0 ; f1.getFractPart()[i] == '0'; i++) {f1zeros++;}
-        // cout << temp << endl;
-        // cout <<"KURVAAAAAa" << endl;
         temp.append(f1zeros, '0');
-        // cout << temp << endl;
     }
     if (f2.intPart == "0"){
         f2zeros ++;
@@ -440,11 +458,8 @@ Fpn Fpn::operator * (const Fpn& f2){
 
     //set the floating point to the right position
 
-    // cout << temp << endl;
     temp.insert(temp.end()-(f1.getFractPart().size() + f2.fractPart.size() ) , '.');
     Fpn out(temp);
-
-    // out.setFractPrecision( f1.getFractPrecision() > f2.fractPrecision ? f1.getFractPrecision() : f2.fractPrecision );
 
     //set the sign
     if ( (f1.getSign() == '-' && f2.sign == '-') || (f1.getSign() == '+' && f2.sign == '+') ){
@@ -469,19 +484,11 @@ Fpn Fpn::operator * (const Fpn& f2){
     return out;
 }
 
+/*simple / method by an overloaded operator*/
 Fpn Fpn::operator / (const Fpn& f2){
     Fpn f1(this->toString());
     Fpn f3(f2.number);
-    // cout << "f1\t" << f1.toString() <<endl;
-    // cout << "f2\t" << f3.toString() <<endl;
 
-    // cout << "eredmeny \t" << divideIntsAsString(f1.toString(), f3.toString(), 100) << endl;
-
-
-    // Fpn out( "5.0" );
-    // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) ); // ==4,92
-
-    // Fpn out( divideIntsAsString( this->toString(), f2.number , f1.getFractPrecision()>f2.fractPrecision ? f1.getFractPrecision() : f2.fractPrecision ) );
     Fpn out( divideIntsAsString( f1.getNumber(), f3.getNumber() , f1.getFractPrecision()>f3.getFractPrecision() ? f1.getFractPrecision() : f3.getFractPrecision() ) );
 
     // example 234.567 / 89.01 
@@ -497,10 +504,10 @@ Fpn Fpn::operator / (const Fpn& f2){
     return out;
 }
 
+/*simple / method by an overloaded operator*/
 Fpn Fpn::operator / (Fpn &f2){
     Fpn f1(this->toString());
-    // Fpn out( "5.0" );
-    // Fpn out( divideIntsAsString( "123.0", "25.0" , f1.getFractPrecision() ) );
+
     Fpn out( divideIntsAsString( this->getNumber(), f2.getNumber() , f1.getFractPrecision()>f2.getFractPrecision() ? f1.getFractPrecision() : f2.getFractPrecision() ) );
 
     // example 234.567 / 89.01 
@@ -518,6 +525,7 @@ Fpn Fpn::operator / (Fpn &f2){
 
 //FPN.math
 
+/*abs() function for Fpn objects*/
 Fpn Fpn::abs(Fpn obj){
     if (obj.getSign() == '-'){
         obj.setSign('+');
@@ -526,6 +534,7 @@ Fpn Fpn::abs(Fpn obj){
     return obj;
 }
 
+/*Rounding method for Fpn objects*/
 Fpn Fpn::round(Fpn obj){
     if ( obj.getFractPart()[0] >= '5'){
         Fpn one = Fpn("1.0");
@@ -544,11 +553,11 @@ Fpn Fpn::round(Fpn obj){
     }
 }
 
+/*Factorial method*/
 Fpn Fpn::fact(Fpn obj){
     Fpn zero("0.0");
     Fpn one("+1.0");
-    // return (&obj == &zero) ? &one : (&obj * &Fpn::fact( (&obj - &one) ));
-    // return (obj == Fpn("0.0")) ? Fpn("1.0") : (Fpn::fact( (obj - one) ) * obj );
+
     if (obj == zero){
         return Fpn("1.0");
     }
@@ -562,7 +571,7 @@ Fpn Fpn::fact(Fpn obj){
     }
 }
 
-
+/*sine function*/
 Fpn Fpn::sin(Fpn x) 
 { 
     Fpn res(x); 
@@ -586,6 +595,7 @@ Fpn Fpn::sin(Fpn x)
 
 } 
 
+/*Taylor series sum for sine function. */
 Fpn Fpn::sinTaylorSum(Fpn x) 
 { 
     Fpn res(x.toString()); 
@@ -594,8 +604,6 @@ Fpn Fpn::sinTaylorSum(Fpn x)
     Fpn fact = sign;
     Fpn pow = x; 
 
-    // cout << x << res << sign << fact << pow <<endl;
-
     // sin(0)=sin(pi)=sin(2pi)... =0
     if (x.toString() == "0.0"){
         res.setIntPart("0");
@@ -603,65 +611,26 @@ Fpn Fpn::sinTaylorSum(Fpn x)
         return res;
     }
 
-    // cout << "sign" << "\t"<< "fact" << "\t"<<"pow" << "\t" << "res" << endl;
-    // for (int i = 1; i < TAYLOR_PREC; i++) 
-    // { 
-    //     std::string s = std::to_string((float)i);
-    //     Fpn fpni(s);
-    //     // sign = sign * Fpn("-1.0",100); 
-    //     fact = fact * ( Fpn("2.0", 100) * fpni + Fpn("1.0", 100) ) *  (Fpn("2.0", 100) * fpni ); 
-    //     pow = pow * x * x; 
-    //     // res = res + (sign * pow / fact ); 
-    //     tempcalc = (pow/fact);
-    //     // cout << pow << "\t"<< fact << "\t"<< tempcalc << endl;
-    //     cout << res << ((i%2 == 0) ? " + " : " - ") << tempcalc  << " = " ;
-    //     res = (i%2 == 0) ? (res+tempcalc) : (res-tempcalc);
-    //     cout << res << endl;
-       
-    //     // cout << (i%2 == 0) << endl;
-    //     cout << ((i%2 == 0) ? '+' : '-') << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
-    //     // cout << res << endl;
-
-    //     if (i==2) break;
-    // } 
-  
-    // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
-    // cout << endl;
     
     for (int i = 1; i < TAYLOR_PREC; i++) 
     { 
         std::string s = std::to_string((float)i);
         Fpn fpni(s);
 
-
-
         sign = sign = sign * Fpn("-1.0",100); 
         fact = fact * (( Fpn("2.0", 100) * fpni + Fpn("1.0", 100) ) * (Fpn("2.0", 100) * fpni )); 
 
-        // cout << "fact: " << fact << endl;
-
-        // cout << "pow: " << pow << endl;
-        // cout << "(x*x): " << (x * x) << endl;
         pow = pow * (x * x); 
 
-        // cout << "pow: " << pow << endl;
-        // cout << "res0: " << res << endl;
-        // cout << "sign*pow: " << (sign *  pow) << endl;
-        // cout << "((sign *  pow) / fact): " << ((sign *  pow) / fact) << endl;
         res = ((sign *  pow) / fact) +res ; 
 
         res.setFractPart( res.getFractPart().substr( 0, fixedPrec ) );
-
-        // cout << "+res: " << res << endl;
-        // cout << sign << "\t"<< fact << "\t"<<pow << "\t" << res << endl;
-        // cout << endl;
-
-        // if (i==1) break;
     } 
 
     return res;  
 } 
 
+/*cosine function*/
 Fpn Fpn::cos(Fpn x) 
 { 
     Fpn res(x.toString()); 
@@ -690,48 +659,16 @@ Fpn Fpn::cos(Fpn x)
 
 } 
 
+/*Taylor series sum for cos function. */
 Fpn Fpn::cosTaylorSum(Fpn x) 
 { 
-    //cos(x)=sin(x+pi/2)
-    // cout << x+Fpn(halfsPi) << endl;
-    return sin(x+Fpn(halfsPi));
-
-    // Fpn res("1.0"); 
-    // Fpn sign("1.0"), fact("1.0"),  pow("1.0"); 
-
-    // for (int i = 1; i < TAYLOR_PREC; i++) 
-    // { 
-    //     // cout << i << endl;
-    //     // cout  << i << "\t" << sign << "\t" << fact << "\t" << pow << "\t" << res  << endl;
-    //     // std::string s = std::to_string((float)i);
-
-    //     std::stringstream stream;
-    //     stream << std::fixed << (float)i;
-    //     std::string s = stream.str();
-    //     Fpn fpni(s);
-    //     // cout << "2QQQ:" ;
-    //     sign = sign * Fpn("-1.0",100); 
-    //     // cout << "3QQQ:" ;
-    //     fact = fact * (Fpn("2.0", 100) * fpni - Fpn("1.0", 100)) *  (Fpn("2.0", 100) * fpni); 
-    //     // cout << "4QQQ:" ;
-    //     pow = pow * x * x; 
-    //     // cout << "5QQQ:" ;
-    //     res = res + (sign * pow / fact ); 
-    //     // cout << "6QQQ:" ;
-    //     // cout << sign << "\t" << fact << "\t" << pow << "\t" << res  << endl;
-    //     // cout << "7QQQ:\n" ;
-        
-    // } 
-    // return res;  
-
-    
+    return sin(x+Fpn(halfsPi)); 
 } 
 
-//public
+/*square function*/
 Fpn Fpn::sqrt(Fpn n) 
 { 
     bool isModified = false;
-    // Fpn modMultiplier("100.0");
     Fpn modDivider("10.0");
 
     if (n.getIntPart()=="0" && n.getFractPart()=="0" ){  //sqrt(0) = 0
@@ -740,16 +677,16 @@ Fpn Fpn::sqrt(Fpn n)
     else if (n == Fpn("1.0")){  //sqrt(1) = 1
         return n;
     }
-    else if (n < Fpn("0.0")){   //sqrt(NEGATIVE) is a fucking math error
-        throw "FLOATING POINT EXCEPTION";
+    else if (n < Fpn("0.0")){   //sqrt(NEGATIVE) is an exception
+        throw "Sqrt parameter must be equal or greater then zero.";
     }
     else if (n.getIntPart()=="0" && n.getFractPart()!="0" ){    //example: sqrt(0.36) == 1/sqrt(1/36.0) 
                                                                 //example: sqrt(0.36) == sqrt(0.36*100)/10
         isModified = true;
-        string temp = n.getFractPart();
+        std::string temp = n.getFractPart();
         int i;
         for (i = 0; temp[i]=='0'; i++); //count zeros the begin of the fract part
-        i = (i%2 ==0 )? i : i+1;    //legyen páros (ennek boldogságos matematikai okai vannak, hogy rohadna el)
+        i = (i%2 ==0 )? i : i+1;    //must be an even number
 
         // modifiy modmultiplier
         temp.clear();
@@ -762,47 +699,39 @@ Fpn Fpn::sqrt(Fpn n)
         // modifiy divider
         temp.clear();
         temp = "10";
-        //
-        i = i/2; //úgyis páros, szóval egész a végeredmény
+        
+        i = i/2;    // i is even number, so the end result (i/2) is an integer
         temp.append(i, '0');
         temp.append(".0");
         modDivider = Fpn(temp);
-        // cout << "/" << temp << endl;
-
-        // n = Fpn("1.0")/n;
-
     }
-
 
     Fpn i("1.0"); 
 
     while (true) { 
   
         if (i * i == n) { 
-            // return i; 
             return isModified ? (i/modDivider) : i; 
-            // return isModified ? (Fpn("1.0")/i) : i; 
         } 
         else if (i * i > n) { 
             Fpn temp =  i-Fpn("1.0"); 
             Fpn res = sSquare(n, temp , i); 
-            // return res;
             return isModified ? (res/modDivider) : res ;
-            // return isModified ? (Fpn("1.0")/res) : res ;
         } 
         i = i + Fpn ("1.0"); 
     } 
 } 
 
-//*******************************************************************************************************************************
-//private functions
-//*******************************************************************************************************************************
+///*******************************************************************************************************************************
+/// private functions
+///*******************************************************************************************************************************
 
+/*Helper function for sqrt() */
 Fpn Fpn::sSquare(Fpn n, Fpn i, Fpn j) 
 {   
     Fpn EPS("0.00000000000000000000000000000000000000001");
 
-    Fpn mid = (i + j) / Fpn("2.0",100); 
+    Fpn mid = (i + j) / Fpn("2.0",fixedPrec); 
     Fpn mul = mid * mid; 
   
     if ((mul == n) || (abs(mul - n) < EPS)) 
@@ -813,28 +742,9 @@ Fpn Fpn::sSquare(Fpn n, Fpn i, Fpn j)
         return sSquare(n, i, mid); 
 } 
 
+/*Add method of the + operator. */
 Fpn Fpn::addFpns(Fpn f1, Fpn f2){
     Fpn out("0.0");
-
-    // cout << "\n\n\n" << f1 << f2<< "\n\n\n" << endl;
-
-    // floating point precision setting. Append zeros for the shorter number.
-
-    // if (f1.getFractPart().size() > f2.getFractPart().size() ){
-    //     string tempstr = f2.getFractPart();
-    //     int precdiff = (int)f1.getFractPart().size() - (int)f2.getFractPart().size();
-    //     tempstr.append(precdiff,'0');
-    //     f2.setFractPart(tempstr);
-    // }
-    // else if (f1.getFractPart().size() < f2.getFractPart().size() ){
-    //     string tempstr = f1.getFractPart();
-    //     int precdiff = (int)f2.getFractPart().size() - (int)f1.getFractPart().size();
-    //     tempstr.append(precdiff,'0');
-    //     f1.setFractPart(tempstr);
-    // }
-
-    // cout << f1 << "\t" << f2 << endl;
-    // cout << f1.getFractPart() << "\t" << f2.getFractPart() << endl;
 
     if (f1.getSign() == f2.getSign()){ 
         //simple add
@@ -848,41 +758,31 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
 
         //f1 + f2
 
-        string carry = "!";
+        std::string carry = "!";
 
-        //1. fract part.
+        //1. fraction part.
 
-        string tempFract1 = f1.getFractPart();
-        string tempFract2 = f2.getFractPart();
+        std::string tempFract1 = f1.getFractPart();
+        std::string tempFract2 = f2.getFractPart();
 
         //append zeros
 
         if (tempFract1.size() > tempFract2.size() ){
-            string tempstr = tempFract2;
-            // int precdiff = (int)tempFract1.size() - (int)tempFract2.size();
+            std::string tempstr = tempFract2;
             tempstr.append((int)tempFract1.size() - (int)tempFract2.size(),'0');
             tempFract2 = tempstr;
         }
         else if (tempFract1.size() < tempFract2.size() ){
-            string tempstr = tempFract1;
-            // int precdiff = (int)tempFract2.size() - (int)tempFract1.size();
+            std::string tempstr = tempFract1;
             tempstr.append((int)tempFract2.size() - (int)tempFract1.size(),'0');
             tempFract1 = tempstr;
         }
 
-        // string tempstr = addIntAsString(f1.getFractPart(), f2.getFractPart());
-        string tempstr = addIntAsString(tempFract1, tempFract2);
-
-        // cout << "f1.f, f2.f\t" << f1.getFractPart() << "\t" << f2.getFractPart() << endl;
-
-        // cout << "fract: \t " << tempstr << endl;
-        // cout << "carry: \t " << carry << endl;
+        std::string tempstr = addIntAsString(tempFract1, tempFract2);
 
         if (tempstr.size() > tempFract1.size()){
             carry = tempstr[0];
-            // cout << "carry: \t " << carry << endl;
             out.setFractPart( tempstr.substr( 1, tempstr.size() ) );
-            // cout << "out.Fract \t"<< out.getFractPart() << endl;
 
             tempstr.clear();
         }
@@ -892,11 +792,9 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
             tempstr.clear();
         }
 
-        //2. int part.
+        //2. integer part.
 
         tempstr = addIntAsString(f1.getIntPart(), f2.getIntPart());
-
-        // cout << "int: \t " << tempstr << endl;
 
 
         if (carry == "!"){
@@ -911,26 +809,8 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
             tempstr.clear();
             carry.clear();
         }
-
-
     }
     else {
-        //simple minus
-        //set sign
-        // if (Fpn::isSmallerFloat(f1,f2) ){
-        //     out.setSign(f2.getSign());
-        // }
-        // else if (Fpn::isSmallerFloat(f2,f1) ){
-        //     out.setSign(f1.getSign());
-        // }
-        // else { //equals
-        //     if (f1.getSign() == f2.getSign()){
-        //         out.setSign(f1.getSign());
-        //     }
-        //     else{
-        //         out.setSign('+'); // if the numbers are fully equals, but the signs are different, then the sign is +, example: (-2.0)+2.0 =0 or 2.0+(-2.0)=0.0
-        //     }
-        // }
 
         if (Fpn::isSmallerFloat(f1,f2) ){   // f1<f2
             out.setSign(f2.getSign());
@@ -939,7 +819,6 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
             out.setIntPart(extractFpns(f2, f1).getIntPart());
         }
         else if (Fpn::isSmallerFloat(f2,f1) ){   // f2<f1
-            // cout << "\nfaszom " << f2.getSign() << endl;
             out.setSign(f1.getSign());
 
             out.setFractPart(extractFpns(f1, f2).getFractPart());
@@ -953,29 +832,16 @@ Fpn Fpn::addFpns(Fpn f1, Fpn f2){
                 out.setIntPart("0");
             }
         }
-        
-        //do the -
-
-        // out = extractFpns(f1, f2);
-        // out.setFractPart(extractFpns(f1, f2).getFractPart());
-        // out.setIntPart(extractFpns(f1, f2).getIntPart());
-
     }
     
     //remove the 0's from the being of the string : 000123.456 -> 123.456 
-    // if (out.getIntPart().at(0) == '0'){
-    //     string temp = out.getIntPart();
-    //     int i;
-    //     for (i = 0; temp[i]=='0'; i++){
-    //     }
-    //     out.setIntPart( temp.substr(i, temp.size() ) );
-    //     temp.clear();
-    // }
+
     out.setIntPart( removeZerosTheBeginOfTheString( out.getIntPart() ) );
     out.setFractPart (removeZerosTheEndOfTheString(out.getFractPart()));
     return out;
 }
 
+/*Extraction method of the - operator. */
 Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
     
     //convert fpn strings to integer extract and insert the floating point to the right place
@@ -985,14 +851,9 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
     //example: diffInts ( 2222510, 66510)  = 2156000
     //example: insert(rightPlace, '.') = 2156.0
 
-    // cout <<"\n\n AAAA: \t"<< f1 << "\t" << f2  << "\n\n"<< endl;
-
-    string temp1 = f1.getIntPart() + f1.getFractPart();
-    string temp2 = f2.getIntPart() + f2.getFractPart();
-    string temp3 = ""; 
-
-    // cout << f1 << "\t" << f2 << endl;
-    // cout << temp1 << "\t" << temp2 << endl;
+    std::string temp1 = f1.getIntPart() + f1.getFractPart();
+    std::string temp2 = f2.getIntPart() + f2.getFractPart();
+    std::string temp3 = ""; 
 
     if (f1.getFractPart().size() < f2.getFractPart().size()){
         temp1.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
@@ -1004,54 +865,33 @@ Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
         temp1.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
         temp2.append(f1.getFractPart().size()-f2.getFractPart().size(), '0');
     }
-    // cout << temp1 << "\t" << temp2 << endl;
 
     int floatPointPos = (f2.getFractPart().size() < f1.getFractPart().size()) ? f1.getFractPart().size() : f2.getFractPart().size();
-    // cout << floatPointPos << endl;
+
     if(isSmallerInt(temp1,temp2)){
         temp3 = diffIntsAsString(temp2, temp1);
-        // cout << "TEMP3: " << temp3 << endl;
 
-        // temp3.insert(temp3.end()-f2.getFractPart().size(), '.');
         temp3.insert(temp3.end()-floatPointPos, '.');
     }
     else if(isSmallerInt(temp2,temp1)){
         temp3 = diffIntsAsString(temp1, temp2);
 
-        // temp3.insert(temp3.end()-f1.getFractPart().size(), '.');
         temp3.insert(temp3.end()-floatPointPos, '.');
-
-
     }
     else if (temp1 == temp2){
         temp3 = temp1;
     }
-    // cout << temp1 << "\t" << temp2 << "\t" << temp3 << endl;
 
     if (temp3[0] == '.')  temp3.insert(0,"0");
 
     return Fpn (temp3);
 }
 
-// Fpn Fpn::extractFpns(Fpn f1, Fpn f2){
-//     string temp1 = f1.getIntPart() + f1.getFractPart();
-//     string temp2 = f2.getIntPart() + f2.getFractPart();
-
-//     string temp3 = diffIntsAsString(temp1, temp2);
-
-//     temp3.insert(temp3.end()-f1.getFractPart().size(), '.');
-
-//     return Fpn (temp3);
-// }
-
+/*if str1 < str2 returns true*/
 bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
-    // if(f1 < f2) return true;
 
-    string f1fract = f1.getFractPart();
-    string f2fract = f2.getFractPart();
-
-    // cout << f1 << "\t" << f2 << endl;
-    // cout << f1fract << "\t" << f2fract << endl;
+    std::string f1fract = f1.getFractPart();
+    std::string f2fract = f2.getFractPart();
 
     if (f1.getFractPart().size() < f2.getFractPart().size()){
         f1fract.append(f2.getFractPart().size()-f1.getFractPart().size(), '0');
@@ -1064,39 +904,35 @@ bool Fpn::isSmallerFloat(Fpn f1, Fpn f2){
         f2fract.append(f1.getFractPart().size()-f2.getFractPart().size(), '0');
     }
 
-    // cout << f1fract << "\t" << f2fract << endl;
-
-
-    // cout <<"\n\n IS SMALLER " << f1 << " THAN " <<f2 << endl;
-
-    if ( Fpn::isSmallerInt( f1.getIntPart(), f2.getIntPart() ) ){
-        // cout << "1\n\n" << endl;
+    if ( Fpn::isSmallerInt( f1.getIntPart(), f2.getIntPart() ) ){   // if f1 < f2
         return true;
     }
-    else if ( Fpn::isSmallerInt( f2.getIntPart(), f1.getIntPart() ) ){
-        // cout << "2\n\n" << endl;
+    else if ( Fpn::isSmallerInt( f2.getIntPart(), f1.getIntPart() ) ){ // if f2 < f1
         return false;
     }
     else { //equals
         if ( Fpn::isSmallerInt( f1fract, f2fract ) ){
-            // cout << "3\n\n" << endl;
             return true;
         }
         else if ( Fpn::isSmallerInt( f2fract, f1fract ) ){
-            // cout << "4\n\n" << endl;
             return false;
         }
         else{
-            // cout << "5\n\n" << endl;
             return false;
         }
     }
 }
 
-bool Fpn::isSmallerInt(string str1, string str2) { 
-    // Calculate lengths of both string 
+/*
+ * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers/
+ * date: 2020. 03.
+ * if str1 < str2 returns true
+*/
+bool Fpn::isSmallerInt(std::string str1, std::string str2) { 
+    // calculate lengths of both string 
     int n1 = str1.length(), n2 = str2.length(); 
   
+    // if the size is bigger, then the humber is bigger
     if (n1 < n2) 
         return true; 
     if (n2 < n1) 
@@ -1114,45 +950,48 @@ bool Fpn::isSmallerInt(string str1, string str2) {
     return false; 
 } 
 
-string Fpn::addIntAsString(string str1, string str2){
-    // Before proceeding further, make sure length 
-    // of str2 is larger. 
-    if (str1.length() > str2.length()) 
+
+/*
+ * source: https://www.geeksforgeeks.org/sum-two-large-numbers/
+ * date: 2020. 03.
+ * This is adding to integer value as a string. Example 23 + 34 = 57
+*/
+std::string Fpn::addIntAsString(std::string str1, std::string str2){
+    // str2 must be longer then str2
+    if (str1.length() > str2.length()){
         swap(str1, str2); 
+    }
+
+    std::string str = "";  // result
+
+    int n1 = str1.length();
+    int n2 = str2.length(); 
   
-    // Take an empty string for storing result 
-    string str = ""; 
-  
-    // Calculate length of both string 
-    int n1 = str1.length(), n2 = str2.length(); 
-  
-    // Reverse both of strings 
+    // reverse strings, because the carry value goes to the end of the string
     reverse(str1.begin(), str1.end()); 
     reverse(str2.begin(), str2.end()); 
   
     int carry = 0; 
-    for (int i=0; i<n1; i++) 
-    { 
-        // Do school mathematics, compute sum of 
-        // current digits and carry 
+
+    // calc the result of the strings, get the carry bit and concat it to the result 
+    for (int i=0; i<n1; i++){
         int sum = ((str1[i]-'0')+(str2[i]-'0')+carry); 
         str.push_back(sum%10 + '0'); 
-  
-        // Calculate carry for next step 
+   
         carry = sum/10; 
     } 
   
-    // Add remaining digits of larger number 
-    for (int i=n1; i<n2; i++) 
-    { 
+    // add remaining digits of larger number 
+    for (int i=n1; i<n2; i++){ 
         int sum = ((str2[i]-'0')+carry); 
         str.push_back(sum%10 + '0'); 
         carry = sum/10; 
     } 
   
-    // Add remaining carry 
-    if (carry) 
+    // add remaining carry 
+    if (carry) {
         str.push_back(carry+'0'); 
+    }
   
     // reverse resultant string 
     reverse(str.begin(), str.end()); 
@@ -1160,154 +999,151 @@ string Fpn::addIntAsString(string str1, string str2){
     return str;
 }
 
-string Fpn::diffIntsAsString(string str1, string str2) { 
-    // Before proceeding further, make sure str1 
-    // is not smaller 
+/*
+ * source: https://www.geeksforgeeks.org/difference-of-two-large-numbers
+ * date: 2020.03
+ * Get difference between two integer strings. Ex: 43-11 = 32
+*/
+std::string Fpn::diffIntsAsString(std::string str1, std::string str2) { 
+    // str2 must be longer then str2
     if (Fpn::isSmallerInt(str1, str2)) 
         swap(str1, str2); 
+
+    std::string str = ""; // result 
   
-    // Take an empty string for storing result 
-    string str = ""; 
+    int n1 = str1.length();
+    int n2 = str2.length(); 
   
-    // Calculate length of both string 
-    int n1 = str1.length(), n2 = str2.length(); 
-  
-    // Reverse both of strings 
+    // reverse strings, because the carry value goes to the end of the string
     reverse(str1.begin(), str1.end()); 
     reverse(str2.begin(), str2.end()); 
       
     int carry = 0; 
   
-    // Run loop till small string length 
-    // and subtract digit of str1 to str2 
-    for (int i=0; i<n2; i++) 
-    { 
-        // Do school mathematics, compute difference of 
-        // current digits 
-          
+    // subtract digit of str1 to str2
+    for (int i=0; i<n2; i++){  
+
         int sub = ((str1[i]-'0')-(str2[i]-'0')-carry); 
           
-        // If subtraction is less then zero 
-        // we add then we add 10 into sub and 
-        // take carry as 1 for calculating next step 
+        // if the result -, then make it +, and the carry value will be 1
         if (sub < 0) { 
             sub = sub + 10; 
             carry = 1; 
         } 
-        else
+        else{
             carry = 0; 
+        }
   
         str.push_back(sub + '0'); 
     } 
   
     // subtract remaining digits of larger number 
-    for (int i=n2; i<n1; i++) 
-    { 
+    for (int i=n2; i<n1; i++){ 
+
         int sub = ((str1[i]-'0') - carry); 
           
-        // if the sub value is -ve, then make it positive 
-        if (sub < 0) 
-        { 
+        // if the sub value is -, then make it + 
+        if (sub < 0) { 
             sub = sub + 10; 
             carry = 1; 
         } 
-        else
+        else{
             carry = 0; 
+        }
               
         str.push_back(sub + '0'); 
     } 
   
-    // reverse resultant string 
+    // reverse the result for the right value 
     reverse(str.begin(), str.end()); 
   
     return str; 
 } 
 
-string Fpn::multiplyIntAsString(string num1, string num2){ 
+/*
+ * source: https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
+ * date: 2020.03
+ * Multiply two integer strings. Example: 11*11=121
+*/
+std::string Fpn::multiplyIntAsString(std::string num1, std::string num2){ 
+
     int n1 = num1.size(); 
     int n2 = num2.size(); 
-    if (n1 == 0 || n2 == 0) 
-    return "0"; 
+    if (n1 == 0 || n2 == 0){
+        return "0"; 
+    }
    
-    // will keep the result number in vector 
-    // in reverse order 
-    vector<int> result(n1 + n2, 0); 
+    // will keep the result number in vector, in reverse order 
+    std::vector<int> result(n1 + n2, 0); 
    
-    // Below two indexes are used to find positions 
-    // in result.  
+    // indexes for positions 
     int i_n1 = 0;  
     int i_n2 = 0;  
        
-    // Go from right to left in num1 
+    // from right to left in num1 
     for (int i=n1-1; i>=0; i--){ 
         int carry = 0; 
         int n1 = num1[i] - '0'; 
    
-        // To shift position to left after every 
-        // multiplication of a digit in num2 
+        // shift positions to left after every multiplication
         i_n2 = 0;  
            
-        // Go from right to left in num2              
+        // from right to left in num2              
         for (int j=n2-1; j>=0; j--){ 
-            // Take current digit of second number 
+            // take current digit of second number 
             int n2 = num2[j] - '0'; 
    
-            // Multiply with current digit of first number 
-            // and add result to previously stored result 
-            // at current position.  
+            // multiply with current digit of first number and add result to previously stored result at current position.  
             int sum = n1*n2 + result[i_n1 + i_n2] + carry; 
    
-            // Carry for next iteration 
+            // carry value for next iteration 
             carry = sum/10; 
    
-            // Store result 
+            // add value to result arr. 
             result[i_n1 + i_n2] = sum % 10; 
    
             i_n2++; 
         } 
    
         // store carry in next cell 
-        if (carry > 0) 
+        if (carry > 0){
             result[i_n1 + i_n2] += carry; 
-   
-        // To shift position to left after every 
-        // multiplication of a digit in num1. 
+        }
+
+        // step the position
         i_n1++; 
     } 
    
-    // ignore '0's from the right 
+    // step zeros from the end of the str
     int i = result.size() - 1; 
-    while (i>=0 && result[i] == 0) 
-    i--; 
+
+    while (i>=0 && result[i] == 0){
+        i--; 
+    } 
    
-    // If all were '0's - means either both or 
-    // one of num1 or num2 were '0' 
-    if (i == -1) 
-    return "0"; 
+    // if nr1 or nr2 is zero
+    if (i == -1){
+        return "0"; 
+    }
    
-    // generate the result string 
-    string s = ""; 
+    std::string s = ""; // result
        
-    while (i >= 0) 
-        s += std::to_string(result[i--]); 
+    while (i >= 0){
+        s += std::to_string(result[i--]);
+    }
    
     return s; 
 }
 
-string Fpn::divideIntsAsString(string number, string divisor, int precision){  
+/*Divide ints as string example: 333-222*/
+std::string Fpn::divideIntsAsString(std::string number, std::string divisor, int precision){  
     
-    string out; 
-
-    // int precdiff = (int)f2.getFractPrecision() - (int)f1.getFractPrecision();
-    // tempstr.append(precdiff,'0');
-
-    // cout << number << "\t" << divisor << endl;
-    // cout << "precison: " << precision << endl;
+    std::string out; 
 
     if (number == "0.0"){
         return "0.0";
     }
-    if (divisor == "0.0"){
+    if (divisor == "0.0"){ // the divisor can't be a zero.
         throw "FLOATING POINT EXCEPTION";
     }
 
@@ -1315,10 +1151,10 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
     int pointPos2 = divisor.find(".");
     int pointDiff = std::abs(pointPos1-pointPos2);
     if (pointPos1>pointPos2 && pointDiff>3){
-        // pont áthelyezése divisor-ben pointpos1 dik helyre
+        // moving the point in the divisor to the pointpos1's position
         divisor.erase(divisor.find("."),1);
 
-        //kibővítés nullákkal a string miatt
+        //adding zeros because of the string
         if (number.size()>divisor.size()) {
             divisor.append(number.size()-divisor.size(), '0');
             precision += number.size()-divisor.size();
@@ -1328,8 +1164,6 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
             precision += divisor.size()-number.size();
         }
 
-        // cout << "precison: " << precision << endl;
-
         divisor.insert(pointPos1, ".");
 
         number = removeZerosTheEndOfTheString(number);
@@ -1338,11 +1172,9 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
         divisor = removeZerosTheEndOfTheString(divisor);
         divisor = removeZerosTheBeginOfTheString(divisor);
 
-        divisor = (divisor.back() == '.') ? divisor.append("0") : divisor; // ha túlnullázta, akkor hozzácsapunk egyet, hogy a pont után legyen egy nulla.
-        number = (number.back() == '.') ? number.append("0") : number;
+        divisor = (divisor.back() == '.') ? divisor.append("0") : divisor; // if too many zeros are deleted, then have to add ONE piece of '0', because after the floating point must to be one. 
+        number = (number.back() == '.') ? number.append("0") : number;      
     }
-
-    // cout << number << "\t" << divisor << endl;
 
 
     //append zeros, because of the precision
@@ -1356,32 +1188,25 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
         number.append(divPrec-numPrec, '0');
     }
 
-    // cout << number << "\t" << divisor << endl;
 
-
-    string tempNum = number;
-    string tempDiv = divisor;
+    std::string tempNum = number;
+    std::string tempDiv = divisor;
 
     tempNum.erase(tempNum.find("."),1);
     tempDiv.erase(tempDiv.find("."),1);
 
     // exampe 188.95/0.12 => 18895/012
     // we should to remove the zeros the begin of the string
-    // cout << "qwe" << tempNum << "\t" << tempDiv << endl;
     tempNum = removeZerosTheBeginOfTheString(tempNum);
     tempDiv = removeZerosTheBeginOfTheString(tempDiv);
 
-    string quotient, remainder;
+    std::string quotient, remainder;
     tie(quotient, remainder) = modIntsAsString(tempNum, tempDiv);
-
-    // cout << "q: " << quotient << "\tR: " << remainder << endl;
-    // cout << "precison: " << precision << endl;
-
 
     out = quotient + "."; 
     int actPrec = 1;
 
-    //ha egész számú a kimenet és nullázódik a tört rész, akkor nem kell a tizedes résszel semmit csinálni
+    // if the output is an integer, then the fraction part is zeroing, then you don't need anything to do with the fraction part
     if (remainder.size() == 0){
         out.append(precision, '0');
         return out;
@@ -1394,22 +1219,17 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
         out += quotient; 
         actPrec++;
         
-        //ha egész számú a kimenet és nullázódik a tört rész, akkor nem kell a tizedes résszel semmit csinálni
+        // if the output is an integer, then the fraction part is zeroing, then you don't need anything to do with the fraction part
         if (remainder.size() == 0){
-            // cout << "actPrec: " << precision-actPrec << endl;
             out.append( (precision-actPrec) , '0');
             break;
         } 
-        // cout << remainder << endl;
         tempNum = remainder+'0';
     }
-
-    // cout << out << endl;
         
-    ///asd
     if (pointPos1>pointPos2 && pointDiff>3){
         int outPointPos = out.find(".");
-        // cout << outPointPos << "\t" << pointDiff <<  endl;
+        
         out.erase(outPointPos,1);
         out.insert(outPointPos+pointDiff, ".");
 
@@ -1419,20 +1239,18 @@ string Fpn::divideIntsAsString(string number, string divisor, int precision){
     return out; 
 } 
 
-tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
+/*This is a % (mod) function implementation by extraxtions. return a tuple<string,string>. First is how many times is it in, the second is the remainder.*/
+std::tuple<std::string, std::string>  Fpn::modIntsAsString(std::string num1, std::string num2 ){
 
-    string out = "";
+    std::string out = "";
 
-    // int counter = 0;
-    string counter = "0";
+    std::string counter = "0";
     if (isSmallerInt(num1, num2)){
         counter = "0";
-        // num1 = num1;
     }
     else{
         while(isSmallerInt(num2, num1) || num1==num2 ){
 
-            // num1 = removeZerosTheBeginOfTheString(num1);
             num1 = diffIntsAsString(num1, num2);
             num1 = removeZerosTheBeginOfTheString(num1);
 
@@ -1440,14 +1258,13 @@ tuple<string, string>  Fpn::modIntsAsString(string num1, string num2 ){
             counter = addIntAsString(counter, "1");
         }
     } 
-
-    // return make_tuple( to_string(counter), num1 );  
-    return make_tuple( counter, num1 );  
+    return std::make_tuple( counter, num1 );  
 }
 
-string Fpn::removeZerosTheBeginOfTheString(string s){
+/*this removes zeros from begin of the string. Example 001233 => 1233 */
+std::string Fpn::removeZerosTheBeginOfTheString(std::string s){
     if (s.at(0) == '0'){
-        string temp = s;
+        std::string temp = s;
         int i;
         for (i = 0; temp[i]=='0'; i++){}
 
@@ -1457,11 +1274,18 @@ string Fpn::removeZerosTheBeginOfTheString(string s){
     return s;
 }
 
-string Fpn::removeZerosTheEndOfTheString(string s){
+/*this removes zeros from end of the string. Example 123300 => 1233 */
+std::string Fpn::removeZerosTheEndOfTheString(std::string s){
     //if the last char is '0'
     if (s.at(s.length()-1) == '0'){
         int i = s.length()-1;
-        for ( ; s[i]=='0'; i--){}
+
+        char lastChar = '0';
+        while(lastChar=='0' && i!=0){
+            lastChar = s[i];
+            i-=1;
+        }
+
         s.erase(i+1, s.length());
 
         //if the string is empty because of zeros
