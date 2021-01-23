@@ -107,8 +107,6 @@ private:
     /// the faction part of the number. ex: "4567"
     std::string fractPart;      
     
-    /// the precision of the integer part. ex: "3"
-    // int intPrecision;      
     
     int fractPrecision; /**< precision of the fraction part. Default 100. If it's set in the construct, then not 100. */
 

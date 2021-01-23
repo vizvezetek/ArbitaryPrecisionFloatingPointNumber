@@ -91,8 +91,6 @@ Fpn::Fpn(const std::string number_, const int fractPrecision_){
 
         if (number[i] == '.' || number[i] == ','){
             number[i] = '.';
-            // intPrecision = i;
-            // fractPrecision = number.size()-i-1;
             floatingpoint = true;
             continue; //because of the floating point
         }
