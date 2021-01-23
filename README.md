@@ -29,7 +29,7 @@ int main(){
     Fpn f = a*b*c*d*e;
     double o = i*j*k*l*m;
 
-    cout << "FPN: " << f.toString() << endl;
+    cout << "FPN: " << f << endl;
     cout << "double: " << std::setprecision(50) << o << endl;
 
     return 0;
@@ -38,5 +38,4 @@ int main(){
 out:
 
 FPN: +478478.0242818719390477005776
-
 double: 478478.0242818719707429409027099609375

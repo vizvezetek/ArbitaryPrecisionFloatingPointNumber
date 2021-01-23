@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     if (argc == 2){
         try
 		{
-            ///char* -> double && double -> string -> Fpn
+            /// char* -> double && double -> string -> Fpn
 
             double d1 = (double)strtod(argv[1],NULL);
             Fpn f1(std::to_string((double)d1),100);
